@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Copyright Matthew Coughlin 2018 -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <TextView
+            android:id="@+id/name_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:labelFor="@id/name_input"
+            android:text="@string/beer_name"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/name_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="0dp"
+            android:hint="@string/name_autofill"
+            android:inputType="text"
+            app:layout_constraintTop_toBottomOf="@id/name_title" />
+
+        <View
+            android:id="@+id/grain_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="0dp"
+            android:background="@color/colorDivider"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name_input" />
+
+        <TextView
+            android:id="@+id/grain_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/grains"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name_input" />
+
+        <Spinner
+            android:id="@+id/grain_spinner1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:entries="@array/grain_options"
+            app:layout_constraintBottom_toBottomOf="@id/amount_input1"
+            app:layout_constraintEnd_toStartOf="@id/amount_input1"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/grain_title" />
+
+        <Spinner
+            android:id="@+id/grain_spinner2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:entries="@array/grain_options"
+            app:layout_constraintBottom_toBottomOf="@id/amount_input2"
+            app:layout_constraintEnd_toStartOf="@id/amount_input1"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/grain_spinner1" />
+
+        <Spinner
+            android:id="@+id/grain_spinner3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:entries="@array/grain_options"
+            app:layout_constraintBottom_toBottomOf="@id/amount_input3"
+            app:layout_constraintEnd_toStartOf="@id/amount_input1"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/grain_spinner2" />
+
+        <Spinner
+            android:id="@+id/grain_spinner4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:entries="@array/grain_options"
+            app:layout_constraintBottom_toBottomOf="@id/amount_input4"
+            app:layout_constraintEnd_toStartOf="@id/amount_input1"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/grain_spinner3" />
+
+        <TextView
+            android:id="@+id/amount_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="0dp"
+            android:labelFor="@id/amount_input1"
+            android:text="@string/amount"
+            app:layout_constraintEnd_toStartOf="@id/grain_units"
+            app:layout_constraintTop_toBottomOf="@id/name_input" />
+
+        <TextView
+            android:id="@+id/grain_units"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/lbs_abbreviation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name_input" />
+
+        <EditText
+            android:id="@+id/amount_input1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="end"
+            android:hint="@string/amount_autofill"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/grain_spinner1"
+            app:layout_constraintTop_toBottomOf="@id/amount_title" />
+
+        <EditText
+            android:id="@+id/amount_input2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="end"
+            android:hint="@string/amount_autofill"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/grain_spinner2"
+            app:layout_constraintTop_toBottomOf="@id/amount_input1" />
+
+        <EditText
+            android:id="@+id/amount_input3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="end"
+            android:hint="@string/amount_autofill"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/grain_spinner3"
+            app:layout_constraintTop_toBottomOf="@id/amount_input2" />
+
+        <EditText
+            android:id="@+id/amount_input4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="end"
+            android:hint="@string/amount_autofill"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/grain_spinner4"
+            app:layout_constraintTop_toBottomOf="@id/amount_input3" />
+
+        <View
+            android:id="@+id/hop_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="0dp"
+            android:background="@color/colorDivider"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/amount_input4" />
+
+        <TextView
+            android:id="@+id/hop_title"
+            android:layout_width="152dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/hops"
+            android:textAlignment="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/grain_spinner4" />
+
+        <Spinner
+            android:id="@+id/hop_spinner1"
+            android:layout_width="160dp"
+            android:layout_height="0dp"
+            android:entries="@array/hop_options"
+            app:layout_constraintBottom_toBottomOf="@id/hop_amount_input1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hop_title" />
+
+        <Spinner
+            android:id="@+id/hop_spinner2"
+            android:layout_width="160dp"
+            android:layout_height="0dp"
+            android:entries="@array/hop_options"
+            app:layout_constraintBottom_toBottomOf="@id/hop_amount_input2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hop_spinner1" />
+
+        <Spinner
+            android:id="@+id/hop_spinner3"
+            android:layout_width="160dp"
+            android:layout_height="0dp"
+            android:entries="@array/hop_options"
+            app:layout_constraintBottom_toBottomOf="@id/hop_amount_input3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hop_spinner2" />
+
+        <Spinner
+            android:id="@+id/hop_spinner4"
+            android:layout_width="160dp"
+            android:layout_height="0dp"
+            android:entries="@array/hop_options"
+            app:layout_constraintBottom_toBottomOf="@id/hop_amount_input4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hop_spinner3" />
+
+        <TextView
+            android:id="@+id/hop_amount_title"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:labelFor="@id/amount_input1"
+            android:text="@string/amount"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toStartOf="@id/addition_time_title"
+            app:layout_constraintStart_toEndOf="@id/hop_title"
+            app:layout_constraintTop_toBottomOf="@id/amount_input4" />
+
+        <EditText
+            android:id="@+id/hop_amount_input1"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:gravity="end"
+            android:hint="@string/ounces_abbreviation"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toStartOf="@id/addition_time1"
+            app:layout_constraintStart_toEndOf="@id/hop_spinner1"
+            app:layout_constraintTop_toBottomOf="@id/hop_amount_title" />
+
+        <EditText
+            android:id="@+id/hop_amount_input2"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:gravity="end"
+            android:hint="@string/ounces_abbreviation"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toStartOf="@id/addition_time1"
+            app:layout_constraintStart_toEndOf="@id/hop_spinner2"
+            app:layout_constraintTop_toBottomOf="@id/hop_amount_input1" />
+
+        <EditText
+            android:id="@+id/hop_amount_input3"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:gravity="end"
+            android:hint="@string/ounces_abbreviation"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toStartOf="@id/addition_time1"
+            app:layout_constraintStart_toEndOf="@id/hop_spinner3"
+            app:layout_constraintTop_toBottomOf="@id/hop_amount_input2" />
+
+        <EditText
+            android:id="@+id/hop_amount_input4"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:gravity="end"
+            android:hint="@string/ounces_abbreviation"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toStartOf="@id/addition_time1"
+            app:layout_constraintStart_toEndOf="@id/hop_spinner4"
+            app:layout_constraintTop_toBottomOf="@id/hop_amount_input3" />
+
+        <TextView
+            android:id="@+id/addition_time_title"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/hop_addition_time"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/amount_input4" />
+
+        <EditText
+            android:id="@+id/addition_time1"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:hint="@string/minutes_abbreviation"
+            android:inputType="number"
+            android:textAlignment="textEnd"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addition_time_title" />
+
+        <EditText
+            android:id="@+id/addition_time2"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:hint="@string/minutes_abbreviation"
+            android:inputType="number"
+            android:textAlignment="textEnd"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addition_time1" />
+
+        <EditText
+            android:id="@+id/addition_time3"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:hint="@string/minutes_abbreviation"
+            android:inputType="number"
+            android:textAlignment="textEnd"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addition_time2" />
+
+        <EditText
+            android:id="@+id/addition_time4"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:hint="@string/minutes_abbreviation"
+            android:inputType="number"
+            android:textAlignment="textEnd"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addition_time3" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/colorDivider"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hop_amount_input4" />
+
+        <TextView
+            android:id="@+id/yeast_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/yeast"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hop_spinner4" />
+
+        <Spinner
+            android:id="@+id/yeast_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:entries="@array/yeast_options"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/yeast_title" />
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

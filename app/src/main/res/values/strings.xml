@@ -1,0 +1,83 @@
+<resources>
+    <string name="app_name">Concoction Crafter</string>
+
+    <!-- General -->
+    <string name="beer_name">Beer Name</string>
+    <string name="hop">Hop</string>
+    <string name="hops">Hops</string>
+    <string name="grain">Grain</string>
+    <string name="grains">Grains</string>
+    <string name="name_autofill">What\'s your beer\'s name?</string>
+    <string name="ale">Ale</string>
+    <string name="lager">Lager</string>
+    <string name="amount">Amount</string>
+    <string name="amount_autofill">How much?</string>
+    <string name="yeast">Yeast</string>
+    <string name="recipe">Recipe</string>
+    <string name="brew_day">Brew Day</string>
+    <string name="brewer">Brewer:</string>
+    <string name="date">Date:</string>
+    <string name="recipe_name">Recipe Name</string>
+    <string name="batch_size">Batch Size:</string>
+    <string name="boil_time">Boil Time</string>
+    <string name="beer_style">Beer Style</string>
+    <string name="hop_addition_time">Addition Time</string>
+    <string name="expected_og">Expected Starting Gravity</string>
+    <string name="actual_og">Actual Starting Gravity</string>
+    <string name="expected_fg">Expected Final Gravity</string>
+    <string name="actual_fg">Actual Final Gravity</string>
+    <string name="expected_alcohol">Expected Alcohol Content</string>
+    <string name="actual_alcohol">Actual Alcohol Content</string>
+    <string name="ibus">IBUs</string>
+    <string name="mash_temp">Mash Temperature</string>
+    <string name="none">None</string>
+    <string name="start_boil">Start Boil</string>
+
+    <!-- Units -->
+    <plurals name="pound_plural">
+        <item quantity="one">Pound</item>
+        <item quantity="other">Pounds</item>
+    </plurals>
+    <plurals name="kilograms_plural">
+        <item quantity="one">Kilogram</item>
+        <item quantity="other">Kilograms</item>
+    </plurals>
+    <plurals name="pounds_abbreviation_plural">
+        <item quantity="one">lb</item>
+        <item quantity="other">lbs</item>
+    </plurals>
+    <string name="lbs_abbreviation">lbs</string>
+    <string name="kilograms_abbreviation">kg</string>
+    <string name="ounces_abbreviation">oz</string>
+    <string name="grams_abbreviation">g</string>
+    <string name="minutes_abbreviation">mins</string>
+    <string name="degrees_f">$1%d \u2109</string>
+    <string name="degrees_c">$1%f \u2103</string>
+
+    <!-- Grain type -->
+    <string-array name="grain_options">
+        <item>Not Used</item>
+        <item>2 Row</item>
+        <item>Marris Otter</item>
+        <item>Chocolate</item>
+        <item>Other</item>
+    </string-array>
+
+    <!-- Hop type -->
+    <string-array name="hop_options">
+        <item>Not Used</item>
+        <item>Cascade</item>
+        <item>Centennial</item>
+        <item>Galaxy</item>
+        <item>Hollertau</item>
+        <item>Other</item>
+    </string-array>
+
+    <!-- Yeast type -->
+    <string-array name="yeast_options">
+        <item>American Ale</item>
+        <item>British Ale</item>
+        <item>Oktoberfest</item>
+        <item>Other</item>
+    </string-array>
+</resources>

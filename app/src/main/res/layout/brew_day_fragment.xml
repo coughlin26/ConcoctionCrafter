@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Copyright Matthew Coughlin 2018 -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/brew_day_constraint"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/recipe_name"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/date_input"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/date_input" />
+
+        <TextView
+            android:id="@+id/date_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/date"
+            app:layout_constraintBottom_toBottomOf="@id/date_input"
+            app:layout_constraintStart_toEndOf="@id/name"
+            app:layout_constraintTop_toTopOf="@id/date_input" />
+
+        <EditText
+            android:id="@+id/date_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="0dp"
+            android:inputType="date"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/date_title"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/start_boil_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="0dp"
+            android:background="@color/colorAccent"
+            android:text="@string/start_boil"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/date_input" />
+
+        <TextView
+            android:id="@+id/hop_type_title"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/hops"
+            android:textAlignment="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/start_boil_button" />
+
+        <TextView
+            android:id="@+id/amount_title"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/amount"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toStartOf="@id/time_title"
+            app:layout_constraintStart_toEndOf="@id/hop_type_title"
+            app:layout_constraintTop_toTopOf="@id/hop_type_title" />
+
+        <TextView
+            android:id="@+id/time_title"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/boil_time"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/hop_type_title" />
+
+        <TextView
+            android:id="@+id/hop_type1"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/none"
+            android:textAlignment="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hop_type_title" />
+
+        <TextView
+            android:id="@+id/amount1"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/none"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toStartOf="@id/time1"
+            app:layout_constraintStart_toEndOf="@id/hop_type1"
+            app:layout_constraintTop_toBottomOf="@id/amount_title" />
+
+        <TextView
+            android:id="@+id/time1"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/none"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/time_title" />
+
+        <TextView
+            android:id="@+id/hop_type2"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/none"
+            android:textAlignment="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hop_type1" />
+
+        <TextView
+            android:id="@+id/amount2"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/none"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toStartOf="@id/time2"
+            app:layout_constraintStart_toEndOf="@id/hop_type2"
+            app:layout_constraintTop_toBottomOf="@id/amount1" />
+
+        <TextView
+            android:id="@+id/time2"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/none"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/time1" />
+
+        <TextView
+            android:id="@+id/hop_type3"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/none"
+            android:textAlignment="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hop_type2" />
+
+        <TextView
+            android:id="@+id/amount3"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/none"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toStartOf="@id/time3"
+            app:layout_constraintStart_toEndOf="@id/hop_type3"
+            app:layout_constraintTop_toBottomOf="@id/amount2" />
+
+        <TextView
+            android:id="@+id/time3"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/none"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/time2" />
+
+        <TextView
+            android:id="@+id/hop_type4"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/none"
+            android:textAlignment="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hop_type3" />
+
+        <TextView
+            android:id="@+id/amount4"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/none"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toStartOf="@id/time4"
+            app:layout_constraintStart_toEndOf="@id/hop_type4"
+            app:layout_constraintTop_toBottomOf="@id/amount3" />
+
+        <TextView
+            android:id="@+id/time4"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/none"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/time3" />
+
+        <TextView
+            android:id="@+id/actual_og_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
+            android:text="@string/actual_og"
+            app:layout_constraintBottom_toBottomOf="@id/actual_og_input"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/actual_og_input" />
+
+        <EditText
+            android:id="@+id/actual_og_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="0dp"
+            android:inputType="numberDecimal"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/actual_og_title"
+            app:layout_constraintTop_toBottomOf="@id/amount4" />
+
+        <TextView
+            android:id="@+id/actual_fg_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
+            android:text="@string/actual_fg"
+            app:layout_constraintBottom_toBottomOf="@id/actual_fg_input"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/actual_fg_input" />
+
+        <EditText
+            android:id="@+id/actual_fg_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="0dp"
+            android:inputType="numberDecimal"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/actual_fg_title"
+            app:layout_constraintTop_toBottomOf="@id/actual_og_input" />
+
+        <TextView
+            android:id="@+id/actual_ac_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/actual_alcohol"
+            app:layout_constraintBottom_toBottomOf="@id/actual_ac"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/actual_ac" />
+
+        <TextView
+            android:id="@+id/actual_ac"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="0dp"
+            android:text="0%"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/actual_ac_title"
+            app:layout_constraintTop_toBottomOf="@id/actual_fg_input" />
+
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>
