@@ -17,12 +17,7 @@ public class BrewDayFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.brew_day_fragment, container, false);
 
         _startBoilButton = rootView.findViewById(R.id.start_boil_button);
-        _startBoilButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "This feature is coming soon!", Toast.LENGTH_SHORT).show();
-            }
-        });
+        _startBoilButton.setOnClickListener(v -> Toast.makeText(getContext(), "This feature is coming soon!", Toast.LENGTH_SHORT).show());
 
         return rootView;
     }

@@ -9,16 +9,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private static final int NUM_PAGES = 2;
     private ViewPager _pager;
     private FragmentPagerAdapter _pageAdapter;
     private TabLayout tabLayout;
-    private Button _startBoilButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
