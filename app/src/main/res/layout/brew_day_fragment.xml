@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/brew_day_constraint"
         android:layout_width="match_parent"
         android:layout_height="0dp">
@@ -346,5 +346,5 @@
             app:layout_constraintStart_toEndOf="@id/actual_ac_title"
             app:layout_constraintTop_toBottomOf="@id/actual_fg_input" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

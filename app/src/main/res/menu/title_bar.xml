@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Copyright Matthew Coughlin 2018 -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_save"
+        android:icon="@drawable/ic_save_black_24dp"
+        android:title="@string/save"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_import"
+        android:icon="@drawable/ic_import_black_24dp"
+        android:title="@string/import_action"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/units_action"
+        android:title="@string/units"
+        app:showAsAction="never" />
+
+</menu>

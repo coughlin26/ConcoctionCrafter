@@ -3,18 +3,26 @@
 package com.example.matt.concoctioncrafter;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.google.android.material.tabs.TabLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 public class MainActivity extends AppCompatActivity {
     private static final int NUM_PAGES = 2;
     private ViewPager _pager;
     private FragmentPagerAdapter _pageAdapter;
-    private TabLayout tabLayout;
+    private TabLayout _tabLayout;
+    private Toolbar _toolBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,11 +30,36 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         _pager = findViewById(R.id.pager);
-        tabLayout = findViewById(R.id.pager_header);
+        _tabLayout = findViewById(R.id.pager_header);
+        _toolBar = findViewById(R.id.toolbar);
         _pageAdapter = new CustomPageAdapter(getSupportFragmentManager());
         _pager.setAdapter(_pageAdapter);
 
-        tabLayout.setupWithViewPager(_pager);
+        _tabLayout.setupWithViewPager(_pager);
+        setSupportActionBar(_toolBar);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.title_bar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_save:
+                Toast.makeText(this, "Save coming soon", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_import:
+                Toast.makeText(this, "Import coming soon", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.units_action:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

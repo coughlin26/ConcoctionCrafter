@@ -1,3 +1,5 @@
+<!-- Copyright Matthew Coughlin 2018 -->
+
 <resources>
     <string name="app_name">Concoction Crafter</string>
 
@@ -32,6 +34,9 @@
     <string name="mash_temp">Mash Temperature</string>
     <string name="none">None</string>
     <string name="start_boil">Start Boil</string>
+    <string name="save">Save</string>
+    <string name="import_action">Import</string>
+    <string name="units">Units</string>
 
     <!-- Units -->
     <plurals name="pound_plural">
