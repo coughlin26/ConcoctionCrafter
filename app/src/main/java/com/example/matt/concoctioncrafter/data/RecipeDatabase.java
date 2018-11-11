@@ -23,10 +23,17 @@ public abstract class RecipeDatabase extends RoomDatabase {
             synchronized (RecipeDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(), RecipeDatabase.class, DB_NAME)
+                            .fallbackToDestructiveMigration()
                             .addCallback(new RoomDatabase.Callback() {
                                 @Override
                                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
                                     super.onCreate(db);
+                                    new PopulateDbAsync(INSTANCE).execute();
+                                }
+
+                                @Override
+                                public void onOpen(@NonNull SupportSQLiteDatabase db) {
+                                    super.onOpen(db);
                                     new PopulateDbAsync(INSTANCE).execute();
                                 }
                             })
@@ -64,7 +71,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
                     "None",
                     0f,
                     "Cascade",
-                    2f,
+                    4f,
                     "None",
                     0,
                     "None",

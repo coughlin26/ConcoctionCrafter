@@ -4,6 +4,7 @@ package com.example.matt.concoctioncrafter.data;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -16,6 +17,9 @@ public interface RecipeDAO {
     @Query("SELECT * FROM recipe")
     List<Recipe> getAll();
 
+    @Query("SELECT * FROM recipe ORDER BY recipe_name ASC")
+    LiveData<List<Recipe>> getAllRecipes();
+
     @Query("SELECT * FROM recipe WHERE id IN (:recipeIds)")
     List<Recipe> loadAllByIds(int[] recipeIds);
 
@@ -25,14 +29,11 @@ public interface RecipeDAO {
     @Query("SELECT * FROM recipe WHERE recipe_name LIKE :name LIMIT 1")
     Recipe findByName(String name);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    long insert(Recipe recipe);
+    @Insert(onConflict = OnConflictStrategy.FAIL)
+    void insert(Recipe recipe);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.FAIL)
     void insert(Recipe... recipes);
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertAll(Recipe... recipes);
 
     @Update
     void update(Recipe recipe);

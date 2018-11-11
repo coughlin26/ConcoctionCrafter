@@ -3,6 +3,7 @@
 package com.example.matt.concoctioncrafter.data;
 
 import android.app.Application;
+import android.util.Log;
 
 import java.util.List;
 
@@ -11,27 +12,47 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 public class RecipeViewModel extends AndroidViewModel {
-    private RecipeDAO recipeDAO;
-    private LiveData<List<Recipe>> recipeLiveData;
+    public static final String TAG = "Recipe_View_Model";
+    private RecipeRepository _recipeRepository;
+    private LiveData<List<Recipe>> _recipeLiveData;
 
     public RecipeViewModel(@NonNull Application application) {
         super(application);
-        recipeDAO = RecipeDatabase.getDatabase(application).recipeDAO();
+        _recipeRepository = new RecipeRepository(application);
+        _recipeLiveData = _recipeRepository.getAllRecipes();
     }
 
     public LiveData<List<Recipe>> getRecipeList() {
-        return recipeLiveData;
+        return _recipeLiveData;
+    }
+
+    public void insert(Recipe recipe) {
+        Log.d(TAG, "Inserting recipe: " + recipe.getRecipeName());
+        _recipeRepository.insert(recipe);
     }
 
     public void insert(Recipe... recipes) {
-        recipeDAO.insert(recipes);
+        Log.d(TAG, "Inserting recipes, starting with: " + recipes[0].getRecipeName());
+        _recipeRepository.insert(recipes);
     }
 
     public void update(Recipe recipe) {
-        recipeDAO.update(recipe);
+        Log.d(TAG, "Updating recipe named: " + recipe.getRecipeName());
+        _recipeRepository.update(recipe);
+    }
+
+    public void update(Recipe... recipes) {
+        Log.d(TAG, "Updating recipes, stating with: " + recipes[0].getRecipeName());
+        _recipeRepository.update(recipes);
+    }
+
+    public void delete(final Recipe recipe) {
+        Log.d(TAG, "Deleting recipe named: " + recipe.getRecipeName());
+        _recipeRepository.delete(recipe);
     }
 
     public void deleteAll() {
-        recipeDAO.deleteAll();
+        Log.d(TAG, "Deleting all recipes...");
+        _recipeRepository.deleteAll();
     }
 }

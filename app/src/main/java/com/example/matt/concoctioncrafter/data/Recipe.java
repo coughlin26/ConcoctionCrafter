@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class Recipe {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     @ColumnInfo(name = "recipe_name")
