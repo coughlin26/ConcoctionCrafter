@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 if (_pager.getCurrentItem() == 0) {
                     final Recipe recipe = makeRecipe();
 
-                    if (_recipeViewModel.getRecipeList().getValue() != null && _recipeViewModel.getRecipeList().getValue().stream().anyMatch(r -> r.getRecipeName().equals(((EditText) findViewById(R.id.name_input)).getText().toString()))) {
+                    if (_recipeViewModel.findByName(recipe.getRecipeName()) != null) {
                         Log.d("Testing", "Updating the recipe");
                         _recipeViewModel.update(recipe);
                     } else {

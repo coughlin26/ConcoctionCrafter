@@ -14,31 +14,31 @@ import androidx.room.Update;
 
 @Dao
 public interface RecipeDAO {
-    @Query("SELECT * FROM recipe")
+    @Query("SELECT * FROM `recipes.db`")
     List<Recipe> getAll();
 
-    @Query("SELECT * FROM recipe ORDER BY recipe_name ASC")
+    @Query("SELECT * FROM `recipes.db` ORDER BY recipe_name ASC")
     LiveData<List<Recipe>> getAllRecipes();
 
-    @Query("SELECT * FROM recipe WHERE id IN (:recipeIds)")
+    @Query("SELECT * FROM `recipes.db` WHERE id IN (:recipeIds)")
     List<Recipe> loadAllByIds(int[] recipeIds);
 
-    @Query("SELECT * FROM recipe WHERE id = :id LIMIT 1")
+    @Query("SELECT * FROM `recipes.db` WHERE id = :id LIMIT 1")
     Recipe findById(int id);
 
-    @Query("SELECT * FROM recipe WHERE recipe_name LIKE :name LIMIT 1")
+    @Query("SELECT * FROM `recipes.db` WHERE recipe_name = :name LIMIT 1")
     Recipe findByName(String name);
 
-    @Insert(onConflict = OnConflictStrategy.FAIL)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Recipe recipe);
 
-    @Insert(onConflict = OnConflictStrategy.FAIL)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Recipe... recipes);
 
     @Update
     void update(Recipe recipe);
 
-    @Query("DELETE FROM recipe")
+    @Query("DELETE FROM `recipes.db`")
     void deleteAll();
 
     @Delete

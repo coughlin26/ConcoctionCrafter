@@ -46,6 +46,11 @@ public class RecipeViewModel extends AndroidViewModel {
         _recipeRepository.update(recipes);
     }
 
+    public Recipe findByName(String name) {
+        Log.d(TAG, "Searching for " + name);
+        return _recipeRepository.findByName(name);
+    }
+
     public void delete(final Recipe recipe) {
         Log.d(TAG, "Deleting recipe named: " + recipe.getRecipeName());
         _recipeRepository.delete(recipe);

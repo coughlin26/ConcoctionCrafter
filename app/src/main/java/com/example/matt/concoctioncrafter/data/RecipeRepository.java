@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import androidx.lifecycle.LiveData;
 
@@ -38,6 +39,15 @@ public class RecipeRepository {
 
     void update(Recipe... recipes) {
         new updateAsyncTask(_recipeDao).execute(recipes);
+    }
+
+    Recipe findByName(String name) {
+        try {
+            return new queryAsyncTask(_recipeDao).execute(name).get();
+        } catch (final InterruptedException | ExecutionException e) {
+            Log.e("RecipeRepository", "findByName interrupted", e);
+            return null;
+        }
     }
 
     void delete(Recipe recipe) {
@@ -97,6 +107,20 @@ public class RecipeRepository {
                 _asyncRecipeDao.update(recipe);
             }
             return null;
+        }
+    }
+
+    private static class queryAsyncTask extends AsyncTask<String, Void, Recipe> {
+        private RecipeDAO _asyncRecipeDao;
+
+        queryAsyncTask(RecipeDAO recipeDAO) {
+            _asyncRecipeDao = recipeDAO;
+        }
+
+        @Override
+        protected Recipe doInBackground(final String... params) {
+            Log.d("Testing", "Querying for recipe: " + params[0]);
+            return _asyncRecipeDao.findByName(params[0]);
         }
     }
 }
