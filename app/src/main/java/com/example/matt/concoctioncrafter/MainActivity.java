@@ -2,6 +2,7 @@
 
 package com.example.matt.concoctioncrafter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -9,15 +10,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.matt.concoctioncrafter.data.Recipe;
 import com.example.matt.concoctioncrafter.data.RecipeViewModel;
 import com.google.android.material.tabs.TabLayout;
-
-import java.util.List;
-import java.util.Locale;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -79,23 +76,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             case R.id.action_import:
-                final List<Recipe> recipes = _recipeViewModel.getRecipeList().getValue();
-                if (recipes == null || recipes.isEmpty()) {
-                    Toast.makeText(this, "No recipes found", Toast.LENGTH_SHORT).show();
-                } else {
-                    final Recipe recipe = recipes.get(0);
-                    if (recipe != null) {
-                        if (_pager.getCurrentItem() == 0) {
-                            ((EditText) findViewById(R.id.name_input)).setText(recipe.getRecipeName());
-                            ((EditText) findViewById(R.id.amount_input1)).setText(String.format(Locale.getDefault(), "%.2f", recipe.getGrain_1_amount()));
-                        } else if (_pager.getCurrentItem() == 1) {
-                            ((TextView) findViewById(R.id.name)).setText(recipe.getRecipeName());
-                            ((TextView) findViewById(R.id.hop_type1)).setText(recipe.getHop_1());
-                        }
-                    } else {
-                        Toast.makeText(this, "Recipe could not be found", Toast.LENGTH_SHORT).show();
-                    }
-                }
+                final Intent chooserIntent = new Intent(this, ChooseRecipeActivity.class);
+                startActivity(chooserIntent);
                 return true;
             case R.id.action_delete:
                 _recipeViewModel.deleteAll();

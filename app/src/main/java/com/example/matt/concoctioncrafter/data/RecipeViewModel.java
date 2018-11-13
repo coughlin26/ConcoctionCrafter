@@ -22,6 +22,11 @@ public class RecipeViewModel extends AndroidViewModel {
         _recipeLiveData = _recipeRepository.getAllRecipes();
     }
 
+    public List<Recipe> getAll() {
+        Log.d(TAG, "Getting all recipes, unordered");
+        return _recipeRepository.getAll();
+    }
+
     public LiveData<List<Recipe>> getRecipeList() {
         return _recipeLiveData;
     }

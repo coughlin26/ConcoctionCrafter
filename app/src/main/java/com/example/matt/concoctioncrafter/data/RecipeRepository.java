@@ -21,29 +21,38 @@ public class RecipeRepository {
         _allRecipes = _recipeDao.getAllRecipes();
     }
 
+    List<Recipe> getAll() {
+        try {
+            return new GetAllAsyncTask(_recipeDao).execute().get();
+        } catch (final InterruptedException | ExecutionException e) {
+            Log.e("RecipeRepository", "Failed to get all recipes", e);
+            return null;
+        }
+    }
+
     LiveData<List<Recipe>> getAllRecipes() {
         return _allRecipes;
     }
 
     void insert(Recipe recipe) {
-        new insertAsyncTask(_recipeDao).execute(recipe);
+        new InsertAsyncTask(_recipeDao).execute(recipe);
     }
 
     void insert(Recipe... recipes) {
-        new insertAsyncTask(_recipeDao).execute(recipes);
+        new InsertAsyncTask(_recipeDao).execute(recipes);
     }
 
     void update(Recipe recipe) {
-        new updateAsyncTask(_recipeDao).execute(recipe);
+        new UpdateAsyncTask(_recipeDao).execute(recipe);
     }
 
     void update(Recipe... recipes) {
-        new updateAsyncTask(_recipeDao).execute(recipes);
+        new UpdateAsyncTask(_recipeDao).execute(recipes);
     }
 
     Recipe findByName(String name) {
         try {
-            return new queryAsyncTask(_recipeDao).execute(name).get();
+            return new FindByNameAsyncTask(_recipeDao).execute(name).get();
         } catch (final InterruptedException | ExecutionException e) {
             Log.e("RecipeRepository", "findByName interrupted", e);
             return null;
@@ -51,21 +60,20 @@ public class RecipeRepository {
     }
 
     void delete(Recipe recipe) {
-        new deleteAsyncTask(_recipeDao).execute(recipe);
+        new DeleteAsyncTask(_recipeDao).execute(recipe);
     }
 
     void deleteAll(Recipe... recipes) {
-        new deleteAsyncTask(_recipeDao).execute(recipes);
+        new DeleteAsyncTask(_recipeDao).execute(recipes);
     }
 
-    private static class insertAsyncTask extends AsyncTask<Recipe, Void, Void> {
+    private static class InsertAsyncTask extends AsyncTask<Recipe, Void, Void> {
         private RecipeDAO _asyncRecipeDao;
 
-        insertAsyncTask(RecipeDAO recipeDAO) {
+        InsertAsyncTask(RecipeDAO recipeDAO) {
             _asyncRecipeDao = recipeDAO;
         }
 
-        // Why isn't this working?
         @Override
         protected Void doInBackground(final Recipe... params) {
             Log.d("Testing", "Inserting in AsyncTask...");
@@ -74,10 +82,10 @@ public class RecipeRepository {
         }
     }
 
-    private static class deleteAsyncTask extends AsyncTask<Recipe, Void, Void> {
+    private static class DeleteAsyncTask extends AsyncTask<Recipe, Void, Void> {
         private RecipeDAO _asyncRecipeDao;
 
-        deleteAsyncTask(RecipeDAO recipeDAO) {
+        DeleteAsyncTask(RecipeDAO recipeDAO) {
             _asyncRecipeDao = recipeDAO;
         }
 
@@ -93,10 +101,10 @@ public class RecipeRepository {
         }
     }
 
-    private static class updateAsyncTask extends AsyncTask<Recipe, Void, Void> {
+    private static class UpdateAsyncTask extends AsyncTask<Recipe, Void, Void> {
         private RecipeDAO _asyncRecipeDao;
 
-        updateAsyncTask(RecipeDAO recipeDAO) {
+        UpdateAsyncTask(RecipeDAO recipeDAO) {
             _asyncRecipeDao = recipeDAO;
         }
 
@@ -110,10 +118,10 @@ public class RecipeRepository {
         }
     }
 
-    private static class queryAsyncTask extends AsyncTask<String, Void, Recipe> {
+    private static class FindByNameAsyncTask extends AsyncTask<String, Void, Recipe> {
         private RecipeDAO _asyncRecipeDao;
 
-        queryAsyncTask(RecipeDAO recipeDAO) {
+        FindByNameAsyncTask(RecipeDAO recipeDAO) {
             _asyncRecipeDao = recipeDAO;
         }
 
@@ -121,6 +129,19 @@ public class RecipeRepository {
         protected Recipe doInBackground(final String... params) {
             Log.d("Testing", "Querying for recipe: " + params[0]);
             return _asyncRecipeDao.findByName(params[0]);
+        }
+    }
+
+    private static class GetAllAsyncTask extends AsyncTask<Void, Void, List<Recipe>> {
+        private RecipeDAO _asyncRecipeDao;
+
+        GetAllAsyncTask(RecipeDAO recipeDAO) {
+            _asyncRecipeDao = recipeDAO;
+        }
+
+        @Override
+        protected List<Recipe> doInBackground(final Void... params) {
+            return _asyncRecipeDao.getAll();
         }
     }
 }
