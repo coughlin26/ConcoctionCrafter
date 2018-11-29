@@ -2,6 +2,7 @@
 
 <resources>
     <string name="app_name">Concoction Crafter</string>
+    <string name="choose_recipe">Choose a Recipe</string>
 
     <!-- General -->
     <string name="beer_name">Beer Name</string>

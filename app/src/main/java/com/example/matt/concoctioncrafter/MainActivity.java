@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private RecipeViewModel _recipeViewModel;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -49,14 +49,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.title_bar, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
                 if (_pager.getCurrentItem() == 0) {
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
      * A custom page adapter.
      */
     private class CustomPageAdapter extends FragmentPagerAdapter {
-        private CustomPageAdapter(FragmentManager manager) {
+        private CustomPageAdapter(final FragmentManager manager) {
             super(manager);
         }
 
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public CharSequence getPageTitle(int position) {
+        public CharSequence getPageTitle(final int position) {
             if (position == 0) {
                 return getString(R.string.recipe);
             } else {
