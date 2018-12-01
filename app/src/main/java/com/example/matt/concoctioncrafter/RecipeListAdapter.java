@@ -4,7 +4,9 @@ package com.example.matt.concoctioncrafter;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.example.matt.concoctioncrafter.data.Recipe;
@@ -13,9 +15,12 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.RecipeViewHolder> {
     private List<Recipe> _recipes;
+    private PublishSubject<Recipe> _recipeSubject = PublishSubject.create();
 
     RecipeListAdapter(final List<Recipe> recipes) {
         _recipes = recipes;
@@ -33,6 +38,11 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         holder._title.setText(_recipes.get(position).getRecipeName());
+        holder._viewGroup.setOnClickListener(v -> _recipeSubject.onNext(_recipes.get(position)));
+    }
+
+    public PublishSubject<Recipe> getRecipeClicks() {
+        return _recipeSubject;
     }
 
     @Override

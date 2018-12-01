@@ -2,10 +2,13 @@
 
 package com.example.matt.concoctioncrafter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.example.matt.concoctioncrafter.data.RecipeParcelable;
 import com.example.matt.concoctioncrafter.data.RecipeViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,10 +16,12 @@ import androidx.core.app.NavUtils;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.disposables.Disposable;
 
 public class ChooseRecipeActivity extends AppCompatActivity {
     private RecyclerView _recipeList;
     private RecipeListAdapter _recipeAdapter;
+    private Disposable _recipeClickSubscription;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -29,11 +34,27 @@ public class ChooseRecipeActivity extends AppCompatActivity {
         _recipeList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         _recipeAdapter = new RecipeListAdapter(recipeViewModel.getAll());
         _recipeList.setAdapter(_recipeAdapter);
+
+        _recipeClickSubscription = _recipeAdapter.getRecipeClicks().subscribe(recipe -> {
+            Toast.makeText(this, "Clicked on " + recipe.getRecipeName(), Toast.LENGTH_SHORT).show();
+            final Bundle bundle = new Bundle();
+            bundle.putParcelable("RECIPE_KEY", new RecipeParcelable(recipe));
+            final Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("BUNDLE_KEY", bundle);
+            //startActivity(intent);
+        });
+
         setSupportActionBar(findViewById(R.id.toolbar));
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        _recipeClickSubscription.dispose();
+        super.onDestroy();
     }
 
     @Override
