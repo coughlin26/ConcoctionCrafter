@@ -8,14 +8,14 @@ import android.os.Parcelable;
 public class RecipeParcelable implements Parcelable {
     private Recipe _recipe;
 
-    public static Creator CREATOR = new Creator() {
+    public static Creator<RecipeParcelable> CREATOR = new Creator<RecipeParcelable>() {
         @Override
-        public Object createFromParcel(Parcel source) {
+        public RecipeParcelable createFromParcel(Parcel source) {
             return new RecipeParcelable(source);
         }
 
         @Override
-        public Object[] newArray(int size) {
+        public RecipeParcelable[] newArray(int size) {
             return new RecipeParcelable[size];
         }
     };

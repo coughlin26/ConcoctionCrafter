@@ -37,10 +37,8 @@ public class ChooseRecipeActivity extends AppCompatActivity {
 
         _recipeClickSubscription = _recipeAdapter.getRecipeClicks().subscribe(recipe -> {
             Toast.makeText(this, "Clicked on " + recipe.getRecipeName(), Toast.LENGTH_SHORT).show();
-            final Bundle bundle = new Bundle();
-            bundle.putParcelable("RECIPE_KEY", new RecipeParcelable(recipe));
             final Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("BUNDLE_KEY", bundle);
+            intent.putExtra("RECIPE_KEY", new RecipeParcelable(recipe));
             //startActivity(intent);
         });
 
