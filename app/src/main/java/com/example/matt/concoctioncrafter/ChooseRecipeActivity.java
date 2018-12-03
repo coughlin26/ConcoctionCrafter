@@ -37,9 +37,10 @@ public class ChooseRecipeActivity extends AppCompatActivity {
 
         _recipeClickSubscription = _recipeAdapter.getRecipeClicks().subscribe(recipe -> {
             Toast.makeText(this, "Clicked on " + recipe.getRecipeName(), Toast.LENGTH_SHORT).show();
-            final Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("RECIPE_KEY", new RecipeParcelable(recipe));
-            //startActivity(intent);
+            final Intent intent = new Intent();
+            intent.putExtra(MainActivity.RECIPE_KEY, new RecipeParcelable(recipe));
+            setResult(RESULT_OK, intent);
+            finish();
         });
 
         setSupportActionBar(findViewById(R.id.toolbar));

@@ -45,6 +45,10 @@ public class RecipeParcelable implements Parcelable {
         _recipe = recipe;
     }
 
+    public Recipe getRecipe() {
+        return _recipe;
+    }
+
     @Override
     public int describeContents() {
         return 0;

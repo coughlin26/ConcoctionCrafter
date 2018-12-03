@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.matt.concoctioncrafter.data.Recipe;
+import com.example.matt.concoctioncrafter.data.RecipeParcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -36,6 +39,16 @@ public class RecipeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            final RecipeParcelable recipeParcelable = getArguments().getParcelable(MainActivity.RECIPE_KEY);
+
+            if (recipeParcelable != null) {
+                final Recipe recipe = recipeParcelable.getRecipe();
+                setBeerName(recipe.getRecipeName());
+
+            }
+        }
     }
 
     @Override
@@ -70,6 +83,10 @@ public class RecipeFragment extends Fragment {
 
     public String getBeerName() {
         return _beerName.getText().toString();
+    }
+
+    public void setGrainInput1(final String grainInput1) {
+        _grainInput1.setText(grainInput1);
     }
 
     public String getGrainInput1() {

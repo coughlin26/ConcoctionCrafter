@@ -4,6 +4,7 @@ package com.example.matt.concoctioncrafter;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.matt.concoctioncrafter.data.Recipe;
+import com.example.matt.concoctioncrafter.data.RecipeParcelable;
 import com.example.matt.concoctioncrafter.data.RecipeViewModel;
 import com.google.android.material.tabs.TabLayout;
 
@@ -25,12 +27,15 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int REQUEST_CODE = 7;
+    public static final String RECIPE_KEY = "RECIPE_KEY";
     private static final int NUM_PAGES = 2;
     private ViewPager _pager;
     private FragmentPagerAdapter _pageAdapter;
     private TabLayout _tabLayout;
     private Toolbar _toolBar;
     private RecipeViewModel _recipeViewModel;
+    private RecipeParcelable _recipeParcelable;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -46,6 +51,32 @@ public class MainActivity extends AppCompatActivity {
 
         _tabLayout.setupWithViewPager(_pager);
         setSupportActionBar(_toolBar);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        Log.d("TESTING", "In onActivityResult");
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            if (data.getParcelableExtra(RECIPE_KEY) != null) {
+                _recipeParcelable = data.getParcelableExtra(RECIPE_KEY);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRestoreInstanceState(final Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(final Bundle outState, final PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
     }
 
     @Override
@@ -77,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_import:
                 final Intent chooserIntent = new Intent(this, ChooseRecipeActivity.class);
-                startActivity(chooserIntent);
+                startActivityForResult(chooserIntent, REQUEST_CODE);
                 return true;
             case R.id.action_delete:
                 _recipeViewModel.deleteAll();
@@ -108,10 +139,17 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
+            final Bundle bundle = new Bundle();
             if (position == 0) {
-                return new RecipeFragment();
+                final RecipeFragment recipeFragment = new RecipeFragment();
+                bundle.putParcelable(RECIPE_KEY, _recipeParcelable);
+                recipeFragment.setArguments(bundle);
+                return recipeFragment;
             } else {
-                return new BrewDayFragment();
+                final BrewDayFragment brewDayFragment = new BrewDayFragment();
+                bundle.putParcelable(RECIPE_KEY, _recipeParcelable);
+                brewDayFragment.setArguments(bundle);
+                return brewDayFragment;
             }
         }
 
@@ -154,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         final String yeast = ((Spinner) findViewById(R.id.yeast_spinner)).getSelectedItem().toString();
 
 
-        return new Recipe(beerName,
+        return new Recipe(beerName == null || "".equals(beerName) ? "Unnamed Beer" : beerName,
                 grain1,
                 grain1Amount.isEmpty() ? 0f : Float.valueOf(grain1Amount),
                 grain2,
