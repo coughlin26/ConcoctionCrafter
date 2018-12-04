@@ -13,8 +13,12 @@ import com.example.matt.concoctioncrafter.data.Recipe;
 import com.example.matt.concoctioncrafter.data.RecipeDatabase;
 import com.example.matt.concoctioncrafter.data.RecipeParcelable;
 
+import java.util.Locale;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import io.reactivex.disposables.Disposable;
 
 public class BrewDayFragment extends Fragment {
     private Button _startBoilButton;
@@ -31,8 +35,28 @@ public class BrewDayFragment extends Fragment {
     private TextView _additionTime2;
     private TextView _additionTime3;
     private TextView _additionTime4;
-
     private TextView _alcoholContent;
+    private Disposable _recipeSubscription;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getActivity() != null) {
+            _recipeSubscription = ((MainActivity) getActivity()).getRecipe().subscribe(recipe ->
+            {
+                setRecipeName(recipe.getRecipeName());
+                setHopType1(recipe.getHop_1());
+                setAmount1(Float.toString(recipe.getHop_1_amount()));
+                setHopType2(recipe.getHop_2());
+                setAmount2(Float.toString(recipe.getHop_2_amount()));
+                setHopType3(recipe.getHop_3());
+                setAmount3(Float.toString(recipe.getHop_3_amount()));
+                setHopType4(recipe.getHop_4());
+                setAmount4(Float.toString(recipe.getHop_4_amount()));
+            });
+        }
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,6 +93,12 @@ public class BrewDayFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        _recipeSubscription.dispose();
+        super.onDestroy();
     }
 
     @Override
@@ -112,99 +142,99 @@ public class BrewDayFragment extends Fragment {
         _hop_type1.setText(type);
     }
 
-    public TextView get_hop_type2() {
-        return _hop_type2;
+    public String getHopType2() {
+        return _hop_type2.getText().toString();
     }
 
-    public void set_hop_type2(TextView _hop_type2) {
-        this._hop_type2 = _hop_type2;
+    public void setHopType2(String hop_type2) {
+        _hop_type2.setText(hop_type2);
     }
 
-    public TextView get_hop_type3() {
-        return _hop_type3;
+    public String getHopType3() {
+        return _hop_type3.getText().toString();
     }
 
-    public void set_hop_type3(TextView _hop_type3) {
-        this._hop_type3 = _hop_type3;
+    public void setHopType3(final String hop_type3) {
+        _hop_type3.setText(hop_type3);
     }
 
-    public TextView get_hop_type4() {
-        return _hop_type4;
+    public String getHopType4() {
+        return _hop_type4.getText().toString();
     }
 
-    public void set_hop_type4(TextView _hop_type4) {
-        this._hop_type4 = _hop_type4;
+    public void setHopType4(final String hop_type4) {
+        _hop_type4.setText(hop_type4);
     }
 
-    public TextView get_amount1() {
-        return _amount1;
+    public String getAmount1() {
+        return _amount1.getText().toString();
     }
 
-    public void set_amount1(TextView _amount1) {
-        this._amount1 = _amount1;
+    public void setAmount1(final String amount1) {
+        _amount1.setText(amount1);
     }
 
-    public TextView get_amount2() {
-        return _amount2;
+    public String getAmount2() {
+        return _amount2.getText().toString();
     }
 
-    public void set_amount2(TextView _amount2) {
-        this._amount2 = _amount2;
+    public void setAmount2(final String amount2) {
+        _amount2.setText(amount2);
     }
 
-    public TextView get_amount3() {
-        return _amount3;
+    public String getAmount3() {
+        return _amount3.getText().toString();
     }
 
-    public void set_amount3(TextView _amount3) {
-        this._amount3 = _amount3;
+    public void setAmount3(final String amount3) {
+        _amount3.setText(amount3);
     }
 
-    public TextView get_amount4() {
-        return _amount4;
+    public String getAmount4() {
+        return _amount4.getText().toString();
     }
 
-    public void set_amount4(TextView _amount4) {
-        this._amount4 = _amount4;
+    public void setAmount4(final String amount4) {
+        _amount4.setText(amount4);
     }
 
-    public TextView get_additionTime1() {
-        return _additionTime1;
+    public String getAdditionTime1() {
+        return _additionTime1.getText().toString();
     }
 
-    public void set_additionTime1(TextView _additionTime1) {
-        this._additionTime1 = _additionTime1;
+    public void setAdditionTime1(final String additionTime1) {
+        _additionTime1.setText(additionTime1);
     }
 
-    public TextView get_additionTime2() {
-        return _additionTime2;
+    public String getAdditionTime2() {
+        return _additionTime2.getText().toString();
     }
 
-    public void set_additionTime2(TextView _additionTime2) {
-        this._additionTime2 = _additionTime2;
+    public void setAdditionTime2(final String additionTime2) {
+        _additionTime2.setText(additionTime2);
     }
 
-    public TextView get_additionTime3() {
-        return _additionTime3;
+    public String getAdditionTime3() {
+        return _additionTime3.getText().toString();
     }
 
-    public void set_additionTime3(TextView _additionTime3) {
-        this._additionTime3 = _additionTime3;
+    public void setAdditionTime3(TextView additionTime3) {
+        _additionTime3 = _additionTime3;
     }
 
-    public TextView get_additionTime4() {
-        return _additionTime4;
+    public String getAdditionTime4() {
+        return _additionTime4.getText().toString();
     }
 
-    public void set_additionTime4(TextView _additionTime4) {
-        this._additionTime4 = _additionTime4;
+    public void setAdditionTime4(final String additionTime4) {
+        _additionTime4.setText(additionTime4);
     }
 
-    public TextView get_alcoholContent() {
-        return _alcoholContent;
+    public float getAlcoholContent() {
+        return Float.valueOf(_alcoholContent.getText().toString());
     }
 
-    public void set_alcoholContent(TextView _alcoholContent) {
-        this._alcoholContent = _alcoholContent;
+    public void setAlcoholContent(final float alcoholContent) {
+        _alcoholContent.setText(String.format(Locale.getDefault(), "%.2f", alcoholContent));
     }
 }

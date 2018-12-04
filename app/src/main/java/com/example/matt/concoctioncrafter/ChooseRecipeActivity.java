@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.matt.concoctioncrafter.data.RecipeParcelable;
 import com.example.matt.concoctioncrafter.data.RecipeViewModel;
@@ -36,7 +35,6 @@ public class ChooseRecipeActivity extends AppCompatActivity {
         _recipeList.setAdapter(_recipeAdapter);
 
         _recipeClickSubscription = _recipeAdapter.getRecipeClicks().subscribe(recipe -> {
-            Toast.makeText(this, "Clicked on " + recipe.getRecipeName(), Toast.LENGTH_SHORT).show();
             final Intent intent = new Intent();
             intent.putExtra(MainActivity.RECIPE_KEY, new RecipeParcelable(recipe));
             setResult(RESULT_OK, intent);

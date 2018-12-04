@@ -4,7 +4,6 @@ package com.example.matt.concoctioncrafter;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +24,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
 
 public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_CODE = 7;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout _tabLayout;
     private Toolbar _toolBar;
     private RecipeViewModel _recipeViewModel;
-    private RecipeParcelable _recipeParcelable;
+    private PublishSubject<Recipe> _recipe = PublishSubject.create();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -54,29 +55,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        Log.d("TESTING", "In onActivityResult");
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             if (data.getParcelableExtra(RECIPE_KEY) != null) {
-                _recipeParcelable = data.getParcelableExtra(RECIPE_KEY);
+                if (((RecipeParcelable) data.getParcelableExtra(RECIPE_KEY)).getRecipe() != null) {
+                    _recipe.onNext(((RecipeParcelable) data.getParcelableExtra(RECIPE_KEY)).getRecipe());
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public void onRestoreInstanceState(final Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    public void onSaveInstanceState(final Bundle outState, final PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
+    /**
+     * Provides a recipe observable to populate the recipe and brew day fragments.
+     *
+     * @return The current recipe being viewed
+     */
+    public Subject<Recipe> getRecipe() {
+        return _recipe;
     }
 
     @Override
@@ -139,17 +135,10 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            final Bundle bundle = new Bundle();
             if (position == 0) {
-                final RecipeFragment recipeFragment = new RecipeFragment();
-                bundle.putParcelable(RECIPE_KEY, _recipeParcelable);
-                recipeFragment.setArguments(bundle);
-                return recipeFragment;
+                return new RecipeFragment();
             } else {
-                final BrewDayFragment brewDayFragment = new BrewDayFragment();
-                bundle.putParcelable(RECIPE_KEY, _recipeParcelable);
-                brewDayFragment.setArguments(bundle);
-                return brewDayFragment;
+                return new BrewDayFragment();
             }
         }
 

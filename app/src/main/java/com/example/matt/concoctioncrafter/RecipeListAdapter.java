@@ -4,9 +4,7 @@ package com.example.matt.concoctioncrafter;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.example.matt.concoctioncrafter.data.Recipe;
@@ -15,7 +13,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.RecipeViewHolder> {
