@@ -1,5 +1,6 @@
 package com.example.matt.concoctioncrafter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -99,23 +100,6 @@ public class BrewDayFragment extends Fragment {
     public void onDestroy() {
         _recipeSubscription.dispose();
         super.onDestroy();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_save:
-                Toast.makeText(getContext(), "Saving is not available for Brew Day", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_import:
-                RecipeDatabase.getDatabase(getContext()).beginTransaction();
-                RecipeDatabase.getDatabase(getContext()).endTransaction();
-                return true;
-            case R.id.units_action:
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     public Button getStartBoilButton() {

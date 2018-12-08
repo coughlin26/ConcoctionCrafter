@@ -24,8 +24,8 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/units_action"
-        android:title="@string/units"
+        android:id="@+id/settings_action"
+        android:title="@string/settings"
         app:showAsAction="never" />
 
 </menu>

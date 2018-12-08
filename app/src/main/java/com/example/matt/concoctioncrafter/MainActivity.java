@@ -109,7 +109,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_delete:
                 _recipeViewModel.deleteAll();
                 return true;
-            case R.id.units_action:
+            case R.id.settings_action:
+                final Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
