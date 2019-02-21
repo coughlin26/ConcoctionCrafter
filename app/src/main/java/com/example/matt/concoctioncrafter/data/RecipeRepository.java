@@ -1,4 +1,4 @@
-/* Copyright Matthew Coughlin 2018 */
+/* Copyright Matthew Coughlin 2018, 2019 */
 
 package com.example.matt.concoctioncrafter.data;
 
@@ -15,7 +15,7 @@ public class RecipeRepository {
     private RecipeDAO _recipeDao;
     private LiveData<List<Recipe>> _allRecipes;
 
-    public RecipeRepository(Application application) {
+    protected RecipeRepository(Application application) {
         RecipeDatabase db = RecipeDatabase.getDatabase(application);
         _recipeDao = db.recipeDAO();
         _allRecipes = _recipeDao.getAllRecipes();

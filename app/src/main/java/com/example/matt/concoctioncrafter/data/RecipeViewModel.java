@@ -1,4 +1,4 @@
-/* Copyright Matthew Coughlin 2018 */
+/* Copyright Matthew Coughlin 2018, 2019 */
 
 package com.example.matt.concoctioncrafter.data;
 
@@ -12,7 +12,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 public class RecipeViewModel extends AndroidViewModel {
-    public static final String TAG = "Recipe_View_Model";
+    private static final String TAG = "Recipe_View_Model";
     private RecipeRepository _recipeRepository;
     private LiveData<List<Recipe>> _recipeLiveData;
 

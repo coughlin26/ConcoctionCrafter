@@ -1,4 +1,4 @@
-/* Copyright Matthew Coughlin 2018 */
+/* Copyright Matthew Coughlin 2018, 2019 */
 
 package com.example.matt.concoctioncrafter;
 
@@ -34,7 +34,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         holder._viewGroup.setOnClickListener(v -> _recipeSubject.onNext(_recipes.get(position)));
     }
 
-    public PublishSubject<Recipe> getRecipeClicks() {
+    protected PublishSubject<Recipe> getRecipeClicks() {
         return _recipeSubject;
     }
 
@@ -43,9 +43,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         return _recipes.size();
     }
 
-    public static class RecipeViewHolder extends RecyclerView.ViewHolder {
-        public ViewGroup _viewGroup;
-        public TextView _title;
+    protected static class RecipeViewHolder extends RecyclerView.ViewHolder {
+        private ViewGroup _viewGroup;
+        private TextView _title;
 
         RecipeViewHolder(ViewGroup viewGroup) {
             super(viewGroup);
