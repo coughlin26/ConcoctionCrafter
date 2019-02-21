@@ -1,4 +1,4 @@
-/* Copyright Matthew Coughlin 2018 */
+/* Copyright Matthew Coughlin 2018, 2019 */
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
@@ -27,7 +27,7 @@ android {
 }
 
 dependencies {
-    def room_version = '2.1.0-alpha03'
+    def room_version = '2.1.0-alpha04'
     def junit_version = '4.12'
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -45,8 +45,8 @@ dependencies {
     annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
 
     testImplementation "junit:junit:$junit_version"
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     androidTestImplementation "androidx.room:room-testing:$room_version"
 }
 repositories {
