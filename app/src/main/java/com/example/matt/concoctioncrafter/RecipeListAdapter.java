@@ -2,7 +2,6 @@
 
 package com.example.matt.concoctioncrafter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -21,9 +20,6 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
     RecipeListAdapter(final List<Recipe> recipes) {
         _recipes = recipes;
-        for (final Recipe recipe : recipes) {
-            Log.d("Testing", "Found recipe: " + recipe.getRecipeName());
-        }
     }
 
     @NonNull
