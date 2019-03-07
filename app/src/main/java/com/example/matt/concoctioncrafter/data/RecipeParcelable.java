@@ -1,4 +1,4 @@
-/* Copyright Matthew Coughlin 2018 */
+/* Copyright Matthew Coughlin 2018, 2019 */
 
 package com.example.matt.concoctioncrafter.data;
 
@@ -22,22 +22,8 @@ public class RecipeParcelable implements Parcelable {
 
     private RecipeParcelable(final Parcel in) {
         _recipe = new Recipe(in.readString(),
-                in.readString(),
-                in.readFloat(),
-                in.readString(),
-                in.readFloat(),
-                in.readString(),
-                in.readFloat(),
-                in.readString(),
-                in.readFloat(),
-                in.readString(),
-                in.readFloat(),
-                in.readString(),
-                in.readFloat(),
-                in.readString(),
-                in.readFloat(),
-                in.readString(),
-                in.readFloat(),
+                in.readArrayList(ClassLoader.getSystemClassLoader()),
+                in.readArrayList(ClassLoader.getSystemClassLoader()),
                 in.readString());
     }
 
@@ -56,23 +42,9 @@ public class RecipeParcelable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(_recipe.getRecipeName());
-        dest.writeString(_recipe.getGrain_1());
-        dest.writeFloat(_recipe.getGrain_1_amount());
-        dest.writeString(_recipe.getGrain_2());
-        dest.writeFloat(_recipe.getGrain_2_amount());
-        dest.writeString(_recipe.getGrain_3());
-        dest.writeFloat(_recipe.getGrain_3_amount());
-        dest.writeString(_recipe.getGrain_4());
-        dest.writeFloat(_recipe.getGrain_4_amount());
-        dest.writeString(_recipe.getHop_1());
-        dest.writeFloat(_recipe.getHop_1_amount());
-        dest.writeString(_recipe.getHop_2());
-        dest.writeFloat(_recipe.getHop_2_amount());
-        dest.writeString(_recipe.getHop_3());
-        dest.writeFloat(_recipe.getHop_3_amount());
-        dest.writeString(_recipe.getHop_4());
-        dest.writeFloat(_recipe.getHop_4_amount());
-        dest.writeString(_recipe.getYeast());
+        dest.writeString(_recipe.get_recipeName());
+        dest.writeList(_recipe.get_fermentables());
+        dest.writeList(_recipe.get_hops());
+        dest.writeString(_recipe.get_yeast());
     }
 }

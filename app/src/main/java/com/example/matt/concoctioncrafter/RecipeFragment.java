@@ -1,4 +1,4 @@
-/* Copyright Matthew Coughlin 2018 */
+/* Copyright Matthew Coughlin 2018, 2019 */
 
 package com.example.matt.concoctioncrafter;
 
@@ -34,6 +34,10 @@ public class RecipeFragment extends Fragment {
     private Spinner _hopSpinner2;
     private Spinner _hopSpinner3;
     private Spinner _hopSpinner4;
+    private EditText _hopAdditionTime_1;
+    private EditText _hopAdditionTime_2;
+    private EditText _hopAdditionTime_3;
+    private EditText _hopAdditionTime_4;
     private Spinner _yeast;
     private Disposable _recipeSubscription;
 
@@ -42,26 +46,29 @@ public class RecipeFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getActivity() != null) {
-            _recipeSubscription = ((MainActivity) getActivity()).getRecipe().subscribe(recipe ->
-            {
-                setBeerName(recipe.getRecipeName());
-                setGrainSpinner1(recipe.getGrain_1());
-                setGrainInput1(String.format(Locale.getDefault(), "%.2f", recipe.getGrain_1_amount()));
-                setGrainSpinner2(recipe.getGrain_2());
-                setGrainInput2(String.format(Locale.getDefault(), "%.2f", recipe.getGrain_2_amount()));
-                setGrainSpinner3(recipe.getGrain_3());
-                setGrainInput3(String.format(Locale.getDefault(), "%.2f", recipe.getGrain_3_amount()));
-                setGrainSpinner4(recipe.getGrain_4());
-                setGrainInput4(String.format(Locale.getDefault(), "%.2f", recipe.getGrain_4_amount()));
-                setHopSpinner1(recipe.getHop_1());
-                setHopInput1(String.format(Locale.getDefault(), "%.2f", recipe.getHop_1_amount()));
-                setHopSpinner2(recipe.getHop_2());
-                setHopInput2(String.format(Locale.getDefault(), "%.2f", recipe.getHop_2_amount()));
-                setHopSpinner3(recipe.getHop_3());
-                setHopInput3(String.format(Locale.getDefault(), "%.2f", recipe.getHop_3_amount()));
-                setHopSpinner4(recipe.getHop_4());
-                setHopInput4(String.format(Locale.getDefault(), "%.2f", recipe.getHop_4_amount()));
-                setYeast(recipe.getYeast());
+            _recipeSubscription = ((MainActivity) getActivity()).getRecipe().subscribe(recipe -> {
+                setBeerName(recipe.get_recipeName());
+                setGrainSpinner1(recipe.get_fermentables().get(0).getName());
+                setGrainInput1(String.format(Locale.getDefault(), "%.2f", recipe.get_fermentables().get(0).getAmount_lbs()));
+                setGrainSpinner2(recipe.get_fermentables().get(1).getName());
+                //setGrainInput2(String.format(Locale.getDefault(), "%.2f", recipe.getFermentable_2().getAmount_lbs()));
+                setGrainSpinner3(recipe.get_fermentables().get(2).getName());
+                //setGrainInput3(String.format(Locale.getDefault(), "%.2f", recipe.getFermentable_3().getAmount_lbs()));
+                setGrainSpinner4(recipe.get_fermentables().get(3).getName());
+                //setGrainInput4(String.format(Locale.getDefault(), "%.2f", recipe.getFermentable_4().getAmount_lbs()));
+                setHopSpinner1(recipe.get_hops().get(0).getName());
+                //setHopInput1(String.format(Locale.getDefault(), "%.2f", recipe.getHop_1().getAmount()));
+                //setHopAdditionTime_1(Integer.toString(recipe.getHop_1().getAdditionTime_min()));
+                setHopSpinner2(recipe.get_hops().get(1).getName());
+                //setHopInput2(String.format(Locale.getDefault(), "%.2f", recipe.getHop_2().getAmount()));
+                //setHopAdditionTime_2(Integer.toString(recipe.getHop_2().getAdditionTime_min()));
+                setHopSpinner3(recipe.get_hops().get(2).getName());
+                //setHopInput3(String.format(Locale.getDefault(), "%.2f", recipe.getHop_3().getAmount()));
+                //setHopAdditionTime_3(Integer.toString(recipe.getHop_3().getAdditionTime_min()));
+                setHopSpinner4(recipe.get_hops().get(3).getName());
+                //setHopInput4(String.format(Locale.getDefault(), "%.2f", recipe.getHop_4().getAmount()));
+                //setHopAdditionTime_4(Integer.toString(recipe.getHop_4().getAdditionTime_min()));
+                setYeast(recipe.get_yeast());
             });
         }
     }
@@ -87,6 +94,10 @@ public class RecipeFragment extends Fragment {
         _hopSpinner2 = rootView.findViewById(R.id.hop_spinner2);
         _hopSpinner3 = rootView.findViewById(R.id.hop_spinner3);
         _hopSpinner4 = rootView.findViewById(R.id.hop_spinner4);
+        _hopAdditionTime_1 = rootView.findViewById(R.id.addition_time1);
+        _hopAdditionTime_2 = rootView.findViewById(R.id.addition_time2);
+        _hopAdditionTime_3 = rootView.findViewById(R.id.addition_time3);
+        _hopAdditionTime_4 = rootView.findViewById(R.id.addition_time4);
         _yeast = rootView.findViewById(R.id.yeast_spinner);
 
         return rootView;
@@ -272,6 +283,38 @@ public class RecipeFragment extends Fragment {
                 break;
             }
         }
+    }
+
+    public String getHopAdditionTime_1() {
+        return _hopAdditionTime_1.getText().toString();
+    }
+
+    public void setHopAdditionTime_1(final CharSequence text) {
+        _hopAdditionTime_1.setText(text);
+    }
+
+    public String getHopAdditionTime_2() {
+        return _hopAdditionTime_2.getText().toString();
+    }
+
+    public void setHopAdditionTime_2(final CharSequence text) {
+        _hopAdditionTime_2.setText(text);
+    }
+
+    public String getHopAdditionTime_3() {
+        return _hopAdditionTime_3.getText().toString();
+    }
+
+    public void setHopAdditionTime_3(final CharSequence text) {
+        _hopAdditionTime_3.setText(text);
+    }
+
+    public String getHopAdditionTime_4() {
+        return _hopAdditionTime_4.getText().toString();
+    }
+
+    public void setHopAdditionTime_4(final CharSequence text) {
+        _hopAdditionTime_4.setText(text);
     }
 
     public String getYeast() {
