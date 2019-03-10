@@ -9,7 +9,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-@Database(entities = {Recipe.class}, version = 1, exportSchema = false)
+@Database(entities = {Recipe.class}, version = 2, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class RecipeDatabase extends RoomDatabase {
     private static final String DB_NAME = "recipes.db";

@@ -4,9 +4,11 @@ package com.example.matt.concoctioncrafter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.matt.concoctioncrafter.data.Recipe;
+import com.example.matt.concoctioncrafter.data.RecipeViewModel;
 
 import java.util.List;
 
@@ -17,9 +19,11 @@ import io.reactivex.subjects.PublishSubject;
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.RecipeViewHolder> {
     private List<Recipe> _recipes;
     private PublishSubject<Recipe> _recipeSubject = PublishSubject.create();
+    private RecipeViewModel _recipeViewModel;
 
-    RecipeListAdapter(final List<Recipe> recipes) {
+    RecipeListAdapter(final List<Recipe> recipes, final RecipeViewModel recipeViewModel) {
         _recipes = recipes;
+        _recipeViewModel = recipeViewModel;
     }
 
     @NonNull
@@ -32,6 +36,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         holder._title.setText(_recipes.get(position).get_recipeName());
         holder._viewGroup.setOnClickListener(v -> _recipeSubject.onNext(_recipes.get(position)));
+        holder._deleteButton.setOnClickListener(v -> _recipeViewModel.delete(_recipes.get(position)));
     }
 
     protected PublishSubject<Recipe> getRecipeClicks() {
@@ -46,11 +51,13 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     protected static class RecipeViewHolder extends RecyclerView.ViewHolder {
         private ViewGroup _viewGroup;
         private TextView _title;
+        private ImageButton _deleteButton;
 
         RecipeViewHolder(ViewGroup viewGroup) {
             super(viewGroup);
             _viewGroup = viewGroup;
             _title = _viewGroup.findViewById(R.id.recipe_name);
+            _deleteButton = _viewGroup.findViewById(R.id.delete_button);
         }
     }
 }

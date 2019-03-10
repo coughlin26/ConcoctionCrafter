@@ -1,4 +1,4 @@
-/* Copyright Matthew Coughlin 2018 */
+/* Copyright Matthew Coughlin 2018, 2019 */
 
 package com.example.matt.concoctioncrafter;
 
@@ -31,7 +31,7 @@ public class ChooseRecipeActivity extends AppCompatActivity {
 
         _recipeList = findViewById(R.id.recipe_list);
         _recipeList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        _recipeAdapter = new RecipeListAdapter(recipeViewModel.getAll());
+        _recipeAdapter = new RecipeListAdapter(recipeViewModel.getAll(), recipeViewModel);
         _recipeList.setAdapter(_recipeAdapter);
 
         _recipeClickSubscription = _recipeAdapter.getRecipeClicks().subscribe(recipe -> {

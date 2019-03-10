@@ -40,6 +40,7 @@
     <string name="settings">Settings</string>
     <string name="units">Units</string>
     <string name="delete_all">Delete All Recipes</string>
+    <string name="delete_recipe">Delete Recipe</string>
 
     <!-- Units -->
     <plurals name="pound_plural">

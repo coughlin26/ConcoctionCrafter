@@ -11,6 +11,7 @@ import android.widget.Spinner;
 
 import java.util.Locale;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -48,26 +49,29 @@ public class RecipeFragment extends Fragment {
         if (getActivity() != null) {
             _recipeSubscription = ((MainActivity) getActivity()).getRecipe().subscribe(recipe -> {
                 setBeerName(recipe.get_recipeName());
+
                 setGrainSpinner1(recipe.get_fermentables().get(0).getName());
                 setGrainInput1(String.format(Locale.getDefault(), "%.2f", recipe.get_fermentables().get(0).getAmount_lbs()));
                 setGrainSpinner2(recipe.get_fermentables().get(1).getName());
-                //setGrainInput2(String.format(Locale.getDefault(), "%.2f", recipe.getFermentable_2().getAmount_lbs()));
+                setGrainInput2(String.format(Locale.getDefault(), "%.2f", recipe.get_fermentables().get(1).getAmount_lbs()));
                 setGrainSpinner3(recipe.get_fermentables().get(2).getName());
-                //setGrainInput3(String.format(Locale.getDefault(), "%.2f", recipe.getFermentable_3().getAmount_lbs()));
+                setGrainInput3(String.format(Locale.getDefault(), "%.2f", recipe.get_fermentables().get(2).getAmount_lbs()));
                 setGrainSpinner4(recipe.get_fermentables().get(3).getName());
-                //setGrainInput4(String.format(Locale.getDefault(), "%.2f", recipe.getFermentable_4().getAmount_lbs()));
+                setGrainInput4(String.format(Locale.getDefault(), "%.2f", recipe.get_fermentables().get(3).getAmount_lbs()));
+
                 setHopSpinner1(recipe.get_hops().get(0).getName());
-                //setHopInput1(String.format(Locale.getDefault(), "%.2f", recipe.getHop_1().getAmount()));
-                //setHopAdditionTime_1(Integer.toString(recipe.getHop_1().getAdditionTime_min()));
+                setHopInput1(String.format(Locale.getDefault(), "%.2f", recipe.get_hops().get(0).getAmount()));
+                setHopAdditionTime_1(Integer.toString(recipe.get_hops().get(0).getAdditionTime_min()));
                 setHopSpinner2(recipe.get_hops().get(1).getName());
-                //setHopInput2(String.format(Locale.getDefault(), "%.2f", recipe.getHop_2().getAmount()));
-                //setHopAdditionTime_2(Integer.toString(recipe.getHop_2().getAdditionTime_min()));
+                setHopInput2(String.format(Locale.getDefault(), "%.2f", recipe.get_hops().get(1).getAmount()));
+                setHopAdditionTime_2(Integer.toString(recipe.get_hops().get(1).getAdditionTime_min()));
                 setHopSpinner3(recipe.get_hops().get(2).getName());
-                //setHopInput3(String.format(Locale.getDefault(), "%.2f", recipe.getHop_3().getAmount()));
-                //setHopAdditionTime_3(Integer.toString(recipe.getHop_3().getAdditionTime_min()));
+                setHopInput3(String.format(Locale.getDefault(), "%.2f", recipe.get_hops().get(2).getAmount()));
+                setHopAdditionTime_3(Integer.toString(recipe.get_hops().get(2).getAdditionTime_min()));
                 setHopSpinner4(recipe.get_hops().get(3).getName());
-                //setHopInput4(String.format(Locale.getDefault(), "%.2f", recipe.getHop_4().getAmount()));
-                //setHopAdditionTime_4(Integer.toString(recipe.getHop_4().getAdditionTime_min()));
+                setHopInput4(String.format(Locale.getDefault(), "%.2f", recipe.get_hops().get(3).getAmount()));
+                setHopAdditionTime_4(Integer.toString(recipe.get_hops().get(3).getAdditionTime_min()));
+
                 setYeast(recipe.get_yeast());
             });
         }
@@ -325,6 +329,16 @@ public class RecipeFragment extends Fragment {
         for (int i = 0; i < _yeast.getCount(); i++) {
             if (_yeast.getItemAtPosition(i).equals(yeast)) {
                 _yeast.setSelection(i);
+                break;
+            }
+        }
+    }
+
+    private void setSpinner(@IdRes final int viewId, final String text) {
+        final Spinner spinner = getActivity().findViewById(viewId);
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).equals(text)) {
+                spinner.setSelection(i);
                 break;
             }
         }

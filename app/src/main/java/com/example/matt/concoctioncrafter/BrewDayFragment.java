@@ -189,7 +189,7 @@ public class BrewDayFragment extends Fragment {
         return _additionTime3.getText().toString();
     }
 
-    public void setAdditionTime3(TextView additionTime3) {
+    public void setAdditionTime3(final String additionTime3) {
         _additionTime3 = _additionTime3;
     }
 
@@ -203,18 +203,19 @@ public class BrewDayFragment extends Fragment {
 
     private void importRecipe(final Recipe recipe) {
         setRecipeName(recipe.get_recipeName());
+
         setHopType1(recipe.get_hops().get(0).getName());
         setAmount1(Float.toString(recipe.get_hops().get(0).getAmount()));
         setAdditionTime1(Integer.toString(recipe.get_hops().get(0).getAdditionTime_min()));
         setHopType2(recipe.get_hops().get(1).getName());
         setAmount2(Float.toString(recipe.get_hops().get(1).getAmount()));
-        setAdditionTime1(Integer.toString(recipe.get_hops().get(1).getAdditionTime_min()));
+        setAdditionTime2(Integer.toString(recipe.get_hops().get(1).getAdditionTime_min()));
         setHopType3(recipe.get_hops().get(2).getName());
         setAmount3(Float.toString(recipe.get_hops().get(2).getAmount()));
-        setAdditionTime1(Integer.toString(recipe.get_hops().get(2).getAdditionTime_min()));
+        setAdditionTime3(Integer.toString(recipe.get_hops().get(2).getAdditionTime_min()));
         setHopType4(recipe.get_hops().get(3).getName());
         setAmount4(Float.toString(recipe.get_hops().get(3).getAmount()));
-        setAdditionTime1(Integer.toString(recipe.get_hops().get(3).getAdditionTime_min()));
+        setAdditionTime4(Integer.toString(recipe.get_hops().get(3).getAdditionTime_min()));
     }
 
     public float getAlcoholContent() {

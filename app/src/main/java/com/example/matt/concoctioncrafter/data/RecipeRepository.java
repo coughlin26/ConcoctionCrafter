@@ -92,7 +92,7 @@ public class RecipeRepository {
         @Override
         protected Void doInBackground(final Recipe... params) {
             Log.d("Testing", "Deleting in AsyncTask...");
-            if (params.length > 1) {
+            if (params.length == 1) {
                 _asyncRecipeDao.delete(params[0]);
             } else {
                 _asyncRecipeDao.deleteAll();

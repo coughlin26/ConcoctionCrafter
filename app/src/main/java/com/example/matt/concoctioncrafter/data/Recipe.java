@@ -17,13 +17,10 @@ public class Recipe {
     @ColumnInfo(name = "recipe_name")
     private String _recipeName;
 
-    //@ColumnInfo(name = "fermentables")
     private List<Fermentable> _fermentables;
 
-    //@ColumnInfo(name = "hops")
     private List<Hop> _hops;
 
-    //@ColumnInfo(name = "yeast")
     private String _yeast;
 
     public Recipe(@NonNull String recipeName,

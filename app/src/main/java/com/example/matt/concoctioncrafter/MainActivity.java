@@ -1,4 +1,4 @@
-/* Copyright Matthew Coughlin 2018 */
+/* Copyright Matthew Coughlin 2018, 2019 */
 
 package com.example.matt.concoctioncrafter;
 
@@ -22,6 +22,7 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -168,32 +169,71 @@ public class MainActivity extends AppCompatActivity {
      * Creates a new Recipe from the views in the Recipe fragment.
      */
     private Recipe makeRecipe() {
-        final String beerName = ((EditText) findViewById(R.id.name_input)).getText().toString();
-        final String grain1 = ((Spinner) findViewById(R.id.grain_spinner1)).getSelectedItem().toString();
-        final float grain1Amount = Float.valueOf(((EditText) findViewById(R.id.amount_input1)).getText().toString());
-        final String grain2 = ((Spinner) findViewById(R.id.grain_spinner2)).getSelectedItem().toString();
-        final float grain2Amount = Float.valueOf(((EditText) findViewById(R.id.amount_input2)).getText().toString());
-        final String grain3 = ((Spinner) findViewById(R.id.grain_spinner3)).getSelectedItem().toString();
-        final float grain3Amount = Float.valueOf(((EditText) findViewById(R.id.amount_input3)).getText().toString());
-        final String grain4 = ((Spinner) findViewById(R.id.grain_spinner4)).getSelectedItem().toString();
-        final float grain4Amount = Float.valueOf(((EditText) findViewById(R.id.amount_input4)).getText().toString());
-        final String hop1 = ((Spinner) findViewById(R.id.hop_spinner1)).getSelectedItem().toString();
-        final float hop1Amount = Float.valueOf(((EditText) findViewById(R.id.hop_amount_input1)).getText().toString());
-        final String hop2 = ((Spinner) findViewById(R.id.hop_spinner2)).getSelectedItem().toString();
-        final float hop2Amount = Float.valueOf(((EditText) findViewById(R.id.hop_amount_input2)).getText().toString());
-        final String hop3 = ((Spinner) findViewById(R.id.hop_spinner3)).getSelectedItem().toString();
-        final float hop3Amount = Float.valueOf(((EditText) findViewById(R.id.hop_amount_input3)).getText().toString());
-        final String hop4 = ((Spinner) findViewById(R.id.hop_spinner4)).getSelectedItem().toString();
-        final float hop4Amount = Float.valueOf(((EditText) findViewById(R.id.hop_amount_input4)).getText().toString());
-        final String yeast = ((Spinner) findViewById(R.id.yeast_spinner)).getSelectedItem().toString();
+        final String beerName = getTextFromEditText(R.id.name_input);
+        final String grain1 = getTextFromSpinner(R.id.grain_spinner1);
+        final float grain1Amount = getFloatFromEditText(R.id.amount_input1);
+        final String grain2 = getTextFromSpinner(R.id.grain_spinner2);
+        final float grain2Amount = getFloatFromEditText(R.id.amount_input2);
+        final String grain3 = getTextFromSpinner(R.id.grain_spinner3);
+        final float grain3Amount = getFloatFromEditText(R.id.amount_input3);
+        final String grain4 = getTextFromSpinner(R.id.grain_spinner4);
+        final float grain4Amount = getFloatFromEditText(R.id.amount_input4);
+        final String hop1 = getTextFromSpinner(R.id.hop_spinner1);
+        final float hop1Amount = getFloatFromEditText(R.id.hop_amount_input1);
+        final int hop1Time = getIntFromEditText(R.id.addition_time1);
+        final String hop2 = getTextFromSpinner(R.id.hop_spinner2);
+        final float hop2Amount = getFloatFromEditText(R.id.hop_amount_input2);
+        final int hop2Time = getIntFromEditText(R.id.addition_time2);
+        final String hop3 = getTextFromSpinner(R.id.hop_spinner3);
+        final float hop3Amount = getFloatFromEditText(R.id.hop_amount_input3);
+        final int hop3Time = getIntFromEditText(R.id.addition_time3);
+        final String hop4 = getTextFromSpinner(R.id.hop_spinner4);
+        final float hop4Amount = getFloatFromEditText(R.id.hop_amount_input4);
+        final int hop4Time = getIntFromEditText(R.id.addition_time4);
+        final String yeast = getTextFromSpinner(R.id.yeast_spinner);
 
         final List<Fermentable> fermentableList = new ArrayList<>();
         final List<Hop> hopList = new ArrayList<>();
 
+        fermentableList.add(new Fermentable(grain1, grain1Amount));
+        fermentableList.add(new Fermentable(grain2, grain2Amount));
+        fermentableList.add(new Fermentable(grain3, grain3Amount));
+        fermentableList.add(new Fermentable(grain4, grain4Amount));
+
+        hopList.add(new Hop(hop1, hop1Amount, hop1Time));
+        hopList.add(new Hop(hop2, hop2Amount, hop2Time));
+        hopList.add(new Hop(hop3, hop3Amount, hop3Time));
+        hopList.add(new Hop(hop4, hop4Amount, hop4Time));
 
         return new Recipe(beerName,
                 fermentableList,
                 hopList,
                 yeast);
+    }
+
+    private String getTextFromSpinner(@IdRes final int viewId) {
+        return ((Spinner) findViewById(viewId)).getSelectedItem().toString();
+    }
+
+    private String getTextFromEditText(@IdRes final int viewId) {
+        return ((EditText) findViewById(viewId)).getText().toString();
+    }
+
+    private float getFloatFromEditText(@IdRes final int viewId) {
+        final String text = getTextFromEditText(viewId);
+        if (text.isEmpty()) {
+            return 0f;
+        } else {
+            return Float.valueOf(text);
+        }
+    }
+
+    private int getIntFromEditText(@IdRes final int viewId) {
+        final String text = getTextFromEditText(viewId);
+        if (text.isEmpty()) {
+            return 0;
+        } else {
+            return Integer.valueOf(text);
+        }
     }
 }
