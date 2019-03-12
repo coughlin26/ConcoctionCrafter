@@ -31,7 +31,13 @@ public class ChooseRecipeActivity extends AppCompatActivity {
 
         _recipeList = findViewById(R.id.recipe_list);
         _recipeList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        _recipeAdapter = new RecipeListAdapter(recipeViewModel.getAll(), recipeViewModel);
+        _recipeAdapter = new RecipeListAdapter(recipeViewModel);
+
+        recipeViewModel.getRecipeList().observe(this, recipeList -> {
+            _recipeAdapter.loadItems(recipeList);
+            _recipeAdapter.notifyDataSetChanged();
+        });
+
         _recipeList.setAdapter(_recipeAdapter);
 
         _recipeClickSubscription = _recipeAdapter.getRecipeClicks().subscribe(recipe -> {

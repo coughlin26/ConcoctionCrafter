@@ -10,15 +10,18 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 public class RecipeRepository {
     private RecipeDAO _recipeDao;
     private LiveData<List<Recipe>> _allRecipes;
+    private MutableLiveData<List<Recipe>> _mutableLiveData = new MutableLiveData<>();
 
     protected RecipeRepository(Application application) {
         RecipeDatabase db = RecipeDatabase.getDatabase(application);
         _recipeDao = db.recipeDAO();
         _allRecipes = _recipeDao.getAllRecipes();
+        updateList();
     }
 
     List<Recipe> getAll() {
@@ -34,20 +37,28 @@ public class RecipeRepository {
         return _allRecipes;
     }
 
+    private void updateList() {
+        _mutableLiveData.postValue(_allRecipes.getValue());
+    }
+
     void insert(Recipe recipe) {
         new InsertAsyncTask(_recipeDao).execute(recipe);
+        updateList();
     }
 
     void insert(Recipe... recipes) {
         new InsertAsyncTask(_recipeDao).execute(recipes);
+        updateList();
     }
 
     void update(Recipe recipe) {
         new UpdateAsyncTask(_recipeDao).execute(recipe);
+        updateList();
     }
 
     void update(Recipe... recipes) {
         new UpdateAsyncTask(_recipeDao).execute(recipes);
+        updateList();
     }
 
     Recipe findByName(String name) {
@@ -61,10 +72,12 @@ public class RecipeRepository {
 
     void delete(Recipe recipe) {
         new DeleteAsyncTask(_recipeDao).execute(recipe);
+        updateList();
     }
 
     void deleteAll(Recipe... recipes) {
         new DeleteAsyncTask(_recipeDao).execute(recipes);
+        updateList();
     }
 
     private static class InsertAsyncTask extends AsyncTask<Recipe, Void, Void> {

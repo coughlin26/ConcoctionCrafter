@@ -21,9 +21,12 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     private PublishSubject<Recipe> _recipeSubject = PublishSubject.create();
     private RecipeViewModel _recipeViewModel;
 
-    RecipeListAdapter(final List<Recipe> recipes, final RecipeViewModel recipeViewModel) {
-        _recipes = recipes;
+    RecipeListAdapter(final RecipeViewModel recipeViewModel) {
         _recipeViewModel = recipeViewModel;
+    }
+
+    public void loadItems(final List<Recipe> recipes) {
+        _recipes = recipes;
     }
 
     @NonNull
@@ -34,9 +37,11 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
-        holder._title.setText(_recipes.get(position).get_recipeName());
-        holder._viewGroup.setOnClickListener(v -> _recipeSubject.onNext(_recipes.get(position)));
-        holder._deleteButton.setOnClickListener(v -> _recipeViewModel.delete(_recipes.get(position)));
+        if (_recipes != null) {
+            holder._title.setText(_recipes.get(position).get_recipeName());
+            holder._viewGroup.setOnClickListener(v -> _recipeSubject.onNext(_recipes.get(position)));
+            holder._deleteButton.setOnClickListener(v -> _recipeViewModel.delete(_recipes.get(position)));
+        }
     }
 
     protected PublishSubject<Recipe> getRecipeClicks() {
@@ -45,7 +50,13 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
     @Override
     public int getItemCount() {
-        return _recipes.size();
+        int count = 0;
+
+        if (_recipes != null) {
+            count = _recipes.size();
+        }
+
+        return count;
     }
 
     protected static class RecipeViewHolder extends RecyclerView.ViewHolder {
