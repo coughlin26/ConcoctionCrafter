@@ -31,7 +31,7 @@ public class RecipeParcelable implements Parcelable {
         in.readTypedList(hops, Hop.CREATOR);
         final String yeast = in.readString();
 
-        _recipe = new Recipe(name == null ? "Unnamed Beer" : name, fermentables, hops, yeast == null ? "Other" : yeast);
+        _recipe = new Recipe(name == null ? "Unnamed Beer" : name, "No Style", fermentables, hops, yeast == null ? "Other" : yeast);
     }
 
     public RecipeParcelable(final Recipe recipe) {

@@ -27,7 +27,7 @@ android {
 }
 
 dependencies {
-    def room_version = '2.1.0-alpha04'
+    def room_version = '2.1.0-alpha05'
     def junit_version = '4.12'
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')

@@ -206,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
         hopList.add(new Hop(hop4, hop4Amount, hop4Time));
 
         return new Recipe(beerName,
+                "No Style",
                 fermentableList,
                 hopList,
                 yeast);
@@ -216,7 +217,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String getTextFromEditText(@IdRes final int viewId) {
-        return ((EditText) findViewById(viewId)).getText().toString();
+        final String text = ((EditText) findViewById(viewId)).getText().toString();
+        return text.isEmpty() ? "Nothing" : text;
     }
 
     private float getFloatFromEditText(@IdRes final int viewId) {

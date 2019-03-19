@@ -17,6 +17,8 @@ public class Recipe {
     @ColumnInfo(name = "recipe_name")
     private String _recipeName;
 
+    private String _style;
+
     private List<Fermentable> _fermentables;
 
     private List<Hop> _hops;
@@ -24,10 +26,12 @@ public class Recipe {
     private String _yeast;
 
     public Recipe(@NonNull String recipeName,
+                  @NonNull String style,
                   @NonNull List<Fermentable> fermentables,
                   @NonNull List<Hop> hops,
                   @NonNull String yeast) {
         _recipeName = recipeName;
+        _style = style;
         _fermentables = fermentables;
         _hops = hops;
         _yeast = yeast;
@@ -47,6 +51,14 @@ public class Recipe {
 
     public void set_recipeName(final String recipeName) {
         _recipeName = recipeName;
+    }
+
+    public String get_style() {
+        return _style;
+    }
+
+    public void set_style(final String style) {
+        _style = style;
     }
 
     public List<Fermentable> get_fermentables() {
