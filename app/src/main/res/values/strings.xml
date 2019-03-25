@@ -63,12 +63,50 @@
     <string name="degrees_f">$1%d \u2109</string>
     <string name="degrees_c">$1%f \u2103</string>
 
+    <!-- Styles -->
+    <string-array name="style_options">
+        <item>British Bitter</item>
+        <item>IPA</item>
+        <item>IPA, NE</item>
+        <item>Lager</item>
+        <item>Oktoberfest</item>
+        <item>Pale Ale</item>
+        <item>Porter</item>
+        <item>Stout</item>
+        <item>Other</item>
+    </string-array>
+
     <!-- Grain type -->
     <string-array name="grain_options">
         <item>Not Used</item>
         <item>2 Row</item>
+        <item>Amber Malt</item>
+        <item>Apples</item>
+        <item>Barley</item>
+        <item>Barley, Roasted</item>
+        <item>Biscuit Malt</item>
+        <item>Black Malt</item>
+        <item>Brown Sugar</item>
+        <item>Caramunich Malt</item>
+        <item>Chocolate Malt</item>
+        <item>Crystal 10L</item>
+        <item>Crystal 20L</item>
+        <item>Crystal 30L</item>
+        <item>Crystal 40L</item>
+        <item>Crystal 60L</item>
+        <item>Crystal 80L</item>
+        <item>Crystal 120L</item>
+        <item>Honey</item>
+        <item>Lemons</item>
+        <item>Limes</item>
+        <item>Maple Syrup</item>
         <item>Marris Otter</item>
-        <item>Chocolate</item>
+        <item>Oats</item>
+        <item>Rye Malt</item>
+        <item>Rye, Flaked</item>
+        <item>Sugar</item>
+        <item>Vienna Malt</item>
+        <item>Wheat</item>
         <item>Other</item>
     </string-array>
 
@@ -77,16 +115,32 @@
         <item>Not Used</item>
         <item>Cascade</item>
         <item>Centennial</item>
+        <item>Chinook</item>
+        <item>Citra</item>
+        <item>Columbus</item>
+        <item>Fuggle</item>
         <item>Galaxy</item>
         <item>Hollertau</item>
+        <item>Mosaic</item>
+        <item>Saaz</item>
+        <item>Tettnanger</item>
         <item>Other</item>
     </string-array>
 
     <!-- Yeast type -->
     <string-array name="yeast_options">
         <item>American Ale</item>
+        <item>American Lager</item>
+        <item>Belgian Ale</item>
+        <item>Brettanomyces</item>
         <item>British Ale</item>
+        <item>Czech Lager</item>
+        <item>German Ale</item>
+        <item>German Lager</item>
+        <item>Lactobacillus</item>
         <item>Oktoberfest</item>
+        <item>Wine, Red</item>
+        <item>Wine, White</item>
         <item>Other</item>
     </string-array>
 </resources>
