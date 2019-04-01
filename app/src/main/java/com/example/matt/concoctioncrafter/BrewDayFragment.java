@@ -190,7 +190,7 @@ public class BrewDayFragment extends Fragment {
     }
 
     public void setAdditionTime3(final String additionTime3) {
-        _additionTime3 = _additionTime3;
+        _additionTime3.setText(additionTime3);
     }
 
     public String getAdditionTime4() {
