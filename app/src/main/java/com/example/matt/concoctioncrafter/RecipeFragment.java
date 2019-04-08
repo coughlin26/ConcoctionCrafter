@@ -3,18 +3,25 @@
 package com.example.matt.concoctioncrafter;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import io.reactivex.disposables.Disposable;
 
 public class RecipeFragment extends Fragment {
@@ -60,20 +67,20 @@ public class RecipeFragment extends Fragment {
                 setGrainInput4(String.format(Locale.getDefault(), "%.2f", recipe.get_fermentables().get(3).getAmount_lbs()));
 
                 setHopSpinner1(recipe.get_hops().get(0).getName());
-                setHopInput1(String.format(Locale.getDefault(), "%.2f", recipe.get_hops().get(0).getAmount()));
+                setHopInput1(String.format(Locale.getDefault(), "%.2f", recipe.get_hops().get(0).getAmount_oz()));
                 setHopAdditionTime_1(Integer.toString(recipe.get_hops().get(0).getAdditionTime_min()));
                 setHopSpinner2(recipe.get_hops().get(1).getName());
-                setHopInput2(String.format(Locale.getDefault(), "%.2f", recipe.get_hops().get(1).getAmount()));
+                setHopInput2(String.format(Locale.getDefault(), "%.2f", recipe.get_hops().get(1).getAmount_oz()));
                 setHopAdditionTime_2(Integer.toString(recipe.get_hops().get(1).getAdditionTime_min()));
                 setHopSpinner3(recipe.get_hops().get(2).getName());
-                setHopInput3(String.format(Locale.getDefault(), "%.2f", recipe.get_hops().get(2).getAmount()));
+                setHopInput3(String.format(Locale.getDefault(), "%.2f", recipe.get_hops().get(2).getAmount_oz()));
                 setHopAdditionTime_3(Integer.toString(recipe.get_hops().get(2).getAdditionTime_min()));
                 setHopSpinner4(recipe.get_hops().get(3).getName());
-                setHopInput4(String.format(Locale.getDefault(), "%.2f", recipe.get_hops().get(3).getAmount()));
+                setHopInput4(String.format(Locale.getDefault(), "%.2f", recipe.get_hops().get(3).getAmount_oz()));
                 setHopAdditionTime_4(Integer.toString(recipe.get_hops().get(3).getAdditionTime_min()));
 
                 setYeast(recipe.get_yeast());
-            });
+            }, throwable -> Log.e("Recipe_Fragment", "Failed to get the recipe", throwable));
         }
     }
 

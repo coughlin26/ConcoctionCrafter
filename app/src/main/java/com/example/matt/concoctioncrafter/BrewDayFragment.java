@@ -3,6 +3,7 @@
 package com.example.matt.concoctioncrafter;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.matt.concoctioncrafter.data.Recipe;
-import com.example.matt.concoctioncrafter.data.RecipeParcelable;
 
 import java.util.Locale;
 
@@ -43,7 +43,7 @@ public class BrewDayFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getActivity() != null) {
-            _recipeSubscription = ((MainActivity) getActivity()).getRecipe().subscribe(this::importRecipe);
+            _recipeSubscription = ((MainActivity) getActivity()).getRecipe().subscribe(this::importRecipe, throwable -> Log.e("Brew_Day_Fragment", "Failed to get the recipe", throwable));
         }
     }
 
@@ -69,14 +69,10 @@ public class BrewDayFragment extends Fragment {
         _alcoholContent = rootView.findViewById(R.id.actual_ac);
 
         if (getArguments() != null) {
-            final RecipeParcelable recipeParcelable = getArguments().getParcelable(MainActivity.RECIPE_KEY);
+            final Recipe recipe = getArguments().getParcelable(MainActivity.RECIPE_KEY);
 
-            if (recipeParcelable != null) {
-                final Recipe recipe = recipeParcelable.getRecipe();
-
-                if (recipe != null) {
-                    importRecipe(recipe);
-                }
+            if (recipe != null) {
+                importRecipe(recipe);
             }
         }
 
@@ -205,16 +201,16 @@ public class BrewDayFragment extends Fragment {
         setRecipeName(recipe.get_recipeName());
 
         setHopType1(recipe.get_hops().get(0).getName());
-        setAmount1(Float.toString(recipe.get_hops().get(0).getAmount()));
+        setAmount1(Float.toString(recipe.get_hops().get(0).getAmount_oz()));
         setAdditionTime1(Integer.toString(recipe.get_hops().get(0).getAdditionTime_min()));
         setHopType2(recipe.get_hops().get(1).getName());
-        setAmount2(Float.toString(recipe.get_hops().get(1).getAmount()));
+        setAmount2(Float.toString(recipe.get_hops().get(1).getAmount_oz()));
         setAdditionTime2(Integer.toString(recipe.get_hops().get(1).getAdditionTime_min()));
         setHopType3(recipe.get_hops().get(2).getName());
-        setAmount3(Float.toString(recipe.get_hops().get(2).getAmount()));
+        setAmount3(Float.toString(recipe.get_hops().get(2).getAmount_oz()));
         setAdditionTime3(Integer.toString(recipe.get_hops().get(2).getAdditionTime_min()));
         setHopType4(recipe.get_hops().get(3).getName());
-        setAmount4(Float.toString(recipe.get_hops().get(3).getAmount()));
+        setAmount4(Float.toString(recipe.get_hops().get(3).getAmount_oz()));
         setAdditionTime4(Integer.toString(recipe.get_hops().get(3).getAdditionTime_min()));
     }
 

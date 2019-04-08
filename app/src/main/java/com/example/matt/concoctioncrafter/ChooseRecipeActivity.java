@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.matt.concoctioncrafter.data.RecipeParcelable;
 import com.example.matt.concoctioncrafter.data.RecipeViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,7 +41,7 @@ public class ChooseRecipeActivity extends AppCompatActivity {
 
         _recipeClickSubscription = _recipeAdapter.getRecipeClicks().subscribe(recipe -> {
             final Intent intent = new Intent();
-            intent.putExtra(MainActivity.RECIPE_KEY, new RecipeParcelable(recipe));
+            intent.putExtra(MainActivity.RECIPE_KEY, recipe);
             setResult(RESULT_OK, intent);
             finish();
         });

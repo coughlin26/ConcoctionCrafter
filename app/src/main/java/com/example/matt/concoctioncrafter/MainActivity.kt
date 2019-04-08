@@ -21,7 +21,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
-import com.example.matt.concoctioncrafter.data.*
+import com.example.matt.concoctioncrafter.data.Fermentable
+import com.example.matt.concoctioncrafter.data.Hop
+import com.example.matt.concoctioncrafter.data.Recipe
+import com.example.matt.concoctioncrafter.data.RecipeViewModel
 import com.google.android.material.tabs.TabLayout
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
@@ -61,9 +64,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
             if (data!!.getParcelableExtra<Parcelable>(RECIPE_KEY) != null) {
-                if ((data.getParcelableExtra<Parcelable>(RECIPE_KEY) as RecipeParcelable).recipe != null) {
-                    _recipe.onNext((data.getParcelableExtra<Parcelable>(RECIPE_KEY) as RecipeParcelable).recipe)
-                }
+                _recipe.onNext(data.getParcelableExtra<Parcelable>(RECIPE_KEY) as Recipe)
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -152,6 +153,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun makeRecipe(): Recipe {
         val beerName = getTextFromEditText(R.id.name_input)
+        val style = "No Style"
         val grain1 = getTextFromSpinner(R.id.grain_spinner1)
         val grain1Amount = getFloatFromEditText(R.id.amount_input1)
         val grain2 = getTextFromSpinner(R.id.grain_spinner2)
@@ -187,11 +189,7 @@ class MainActivity : AppCompatActivity() {
         hopList.add(Hop(hop3, hop3Amount, hop3Time))
         hopList.add(Hop(hop4, hop4Amount, hop4Time))
 
-        return Recipe(beerName,
-                "No Style",
-                fermentableList,
-                hopList,
-                yeast)
+        return Recipe(beerName, style, fermentableList, hopList, yeast)
     }
 
     private fun getTextFromSpinner(@IdRes viewId: Int): String {

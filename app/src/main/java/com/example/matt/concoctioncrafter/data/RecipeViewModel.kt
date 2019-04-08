@@ -8,7 +8,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
-    private val _recipeRepository: RecipeRepository
+    private val _recipeRepository: RecipeRepository = RecipeRepository(application)
     val recipeList: LiveData<List<Recipe>>
 
     val all: List<Recipe>?
@@ -18,27 +18,30 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         }
 
     init {
-        _recipeRepository = RecipeRepository(application)
         recipeList = _recipeRepository.allRecipes
     }
 
     fun insert(recipe: Recipe) {
-        Log.d(TAG, "Inserting recipe: " + recipe._recipeName)
+        Log.d(TAG, "Inserting recipe: $recipe")
         _recipeRepository.insert(recipe)
     }
 
     fun insert(vararg recipes: Recipe) {
-        Log.d(TAG, "Inserting recipes, starting with: " + recipes[0]._recipeName)
+        for (recipe in recipes) {
+            Log.d(TAG, "Inserting recipes, starting with: $recipe")
+        }
         _recipeRepository.insert(*recipes)
     }
 
     fun update(recipe: Recipe) {
-        Log.d(TAG, "Updating recipe named: " + recipe._recipeName)
+        Log.d(TAG, "Updating recipe named: $recipe")
         _recipeRepository.update(recipe)
     }
 
     fun update(vararg recipes: Recipe) {
-        Log.d(TAG, "Updating recipes, stating with: " + recipes[0]._recipeName)
+        for (recipe in recipes) {
+            Log.d(TAG, "Updating recipes, stating with: $recipe")
+        }
         _recipeRepository.update(*recipes)
     }
 
@@ -48,7 +51,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun delete(recipe: Recipe) {
-        Log.d(TAG, "Deleting recipe named: " + recipe._recipeName)
+        Log.d(TAG, "Deleting recipe: $recipe")
         _recipeRepository.delete(recipe)
     }
 
@@ -58,6 +61,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     companion object {
-        private val TAG = "Recipe_View_Model"
+        private const val TAG = "Testing"
     }
 }

@@ -10,16 +10,10 @@ interface RecipeDAO {
     @get:Query("SELECT * FROM `recipes.db`")
     val all: List<Recipe>
 
-    @get:Query("SELECT * FROM `recipes.db` ORDER BY recipe_name ASC")
+    @get:Query("SELECT * FROM `recipes.db` ORDER BY _recipeName ASC")
     val allRecipes: LiveData<List<Recipe>>
 
-    @Query("SELECT * FROM `recipes.db` WHERE id IN (:recipeIds)")
-    fun loadAllByIds(recipeIds: IntArray): List<Recipe>
-
-    @Query("SELECT * FROM `recipes.db` WHERE id = :id LIMIT 1")
-    fun findById(id: Int): Recipe
-
-    @Query("SELECT * FROM `recipes.db` WHERE recipe_name = :name LIMIT 1")
+    @Query("SELECT * FROM `recipes.db` WHERE _recipeName = :name LIMIT 1")
     fun findByName(name: String): Recipe
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
