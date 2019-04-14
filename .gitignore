@@ -1,5 +1,10 @@
 *.iml
 .gradle
+/gradle
+gradlew
+gradlew.bat
+aus
+/app/proguard-rules.pro
 /local.properties
 /.idea/caches/build_file_checksums.ser
 /.idea/libraries
