@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun makeRecipe(): Recipe {
         val beerName = getTextFromEditText(R.id.name_input)
-        val style = "No Style"
+        val style = getTextFromSpinner(R.id.style_spinner)
         val grain1 = getTextFromSpinner(R.id.grain_spinner1)
         val grain1Amount = getFloatFromEditText(R.id.amount_input1)
         val grain2 = getTextFromSpinner(R.id.grain_spinner2)

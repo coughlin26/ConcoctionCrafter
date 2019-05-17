@@ -394,8 +394,29 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:entries="@array/yeast_options"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/yeast_title" />
+
+        <TextView
+            android:id="@+id/style_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/beer_style"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/yeast_spinner" />
+
+        <Spinner
+            android:id="@+id/style_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:entries="@array/style_options"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/style_title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

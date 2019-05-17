@@ -37,6 +37,7 @@ class RecipeFragment : Fragment() {
     private var _hopAdditionTime_3: EditText? = null
     private var _hopAdditionTime_4: EditText? = null
     private var _yeast: Spinner? = null
+    private var _style: Spinner? = null
     private var _recipeSubscription: Disposable? = null
 
     var beerName: String
@@ -186,11 +187,22 @@ class RecipeFragment : Fragment() {
             }
         }
 
+    var style: String
+        get() = _style!!.selectedItem.toString()
+        set(style) {
+            for (i in 0 until _style!!.count) {
+                if (_style!!.getItemAtPosition(i) == style) {
+                    _style!!.setSelection(i)
+                    break
+                }
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (activity != null) {
-            _recipeSubscription = (activity as MainActivity).recipe.subscribe({ (_recipeName, _, _fermentables, _hops, _yeast1) ->
+            _recipeSubscription = (activity as MainActivity).recipe.subscribe({ (_recipeName, _style, _fermentables, _hops, _yeast) ->
                 beerName = _recipeName
 
                 grainSpinner1 = _fermentables[0].name
@@ -215,7 +227,9 @@ class RecipeFragment : Fragment() {
                 hopInput4 = String.format(Locale.getDefault(), "%.2f", _hops[3].amount_oz)
                 setHopAdditionTime_4(Integer.toString(_hops[3].additionTime_min))
 
-                yeast = _yeast1
+                yeast = _yeast
+
+                style = _style
             }, { throwable -> Log.e("Recipe_Fragment", "Failed to get the recipe", throwable) })
         }
     }
@@ -245,6 +259,7 @@ class RecipeFragment : Fragment() {
         _hopAdditionTime_3 = rootView.findViewById(R.id.addition_time3)
         _hopAdditionTime_4 = rootView.findViewById(R.id.addition_time4)
         _yeast = rootView.findViewById(R.id.yeast_spinner)
+        _style = rootView.findViewById(R.id.style_spinner)
 
         return rootView
     }
