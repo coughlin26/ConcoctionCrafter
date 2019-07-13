@@ -154,40 +154,15 @@ class MainActivity : AppCompatActivity() {
     private fun makeRecipe(): Recipe {
         val beerName = getTextFromEditText(R.id.name_input)
         val style = getTextFromSpinner(R.id.style_spinner)
-        val grain1 = getTextFromSpinner(R.id.grain_spinner1)
-        val grain1Amount = getFloatFromEditText(R.id.amount_input1)
-        val grain2 = getTextFromSpinner(R.id.grain_spinner2)
-        val grain2Amount = getFloatFromEditText(R.id.amount_input2)
-        val grain3 = getTextFromSpinner(R.id.grain_spinner3)
-        val grain3Amount = getFloatFromEditText(R.id.amount_input3)
-        val grain4 = getTextFromSpinner(R.id.grain_spinner4)
-        val grain4Amount = getFloatFromEditText(R.id.amount_input4)
-        val hop1 = getTextFromSpinner(R.id.hop_spinner1)
-        val hop1Amount = getFloatFromEditText(R.id.hop_amount_input1)
-        val hop1Time = getIntFromEditText(R.id.addition_time1)
-        val hop2 = getTextFromSpinner(R.id.hop_spinner2)
-        val hop2Amount = getFloatFromEditText(R.id.hop_amount_input2)
-        val hop2Time = getIntFromEditText(R.id.addition_time2)
-        val hop3 = getTextFromSpinner(R.id.hop_spinner3)
-        val hop3Amount = getFloatFromEditText(R.id.hop_amount_input3)
-        val hop3Time = getIntFromEditText(R.id.addition_time3)
-        val hop4 = getTextFromSpinner(R.id.hop_spinner4)
-        val hop4Amount = getFloatFromEditText(R.id.hop_amount_input4)
-        val hop4Time = getIntFromEditText(R.id.addition_time4)
+
+        // TODO: Get the grains and hops
+
         val yeast = getTextFromSpinner(R.id.yeast_spinner)
 
         val fermentableList = ArrayList<Fermentable>()
         val hopList = ArrayList<Hop>()
 
-        fermentableList.add(Fermentable(grain1, grain1Amount))
-        fermentableList.add(Fermentable(grain2, grain2Amount))
-        fermentableList.add(Fermentable(grain3, grain3Amount))
-        fermentableList.add(Fermentable(grain4, grain4Amount))
-
-        hopList.add(Hop(hop1, hop1Amount, hop1Time))
-        hopList.add(Hop(hop2, hop2Amount, hop2Time))
-        hopList.add(Hop(hop3, hop3Amount, hop3Time))
-        hopList.add(Hop(hop4, hop4Amount, hop4Time))
+        // TODO: Add the grains and hops to the lists
 
         return Recipe(beerName, style, fermentableList, hopList, yeast)
     }

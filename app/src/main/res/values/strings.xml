@@ -41,6 +41,8 @@
     <string name="units">Units</string>
     <string name="delete_all">Delete All Recipes</string>
     <string name="delete_recipe">Delete Recipe</string>
+    <string name="add_fermentable">Add Fermentable</string>
+    <string name="add_hop">Add Hop</string>
 
     <!-- Units -->
     <plurals name="pound_plural">

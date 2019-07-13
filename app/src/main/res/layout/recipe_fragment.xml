@@ -61,49 +61,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/name_input" />
 
-        <Spinner
-            android:id="@+id/grain_spinner1"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:entries="@array/grain_options"
-            app:layout_constraintBottom_toBottomOf="@id/amount_input1"
-            app:layout_constraintEnd_toStartOf="@id/amount_input1"
-            app:layout_constraintHorizontal_chainStyle="spread"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/grain_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/hop_divider"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/grain_title" />
-
-        <Spinner
-            android:id="@+id/grain_spinner2"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:entries="@array/grain_options"
-            app:layout_constraintBottom_toBottomOf="@id/amount_input2"
-            app:layout_constraintEnd_toStartOf="@id/amount_input1"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/grain_spinner1" />
-
-        <Spinner
-            android:id="@+id/grain_spinner3"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:entries="@array/grain_options"
-            app:layout_constraintBottom_toBottomOf="@id/amount_input3"
-            app:layout_constraintEnd_toStartOf="@id/amount_input1"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/grain_spinner2" />
-
-        <Spinner
-            android:id="@+id/grain_spinner4"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:entries="@array/grain_options"
-            app:layout_constraintBottom_toBottomOf="@id/amount_input4"
-            app:layout_constraintEnd_toStartOf="@id/amount_input1"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/grain_spinner3" />
 
         <TextView
             android:id="@+id/amount_title"
@@ -113,7 +78,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="0dp"
-            android:labelFor="@id/amount_input1"
             android:text="@string/amount"
             app:layout_constraintEnd_toStartOf="@id/grain_units"
             app:layout_constraintTop_toBottomOf="@id/name_input" />
@@ -128,57 +92,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/name_input" />
 
-        <EditText
-            android:id="@+id/amount_input1"
-            android:layout_width="0dp"
+        <Button
+            android:id="@+id/add_grain_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="8dp"
-            android:gravity="end"
-            android:hint="@string/amount_autofill"
-            android:inputType="numberDecimal"
+            android:text="@string/add_fermentable"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/grain_spinner1"
-            app:layout_constraintTop_toBottomOf="@id/amount_title" />
-
-        <EditText
-            android:id="@+id/amount_input2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="8dp"
-            android:gravity="end"
-            android:hint="@string/amount_autofill"
-            android:inputType="numberDecimal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/grain_spinner2"
-            app:layout_constraintTop_toBottomOf="@id/amount_input1" />
-
-        <EditText
-            android:id="@+id/amount_input3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="8dp"
-            android:gravity="end"
-            android:hint="@string/amount_autofill"
-            android:inputType="numberDecimal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/grain_spinner3"
-            app:layout_constraintTop_toBottomOf="@id/amount_input2" />
-
-        <EditText
-            android:id="@+id/amount_input4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="8dp"
-            android:gravity="end"
-            android:hint="@string/amount_autofill"
-            android:inputType="numberDecimal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/grain_spinner4"
-            app:layout_constraintTop_toBottomOf="@id/amount_input3" />
+            app:layout_constraintTop_toBottomOf="@id/grain_list" />
 
         <View
             android:id="@+id/hop_divider"
@@ -189,7 +109,7 @@
             android:background="@color/colorDivider"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/amount_input4" />
+            app:layout_constraintTop_toBottomOf="@id/add_grain_button" />
 
         <TextView
             android:id="@+id/hop_title"
@@ -202,43 +122,7 @@
             android:text="@string/hops"
             android:textAlignment="center"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/grain_spinner4" />
-
-        <Spinner
-            android:id="@+id/hop_spinner1"
-            android:layout_width="160dp"
-            android:layout_height="0dp"
-            android:entries="@array/hop_options"
-            app:layout_constraintBottom_toBottomOf="@id/hop_amount_input1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/hop_title" />
-
-        <Spinner
-            android:id="@+id/hop_spinner2"
-            android:layout_width="160dp"
-            android:layout_height="0dp"
-            android:entries="@array/hop_options"
-            app:layout_constraintBottom_toBottomOf="@id/hop_amount_input2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/hop_spinner1" />
-
-        <Spinner
-            android:id="@+id/hop_spinner3"
-            android:layout_width="160dp"
-            android:layout_height="0dp"
-            android:entries="@array/hop_options"
-            app:layout_constraintBottom_toBottomOf="@id/hop_amount_input3"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/hop_spinner2" />
-
-        <Spinner
-            android:id="@+id/hop_spinner4"
-            android:layout_width="160dp"
-            android:layout_height="0dp"
-            android:entries="@array/hop_options"
-            app:layout_constraintBottom_toBottomOf="@id/hop_amount_input4"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/hop_spinner3" />
+            app:layout_constraintTop_toBottomOf="@id/hop_divider" />
 
         <TextView
             android:id="@+id/hop_amount_title"
@@ -248,64 +132,11 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="0dp"
-            android:labelFor="@id/amount_input1"
             android:text="@string/amount"
             android:textAlignment="center"
             app:layout_constraintEnd_toStartOf="@id/addition_time_title"
             app:layout_constraintStart_toEndOf="@id/hop_title"
-            app:layout_constraintTop_toBottomOf="@id/amount_input4" />
-
-        <EditText
-            android:id="@+id/hop_amount_input1"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            android:gravity="end"
-            android:hint="@string/ounces_abbreviation"
-            android:inputType="numberDecimal"
-            app:layout_constraintEnd_toStartOf="@id/addition_time1"
-            app:layout_constraintStart_toEndOf="@id/hop_spinner1"
-            app:layout_constraintTop_toBottomOf="@id/hop_amount_title" />
-
-        <EditText
-            android:id="@+id/hop_amount_input2"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            android:gravity="end"
-            android:hint="@string/ounces_abbreviation"
-            android:inputType="numberDecimal"
-            app:layout_constraintEnd_toStartOf="@id/addition_time1"
-            app:layout_constraintStart_toEndOf="@id/hop_spinner2"
-            app:layout_constraintTop_toBottomOf="@id/hop_amount_input1" />
-
-        <EditText
-            android:id="@+id/hop_amount_input3"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            android:gravity="end"
-            android:hint="@string/ounces_abbreviation"
-            android:inputType="numberDecimal"
-            app:layout_constraintEnd_toStartOf="@id/addition_time1"
-            app:layout_constraintStart_toEndOf="@id/hop_spinner3"
-            app:layout_constraintTop_toBottomOf="@id/hop_amount_input2" />
-
-        <EditText
-            android:id="@+id/hop_amount_input4"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            android:gravity="end"
-            android:hint="@string/ounces_abbreviation"
-            android:inputType="numberDecimal"
-            app:layout_constraintEnd_toStartOf="@id/addition_time1"
-            app:layout_constraintStart_toEndOf="@id/hop_spinner4"
-            app:layout_constraintTop_toBottomOf="@id/hop_amount_input3" />
+            app:layout_constraintTop_toBottomOf="@id/hop_divider" />
 
         <TextView
             android:id="@+id/addition_time_title"
@@ -318,60 +149,34 @@
             android:text="@string/hop_addition_time"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/amount_input4" />
+            app:layout_constraintTop_toBottomOf="@id/hop_divider" />
 
-        <EditText
-            android:id="@+id/addition_time1"
-            android:layout_width="100dp"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/hop_list"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:hint="@string/minutes_abbreviation"
-            android:inputType="number"
-            android:textAlignment="textEnd"
+            app:layout_constraintBottom_toTopOf="@id/yeast_divider"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/addition_time_title" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hop_title" />
 
-        <EditText
-            android:id="@+id/addition_time2"
-            android:layout_width="100dp"
+        <Button
+            android:id="@+id/add_hop_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:hint="@string/minutes_abbreviation"
-            android:inputType="number"
-            android:textAlignment="textEnd"
+            android:text="@string/add_hop"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/addition_time1" />
-
-        <EditText
-            android:id="@+id/addition_time3"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:hint="@string/minutes_abbreviation"
-            android:inputType="number"
-            android:textAlignment="textEnd"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/addition_time2" />
-
-        <EditText
-            android:id="@+id/addition_time4"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:hint="@string/minutes_abbreviation"
-            android:inputType="number"
-            android:textAlignment="textEnd"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/addition_time3" />
+            app:layout_constraintTop_toBottomOf="@id/hop_list" />
 
         <View
+            android:id="@+id/yeast_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="4dp"
             android:background="@color/colorDivider"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/hop_amount_input4" />
+            app:layout_constraintTop_toBottomOf="@id/add_hop_button" />
 
         <TextView
             android:id="@+id/yeast_title"
@@ -383,7 +188,7 @@
             android:layout_marginBottom="0dp"
             android:text="@string/yeast"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/hop_spinner4" />
+            app:layout_constraintTop_toBottomOf="@id/yeast_divider" />
 
         <Spinner
             android:id="@+id/yeast_spinner"
