@@ -8,27 +8,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.Disposable
+
 
 class RecipeFragment : Fragment() {
     private var _beerName: EditText? = null
-    private var _grainList: RecyclerView? = null
-    private var _hopList: RecyclerView? = null
+    private var _grainList: LinearLayout? = null
+    private var _hopList: LinearLayout? = null
     private var _yeast: Spinner? = null
     private var _style: Spinner? = null
-    private var _grainAdapter: GrainAdapter? = null
-    private var _hopAdapter: HopAdapter? = null
     private var _recipeSubscription: Disposable? = null
 
-    var beerName: String
+    private var beerName: String
         get() = _beerName!!.text.toString()
         set(beerName) = _beerName!!.setText(beerName)
 
-    var yeast: String
+    private var yeast: String
         get() = _yeast!!.selectedItem.toString()
         set(yeast) {
             for (i in 0 until _yeast!!.count) {
@@ -39,7 +38,7 @@ class RecipeFragment : Fragment() {
             }
         }
 
-    var style: String
+    private var style: String
         get() = _style!!.selectedItem.toString()
         set(style) {
             for (i in 0 until _style!!.count) {
@@ -57,11 +56,20 @@ class RecipeFragment : Fragment() {
             _recipeSubscription = (activity as MainActivity).recipe.subscribe({ (_recipeName, _style, _fermentables, _hops, _yeast) ->
                 beerName = _recipeName
 
-                _grainAdapter = GrainAdapter(_fermentables, context)
-                _grainList!!.adapter = _grainAdapter
+                for (fermentable in _fermentables) {
+                    val newRow = layoutInflater.inflate(R.layout.grain_row, null)
+                    setSpinner(newRow, R.id.spinner, fermentable.name)
+                    newRow.findViewById<EditText>(R.id.amount).setText("%.2f".format(fermentable.amount_lbs))
+                    _grainList!!.addView(newRow)
+                }
 
-                _hopAdapter = HopAdapter(_hops, context)
-                _hopList!!.adapter = _hopAdapter
+                for (hop in _hops) {
+                    val newRow = layoutInflater.inflate(R.layout.hop_row, null)
+                    setSpinner(newRow, R.id.spinner, hop.name)
+                    newRow.findViewById<EditText>(R.id.amount).setText("%.2f".format(hop.amount_oz))
+                    newRow.findViewById<EditText>(R.id.time).setText(hop.additionTime_min)
+                    _hopList!!.addView(newRow)
+                }
 
                 yeast = _yeast
 
@@ -87,8 +95,8 @@ class RecipeFragment : Fragment() {
         super.onDestroy()
     }
 
-    private fun setSpinner(@IdRes viewId: Int, text: String) {
-        val spinner = activity!!.findViewById<Spinner>(viewId)
+    private fun setSpinner(parent: View, @IdRes viewId: Int, text: String) {
+        val spinner = parent.findViewById<Spinner>(viewId)
         for (i in 0 until spinner.count) {
             if (spinner.getItemAtPosition(i) == text) {
                 spinner.setSelection(i)

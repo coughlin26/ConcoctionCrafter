@@ -61,14 +61,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/name_input" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <LinearLayout
             android:id="@+id/grain_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/hop_divider"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/grain_title" />
+            app:layout_constraintTop_toBottomOf="@id/grain_title">
+
+            <com.example.matt.concoctioncrafter.widgets.FermentableRow
+                android:id="@+id/first_grain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/amount_title"
@@ -151,14 +158,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/hop_divider" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <LinearLayout
             android:id="@+id/hop_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/yeast_divider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/hop_title" />
+            app:layout_constraintTop_toBottomOf="@id/hop_divider">
+
+            <com.example.matt.concoctioncrafter.widgets.HopRow
+                android:id="@+id/first_hop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/add_hop_button"
