@@ -68,14 +68,7 @@
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/grain_title">
-
-            <com.example.matt.concoctioncrafter.widgets.FermentableRow
-                android:id="@+id/first_grain"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@id/grain_title" />
 
         <TextView
             android:id="@+id/amount_title"
@@ -164,14 +157,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/hop_divider">
-
-            <com.example.matt.concoctioncrafter.widgets.HopRow
-                android:id="@+id/first_hop"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@id/hop_title" />
 
         <Button
             android:id="@+id/add_hop_button"
