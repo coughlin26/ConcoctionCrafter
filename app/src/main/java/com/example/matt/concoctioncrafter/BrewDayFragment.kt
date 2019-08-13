@@ -170,6 +170,10 @@ class BrewDayFragment : Fragment() {
     private fun importRecipe(recipe: Recipe) {
         recipeName = recipe._recipeName
 
+        for (hop in recipe._hops) {
+            // TODO: Update the hop list. This requires changing the list to a linearllayout
+        }
+
         hopType1 = recipe._hops[0].name
         amount1 = java.lang.Float.toString(recipe._hops[0].amount_oz)
         additionTime1 = Integer.toString(recipe._hops[0].additionTime_min)

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Spinner
@@ -86,6 +87,16 @@ class RecipeFragment : Fragment() {
         _hopList = rootView.findViewById(R.id.hop_list)
         _yeast = rootView.findViewById(R.id.yeast_spinner)
         _style = rootView.findViewById(R.id.style_spinner)
+        val addFermentableButton: Button = rootView.findViewById(R.id.add_grain_button)
+        val addHopButton: Button = rootView.findViewById(R.id.add_hop_button)
+
+        addFermentableButton.setOnClickListener {
+            layoutInflater.inflate(R.layout.grain_row, _grainList, true)
+        }
+
+        addHopButton.setOnClickListener {
+            layoutInflater.inflate(R.layout.hop_row, _hopList, true)
+        }
 
         return rootView
     }
