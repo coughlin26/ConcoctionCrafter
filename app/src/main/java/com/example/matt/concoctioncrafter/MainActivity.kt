@@ -6,11 +6,13 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.annotation.IdRes
@@ -28,7 +30,6 @@ import com.example.matt.concoctioncrafter.data.RecipeViewModel
 import com.google.android.material.tabs.TabLayout
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private var _pager: ViewPager? = null
@@ -122,6 +123,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        if (_pager!!.currentItem == 0) {
+            val recipe = makeRecipe()
+
+            outState.putParcelableArrayList("GRAINS", recipe._fermentables as ArrayList<out Parcelable>)
+            outState.putParcelableArrayList("HOPS", recipe._hops as ArrayList<out Parcelable>)
+        }
+
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        if (_pager!!.currentItem == 0) {
+            val recipe = makeRecipe()
+
+            outState.putParcelableArrayList("GRAINS", recipe._fermentables as ArrayList<out Parcelable>)
+            outState.putParcelableArrayList("HOPS", recipe._hops as ArrayList<out Parcelable>)
+        }
+
+        super.onSaveInstanceState(outState, outPersistentState)
+    }
+
     /**
      * A custom page adapter.
      */
@@ -154,17 +177,11 @@ class MainActivity : AppCompatActivity() {
     private fun makeRecipe(): Recipe {
         val beerName = getTextFromEditText(R.id.name_input)
         val style = getTextFromSpinner(R.id.style_spinner)
-
-        // TODO: Get the grains and hops
-
+        val fermentables = getFermentablesFromList()
+        val hops = getHopsFromList()
         val yeast = getTextFromSpinner(R.id.yeast_spinner)
 
-        val fermentableList = ArrayList<Fermentable>()
-        val hopList = ArrayList<Hop>()
-
-        // TODO: Add the grains and hops to the lists
-
-        return Recipe(beerName, style, fermentableList, hopList, yeast)
+        return Recipe(beerName, style, fermentables, hops, yeast)
     }
 
     private fun getTextFromSpinner(@IdRes viewId: Int): String {
@@ -172,13 +189,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getTextFromEditText(@IdRes viewId: Int): String {
-        val text = (findViewById<View>(viewId) as EditText).text.toString()
-        return if (text.isEmpty()) "Nothing" else text
+        val view = findViewById<View>(viewId)
+
+        if (view != null) {
+            val text = (view as EditText).text.toString()
+            return if (text.isEmpty()) "Nothing" else text
+        }
+
+        return "Nothing"
     }
 
     private fun getFloatFromEditText(@IdRes viewId: Int): Float {
         val text = getTextFromEditText(viewId)
-        return if (text.isEmpty() or text.equals("Nothing")) {
+        return if (text.isEmpty() or (text == "Nothing")) {
             0f
         } else {
             java.lang.Float.valueOf(text)
@@ -192,6 +215,36 @@ class MainActivity : AppCompatActivity() {
         } else {
             Integer.valueOf(text)
         }
+    }
+
+    private fun getFermentablesFromList(): List<Fermentable> {
+        val fermentables = ArrayList<Fermentable>()
+        val list = findViewById<LinearLayout>(R.id.grain_list)
+
+        for (i in 0 until list.childCount) {
+            val row = list.getChildAt(i)
+            val amount = row.findViewById<EditText>(R.id.amount).text.toString()
+            fermentables.add(Fermentable(row.findViewById<Spinner>(R.id.spinner).selectedItem.toString(),
+                    if (amount.isEmpty()) 0f else amount.toFloat()))
+        }
+
+        return fermentables
+    }
+
+    private fun getHopsFromList(): List<Hop> {
+        val hops = ArrayList<Hop>()
+        val list = findViewById<LinearLayout>(R.id.hop_list)
+
+        for (i in 0 until list.childCount) {
+            val row = list.getChildAt(i)
+            val amount = row.findViewById<EditText>(R.id.amount).text.toString()
+            val time = row.findViewById<EditText>(R.id.time).text.toString()
+            hops.add(Hop(row.findViewById<Spinner>(R.id.spinner).selectedItem.toString(),
+                    if (amount.isEmpty()) 0f else amount.toFloat(),
+                    if (time.isEmpty()) -1 else time.toInt()))
+        }
+
+        return hops
     }
 
     companion object {

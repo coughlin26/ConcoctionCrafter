@@ -171,20 +171,7 @@ class BrewDayFragment : Fragment() {
         recipeName = recipe._recipeName
 
         for (hop in recipe._hops) {
-            // TODO: Update the hop list. This requires changing the list to a linearllayout
+            // TODO: Update the hop list. This requires changing the list to a linearlayout
         }
-
-        hopType1 = recipe._hops[0].name
-        amount1 = java.lang.Float.toString(recipe._hops[0].amount_oz)
-        additionTime1 = Integer.toString(recipe._hops[0].additionTime_min)
-        hopType2 = recipe._hops[1].name
-        amount2 = java.lang.Float.toString(recipe._hops[1].amount_oz)
-        additionTime2 = Integer.toString(recipe._hops[1].additionTime_min)
-        hopType3 = recipe._hops[2].name
-        amount3 = java.lang.Float.toString(recipe._hops[2].amount_oz)
-        additionTime3 = Integer.toString(recipe._hops[2].additionTime_min)
-        hopType4 = recipe._hops[3].name
-        amount4 = java.lang.Float.toString(recipe._hops[3].amount_oz)
-        additionTime4 = Integer.toString(recipe._hops[3].additionTime_min)
     }
 }
