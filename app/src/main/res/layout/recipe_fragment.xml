@@ -7,11 +7,80 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp">
+
+        <Button
+            android:id="@+id/add_grain_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_fermentable"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/grain_list" />
+
+        <Button
+            android:id="@+id/add_hop_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_hop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hop_list" />
+
+        <EditText
+            android:id="@+id/name_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="0dp"
+            android:hint="@string/name_autofill"
+            android:inputType="text"
+            app:layout_constraintTop_toBottomOf="@id/name_title" />
+
+        <LinearLayout
+            android:id="@+id/grain_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/grain_title" />
+
+        <LinearLayout
+            android:id="@+id/hop_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hop_title" />
+
+        <Spinner
+            android:id="@+id/yeast_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:entries="@array/yeast_options"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/yeast_title" />
+
+        <Spinner
+            android:id="@+id/style_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:entries="@array/style_options"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/style_title" />
 
         <TextView
             android:id="@+id/name_title"
@@ -26,29 +95,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/name_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="0dp"
-            android:hint="@string/name_autofill"
-            android:inputType="text"
-            app:layout_constraintTop_toBottomOf="@id/name_title" />
-
-        <View
-            android:id="@+id/grain_divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="0dp"
-            android:background="@color/colorDivider"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/name_input" />
-
         <TextView
             android:id="@+id/grain_title"
             android:layout_width="wrap_content"
@@ -60,15 +106,6 @@
             android:text="@string/grains"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/name_input" />
-
-        <LinearLayout
-            android:id="@+id/grain_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/grain_title" />
 
         <TextView
             android:id="@+id/amount_title"
@@ -91,25 +128,6 @@
             android:text="@string/lbs_abbreviation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/name_input" />
-
-        <Button
-            android:id="@+id/add_grain_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_fermentable"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/grain_list" />
-
-        <View
-            android:id="@+id/hop_divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="0dp"
-            android:background="@color/colorDivider"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_grain_button" />
 
         <TextView
             android:id="@+id/hop_title"
@@ -151,33 +169,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/hop_divider" />
 
-        <LinearLayout
-            android:id="@+id/hop_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/hop_title" />
-
-        <Button
-            android:id="@+id/add_hop_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_hop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/hop_list" />
-
-        <View
-            android:id="@+id/yeast_divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="4dp"
-            android:background="@color/colorDivider"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_hop_button" />
-
         <TextView
             android:id="@+id/yeast_title"
             android:layout_width="wrap_content"
@@ -189,18 +180,6 @@
             android:text="@string/yeast"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/yeast_divider" />
-
-        <Spinner
-            android:id="@+id/yeast_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:entries="@array/yeast_options"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/yeast_title" />
 
         <TextView
             android:id="@+id/style_title"
@@ -214,14 +193,36 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/yeast_spinner" />
 
-        <Spinner
-            android:id="@+id/style_spinner"
+        <View
+            android:id="@+id/grain_divider"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_margin="8dp"
-            android:entries="@array/style_options"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="0dp"
+            android:background="@color/colorDivider"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/style_title" />
+            app:layout_constraintTop_toBottomOf="@id/name_input" />
+
+        <View
+            android:id="@+id/hop_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="0dp"
+            android:background="@color/colorDivider"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_grain_button" />
+
+        <View
+            android:id="@+id/yeast_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/colorDivider"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_hop_button" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -6,7 +6,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import android.os.PersistableBundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -121,28 +120,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             _pager!!.currentItem = _pager!!.currentItem - 1
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        if (_pager!!.currentItem == 0) {
-            val recipe = makeRecipe()
-
-            outState.putParcelableArrayList("GRAINS", recipe._fermentables as ArrayList<out Parcelable>)
-            outState.putParcelableArrayList("HOPS", recipe._hops as ArrayList<out Parcelable>)
-        }
-
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        if (_pager!!.currentItem == 0) {
-            val recipe = makeRecipe()
-
-            outState.putParcelableArrayList("GRAINS", recipe._fermentables as ArrayList<out Parcelable>)
-            outState.putParcelableArrayList("HOPS", recipe._hops as ArrayList<out Parcelable>)
-        }
-
-        super.onSaveInstanceState(outState, outPersistentState)
     }
 
     /**
