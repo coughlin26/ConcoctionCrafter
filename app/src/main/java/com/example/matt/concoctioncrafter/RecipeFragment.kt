@@ -12,15 +12,18 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.annotation.IdRes
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.example.matt.concoctioncrafter.data.Fermentable
 import com.example.matt.concoctioncrafter.data.Hop
+import com.example.matt.concoctioncrafter.data.Recipe
 import io.reactivex.disposables.Disposable
 
 
 class RecipeFragment : Fragment() {
     private val FERMENTABLE_KEY = "FERMENTABLE_KEY"
     private val HOP_KEY = "HOP_KEY"
+    private var _recipeLayout: ConstraintLayout? = null
     private var _beerName: EditText? = null
     private var _grainList: LinearLayout? = null
     private var _hopList: LinearLayout? = null
@@ -29,6 +32,7 @@ class RecipeFragment : Fragment() {
     private var _yeast: Spinner? = null
     private var _style: Spinner? = null
     private var _recipeSubscription: Disposable? = null
+    private var _recipe: Recipe? = null
 
     private var beerName: String
         get() = _beerName!!.text.toString()
@@ -56,18 +60,6 @@ class RecipeFragment : Fragment() {
             }
         }
 
-    /**
-     * Save the grains and hops.
-     *
-     * @param outState The saved instance state bundle.
-     * @see android.view.View.onSaveInstanceState
-     */
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(FERMENTABLE_KEY, getFermentablesFromList() as ArrayList<Fermentable>)
-        outState.putParcelableArrayList(HOP_KEY, getHopsFromList() as ArrayList<Hop>)
-        super.onSaveInstanceState(outState)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -77,29 +69,8 @@ class RecipeFragment : Fragment() {
                                                                                         _fermentables,
                                                                                         _hops,
                                                                                         _yeast) ->
-                beerName = _recipeName
-
-                _grainList!!.removeAllViews()
-                _hopList!!.removeAllViews()
-                for (fermentable in _fermentables) {
-                    val newRow = layoutInflater.inflate(R.layout.grain_row, activity!!.findViewById(R.id.grain_list))
-                    setSpinner(newRow, R.id.spinner, fermentable.name)
-                    newRow.findViewById<EditText>(R.id.amount).setText("%.2f".format(fermentable.amount_lbs))
-                    _grainList!!.removeView(newRow)
-                    _grainList!!.addView(newRow)
-                }
-
-                for (hop in _hops) {
-                    val newRow = layoutInflater.inflate(R.layout.hop_row, activity!!.findViewById(R.id.hop_list))
-                    setSpinner(newRow, R.id.spinner, hop.name)
-                    newRow.findViewById<EditText>(R.id.amount).setText("%.2f".format(hop.amount_oz))
-                    newRow.findViewById<EditText>(R.id.time).setText(hop.additionTime_min.toString())
-                    _hopList!!.removeView(newRow)
-                    _hopList!!.addView(newRow)
-                }
-
-                yeast = _yeast
-                style = _style
+                _recipe = Recipe(_recipeName, _style, _fermentables, _hops, _yeast)
+                restoreSavedState(savedInstanceState)
             }, { throwable -> Log.e("Recipe_Fragment", "Failed to get the recipe", throwable) })
         }
     }
@@ -107,6 +78,7 @@ class RecipeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.recipe_fragment, container, false) as ViewGroup
 
+        _recipeLayout = rootView.findViewById(R.id.recipe_layout)
         _beerName = rootView.findViewById(R.id.name_input)
         _grainList = rootView.findViewById(R.id.grain_list)
         _hopList = rootView.findViewById(R.id.hop_list)
@@ -145,28 +117,52 @@ class RecipeFragment : Fragment() {
         }
     }
 
+    /**
+     * Save the grains and hops.
+     *
+     * @param outState The saved instance state bundle.
+     * @see android.view.View.onSaveInstanceState
+     */
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putParcelableArrayList(FERMENTABLE_KEY, getFermentablesFromList() as ArrayList<Fermentable>)
+        outState.putParcelableArrayList(HOP_KEY, getHopsFromList() as ArrayList<Hop>)
+        super.onSaveInstanceState(outState)
+    }
+
     private fun restoreSavedState(savedInstanceState: Bundle?) {
-        if (savedInstanceState != null) {
-            val fermentables = savedInstanceState.getParcelableArrayList<Fermentable>(FERMENTABLE_KEY)
-            val hops = savedInstanceState.getParcelableArrayList<Hop>(HOP_KEY)
+        var fermentables: ArrayList<Fermentable>? = null
+        var hops: ArrayList<Hop>? = null
 
-            if (fermentables != null) {
-                for (fermentable in fermentables) {
-                    val newRow = layoutInflater.inflate(R.layout.grain_row, activity!!.findViewById(R.id.grain_list))
-                    setSpinner(newRow, R.id.spinner, fermentable.name)
-                    newRow.findViewById<EditText>(R.id.amount).setText("%.2f".format(fermentable.amount_lbs))
-                    _grainList!!.addView(newRow)
-                }
+        if (_recipe != null) {
+            beerName = _recipe!!._recipeName
+            yeast = _recipe!!._yeast
+            style = _recipe!!._style
+            fermentables = _recipe!!._fermentables as ArrayList<Fermentable>
+            hops = _recipe!!._hops as ArrayList<Hop>
+        } else if (savedInstanceState != null) {
+            fermentables = savedInstanceState.getParcelableArrayList<Fermentable>(FERMENTABLE_KEY)
+            hops = savedInstanceState.getParcelableArrayList<Hop>(HOP_KEY)
+        }
+
+        _grainList!!.removeAllViews()
+        if (fermentables != null) {
+            for (fermentable in fermentables) {
+                val newRow = layoutInflater.inflate(R.layout.grain_row, activity!!.findViewById(R.id.grain_list), true)
+                setSpinner(newRow, R.id.spinner, fermentable.name)
+                newRow.findViewById<EditText>(R.id.amount).setText("%.2f".format(fermentable.amount_lbs))
+                Log.d("TESTING", "Parent: ${newRow.parent.javaClass}")
+                _grainList!!.addView(newRow)
             }
+        }
 
-            if (hops != null) {
-                for (hop in hops) {
-                    val newRow = layoutInflater.inflate(R.layout.hop_row, activity!!.findViewById(R.id.hop_list))
-                    setSpinner(newRow, R.id.spinner, hop.name)
-                    newRow.findViewById<EditText>(R.id.amount).setText("%.2f".format(hop.amount_oz))
-                    newRow.findViewById<EditText>(R.id.time).setText(if (hop.additionTime_min != -1) hop.additionTime_min.toString() else "")
-                    _hopList!!.addView(newRow)
-                }
+        _hopList!!.removeAllViews()
+        if (hops != null) {
+            for (hop in hops) {
+                val newRow = layoutInflater.inflate(R.layout.hop_row, activity!!.findViewById(R.id.hop_list), true)
+                setSpinner(newRow, R.id.spinner, hop.name)
+                newRow.findViewById<EditText>(R.id.amount).setText("%.2f".format(hop.amount_oz))
+                newRow.findViewById<EditText>(R.id.time).setText(if (hop.additionTime_min != -1) hop.additionTime_min.toString() else "")
+                _hopList!!.addView(newRow)
             }
         }
     }
