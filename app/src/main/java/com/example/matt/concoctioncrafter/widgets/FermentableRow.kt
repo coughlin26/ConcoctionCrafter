@@ -9,7 +9,7 @@ import android.widget.Spinner
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.matt.concoctioncrafter.R
 
-class FermentableRow(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs, R.layout.grain_row) {
+class FermentableRow(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs, R.layout.fermentable_row) {
     fun getName(): String {
         return this.findViewById<Spinner>(R.id.spinner).selectedItem.toString()
     }

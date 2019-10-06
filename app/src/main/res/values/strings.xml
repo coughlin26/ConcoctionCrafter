@@ -4,12 +4,16 @@
     <string name="app_name">Concoction Crafter</string>
     <string name="choose_recipe">Choose a Recipe</string>
 
+    <plurals name="grain_plural">
+        <item quantity="one">Grain</item>
+        <item quantity="other">Grains</item>
+    </plurals>
+
     <!-- General -->
     <string name="beer_name">Beer Name</string>
     <string name="hop">Hop</string>
     <string name="hops">Hops</string>
-    <string name="grain">Grain</string>
-    <string name="grains">Grains</string>
+    <string name="fermentables">Fermentables</string>
     <string name="name_autofill">What\'s your beer\'s name?</string>
     <string name="ale">Ale</string>
     <string name="lager">Lager</string>
@@ -25,6 +29,7 @@
     <string name="boil_time">Boil Time</string>
     <string name="beer_style">Beer Style</string>
     <string name="hop_addition_time">Addition Time</string>
+    <string name="hop_addition_hint">45 min</string>
     <string name="expected_og">Expected Starting Gravity</string>
     <string name="actual_og">Actual Starting Gravity</string>
     <string name="expected_fg">Expected Final Gravity</string>
@@ -78,8 +83,8 @@
         <item>Other</item>
     </string-array>
 
-    <!-- Grain type -->
-    <string-array name="grain_options">
+    <!-- Fermentable Type -->
+    <string-array name="fermentable_options">
         <item>Not Used</item>
         <item>2 Row</item>
         <item>Amber Malt</item>
@@ -112,7 +117,7 @@
         <item>Other</item>
     </string-array>
 
-    <!-- Hop type -->
+    <!-- Hop Type -->
     <string-array name="hop_options">
         <item>Not Used</item>
         <item>Cascade</item>

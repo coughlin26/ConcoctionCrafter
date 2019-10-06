@@ -16,12 +16,12 @@
         android:layout_height="0dp">
 
         <Button
-            android:id="@+id/add_grain_button"
+            android:id="@+id/add_fermentable_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/add_fermentable"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/grain_list" />
+            app:layout_constraintTop_toBottomOf="@id/fermentable_list" />
 
         <Button
             android:id="@+id/add_hop_button"
@@ -44,13 +44,13 @@
             app:layout_constraintTop_toBottomOf="@id/name_title" />
 
         <LinearLayout
-            android:id="@+id/grain_list"
+            android:id="@+id/fermentable_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/grain_title" />
+            app:layout_constraintTop_toBottomOf="@id/fermentable_title" />
 
         <LinearLayout
             android:id="@+id/hop_list"
@@ -97,14 +97,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/grain_title"
+            android:id="@+id/fermentable_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="0dp"
-            android:text="@string/grains"
+            android:text="@string/fermentables"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/name_input" />
 
@@ -117,11 +117,11 @@
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="0dp"
             android:text="@string/amount"
-            app:layout_constraintEnd_toStartOf="@id/grain_units"
+            app:layout_constraintEnd_toStartOf="@id/fermentable_units"
             app:layout_constraintTop_toBottomOf="@id/name_input" />
 
         <TextView
-            android:id="@+id/grain_units"
+            android:id="@+id/fermentable_units"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -195,7 +195,7 @@
             app:layout_constraintTop_toBottomOf="@id/yeast_spinner" />
 
         <View
-            android:id="@+id/grain_divider"
+            android:id="@+id/fermentable_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="4dp"
@@ -214,7 +214,7 @@
             android:background="@color/colorDivider"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_grain_button" />
+            app:layout_constraintTop_toBottomOf="@id/add_fermentable_button" />
 
         <View
             android:id="@+id/yeast_divider"

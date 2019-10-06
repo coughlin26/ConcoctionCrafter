@@ -62,11 +62,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
-            if (data!!.getParcelableExtra<Parcelable>(RECIPE_KEY) != null) {
-                _recipe.onNext(data.getParcelableExtra<Parcelable>(RECIPE_KEY) as Recipe)
-            }
-        }
+        if (resultCode == Activity.RESULT_OK &&
+                requestCode == REQUEST_CODE &&
+                data!!.getParcelableExtra<Parcelable>(RECIPE_KEY) != null)
+            _recipe.onNext(data.getParcelableExtra<Parcelable>(RECIPE_KEY) as Recipe)
         super.onActivityResult(requestCode, resultCode, data)
     }
 
@@ -188,7 +187,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun getFermentablesFromList(): List<Fermentable> {
         val fermentables = ArrayList<Fermentable>()
-        val list = findViewById<LinearLayout>(R.id.grain_list)
+        val list = findViewById<LinearLayout>(R.id.fermentable_list)
 
         for (i in 0 until list.childCount) {
             val row = list.getChildAt(i)
