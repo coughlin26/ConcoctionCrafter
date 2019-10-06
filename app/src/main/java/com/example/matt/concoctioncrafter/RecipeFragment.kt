@@ -11,7 +11,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Spinner
-import androidx.annotation.IdRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.example.matt.concoctioncrafter.data.Fermentable
@@ -107,8 +106,8 @@ class RecipeFragment : Fragment() {
         super.onDestroy()
     }
 
-    private fun setSpinner(parent: View, @IdRes viewId: Int, text: String) {
-        val spinner = parent.findViewById<Spinner>(viewId)
+    private fun setSpinner(parent: View, text: String) {
+        val spinner = parent.findViewById<Spinner>(R.id.spinner)
         for (i in 0 until spinner.count) {
             if (spinner.getItemAtPosition(i) == text) {
                 spinner.setSelection(i)
@@ -145,23 +144,28 @@ class RecipeFragment : Fragment() {
         }
 
         _grainList!!.removeAllViews()
+
         if (fermentables != null) {
             for (fermentable in fermentables) {
-                val newRow = layoutInflater.inflate(R.layout.grain_row, activity!!.findViewById(R.id.grain_list), true)
-                setSpinner(newRow, R.id.spinner, fermentable.name)
+                val newRow = layoutInflater.inflate(R.layout.grain_row, activity!!.findViewById(R.id.grain_list), false)
+                setSpinner(newRow, fermentable.name)
                 newRow.findViewById<EditText>(R.id.amount).setText("%.2f".format(fermentable.amount_lbs))
-                Log.d("TESTING", "Parent: ${newRow.parent.javaClass}")
+
+                if (_grainList!!.parent != null) (_grainList!!.parent as ViewGroup).removeView(newRow)
                 _grainList!!.addView(newRow)
             }
         }
 
         _hopList!!.removeAllViews()
+
         if (hops != null) {
             for (hop in hops) {
-                val newRow = layoutInflater.inflate(R.layout.hop_row, activity!!.findViewById(R.id.hop_list), true)
-                setSpinner(newRow, R.id.spinner, hop.name)
+                val newRow = layoutInflater.inflate(R.layout.hop_row, activity!!.findViewById(R.id.hop_list), false)
+                setSpinner(newRow, hop.name)
                 newRow.findViewById<EditText>(R.id.amount).setText("%.2f".format(hop.amount_oz))
                 newRow.findViewById<EditText>(R.id.time).setText(if (hop.additionTime_min != -1) hop.additionTime_min.toString() else "")
+
+                if (_hopList!!.parent != null) (_hopList!!.parent as ViewGroup).removeView(newRow)
                 _hopList!!.addView(newRow)
             }
         }

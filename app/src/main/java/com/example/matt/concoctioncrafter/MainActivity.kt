@@ -128,10 +128,7 @@ class MainActivity : AppCompatActivity() {
     private inner class CustomPageAdapter constructor(manager: FragmentManager) : FragmentPagerAdapter(manager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
         override fun getItem(position: Int): Fragment {
-            return if (position == 0)
-                RecipeFragment()
-            else
-                BrewDayFragment()
+            return if (position == 0) RecipeFragment() else BrewDayFragment()
         }
 
         override fun getCount(): Int {
@@ -139,11 +136,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            return if (position == 0) {
-                getString(R.string.recipe)
-            } else {
-                getString(R.string.brew_day)
-            }
+            return if (position == 0) getString(R.string.recipe) else getString(R.string.brew_day)
         }
     }
 
