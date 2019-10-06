@@ -125,14 +125,13 @@ class MainActivity : AppCompatActivity() {
     /**
      * A custom page adapter.
      */
-    private inner class CustomPageAdapter constructor(manager: FragmentManager) : FragmentPagerAdapter(manager) {
+    private inner class CustomPageAdapter constructor(manager: FragmentManager) : FragmentPagerAdapter(manager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
         override fun getItem(position: Int): Fragment {
-            return if (position == 0) {
+            return if (position == 0)
                 RecipeFragment()
-            } else {
+            else
                 BrewDayFragment()
-            }
         }
 
         override fun getCount(): Int {
