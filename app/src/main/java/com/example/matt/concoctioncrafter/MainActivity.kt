@@ -37,8 +37,8 @@ class MainActivity : AppCompatActivity() {
     private var _toolBar: Toolbar? = null
     private var _recipeViewModel: RecipeViewModel? = null
     private val _recipe = PublishSubject.create<Recipe>()
-    private var _recipeFragment = RecipeFragment()
-    private var _brewDayFragment = BrewDayFragment()
+    private val _recipeFragment = RecipeFragment()
+    private val _brewDayFragment = BrewDayFragment()
 
     /**
      * Provides a recipe observable to populate the recipe and brew day fragments.
