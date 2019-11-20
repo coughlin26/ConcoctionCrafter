@@ -60,14 +60,11 @@ class RecipeFragment : Fragment() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("TESTING", "Creating RecipeFragment")
         super.onCreate(savedInstanceState)
 
         if (activity != null) {
-            _recipeSubscription = (activity as MainActivity).recipe.subscribe({ (_recipeName,
-                                                                                        _style,
-                                                                                        _fermentables,
-                                                                                        _hops,
-                                                                                        _yeast) ->
+            _recipeSubscription = (activity as MainActivity).recipe.subscribe({ (_recipeName, _style, _fermentables, _hops, _yeast) ->
                 _recipe = Recipe(_recipeName, _style, _fermentables, _hops, _yeast)
                 restoreSavedState(savedInstanceState)
             }, { throwable -> Log.e("Recipe_Fragment", "Failed to get the recipe", throwable) })
@@ -75,6 +72,8 @@ class RecipeFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        Log.d("TESTING", "Creating views in RecipeFragment")
+
         val rootView = inflater.inflate(R.layout.recipe_fragment, container, false) as ViewGroup
 
         _recipeLayout = rootView.findViewById(R.id.recipe_layout)
@@ -106,16 +105,6 @@ class RecipeFragment : Fragment() {
         super.onDestroy()
     }
 
-    private fun setSpinner(parent: View, text: String) {
-        val spinner = parent.findViewById<Spinner>(R.id.spinner)
-        for (i in 0 until spinner.count) {
-            if (spinner.getItemAtPosition(i) == text) {
-                spinner.setSelection(i)
-                break
-            }
-        }
-    }
-
     /**
      * Save the fermentables and hops.
      *
@@ -136,8 +125,8 @@ class RecipeFragment : Fragment() {
             beerName = _recipe!!._recipeName
             yeast = _recipe!!._yeast
             style = _recipe!!._style
-            fermentables = _recipe!!._fermentables as ArrayList<Fermentable>
-            hops = _recipe!!._hops as ArrayList<Hop>
+            fermentables = _recipe?._fermentables as ArrayList<Fermentable>
+            hops = _recipe?._hops as ArrayList<Hop>
         } else if (savedInstanceState != null) {
             fermentables = savedInstanceState.getParcelableArrayList<Fermentable>(FERMENTABLE_KEY)
             hops = savedInstanceState.getParcelableArrayList<Hop>(HOP_KEY)
@@ -209,5 +198,25 @@ class RecipeFragment : Fragment() {
                 _hopList!!.addView(newRow)
             }
         }
+    }
+
+    private fun setSpinner(parent: View, text: String) {
+        val spinner = parent.findViewById<Spinner>(R.id.spinner)
+        for (i in 0 until spinner.count) {
+            if (spinner.getItemAtPosition(i) == text) {
+                spinner.setSelection(i)
+                break
+            }
+        }
+    }
+
+    fun clear() {
+        Log.d("TESTING", "Clearing the recipe")
+        _beerName?.text?.clear()
+        _fermentableList?.removeAllViews()
+        _hopList?.removeAllViews()
+        _yeast?.setSelection(0)
+        _style?.setSelection(0)
+        _recipe = null
     }
 }

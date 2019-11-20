@@ -13,7 +13,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.matt.concoctioncrafter.data.Recipe
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
 import java.util.*
 
 class BrewDayFragment : Fragment() {
@@ -122,8 +121,8 @@ class BrewDayFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         if (activity != null) {
-            _recipeSubscription = (activity as MainActivity).recipe.subscribe(Consumer { this.importRecipe(it) },
-                    Consumer<Throwable> { Log.e("Brew_Day_Fragment", "Failed to get the recipe", it) })
+            _recipeSubscription = (activity as MainActivity).recipe.subscribe({ this.importRecipe(it) },
+                    { Log.e("Brew_Day_Fragment", "Failed to get the recipe", it) })
         }
     }
 
@@ -173,5 +172,22 @@ class BrewDayFragment : Fragment() {
         for (hop in recipe._hops) {
             // TODO: Update the hop list. This requires changing the list to a linearlayout
         }
+    }
+
+    fun clear() {
+        _hopType1?.text = getString(R.string.none)
+        _hopType2?.text = getString(R.string.none)
+        _hopType3?.text = getString(R.string.none)
+        _hopType4?.text = getString(R.string.none)
+
+        _amount1?.text = getString(R.string.none)
+        _amount2?.text = getString(R.string.none)
+        _amount3?.text = getString(R.string.none)
+        _amount4?.text = getString(R.string.none)
+
+        _additionTime1?.text = getString(R.string.none)
+        _additionTime2?.text = getString(R.string.none)
+        _additionTime3?.text = getString(R.string.none)
+        _additionTime4?.text = getString(R.string.none)
     }
 }

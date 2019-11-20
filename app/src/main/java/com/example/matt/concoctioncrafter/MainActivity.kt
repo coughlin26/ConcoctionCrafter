@@ -37,6 +37,8 @@ class MainActivity : AppCompatActivity() {
     private var _toolBar: Toolbar? = null
     private var _recipeViewModel: RecipeViewModel? = null
     private val _recipe = PublishSubject.create<Recipe>()
+    private var _recipeFragment = RecipeFragment()
+    private var _brewDayFragment = BrewDayFragment()
 
     /**
      * Provides a recipe observable to populate the recipe and brew day fragments.
@@ -100,6 +102,11 @@ class MainActivity : AppCompatActivity() {
                 startActivityForResult(chooserIntent, REQUEST_CODE)
                 return true
             }
+            R.id.action_clear -> {
+                _recipeFragment.clear()
+                _brewDayFragment.clear()
+                return true
+            }
             R.id.action_delete -> {
                 _recipeViewModel!!.deleteAll()
                 return true
@@ -127,7 +134,7 @@ class MainActivity : AppCompatActivity() {
     private inner class CustomPageAdapter constructor(manager: FragmentManager) : FragmentPagerAdapter(manager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
         override fun getItem(position: Int): Fragment {
-            return if (position == 0) RecipeFragment() else BrewDayFragment()
+            return if (position == 0) _recipeFragment else _brewDayFragment
         }
 
         override fun getCount(): Int {
