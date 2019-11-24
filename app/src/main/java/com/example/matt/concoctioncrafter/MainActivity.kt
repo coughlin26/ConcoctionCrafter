@@ -225,6 +225,8 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val REQUEST_CODE = 7
         const val RECIPE_KEY = "RECIPE_KEY"
+        const val FERMENTABLE_KEY = "FERMENTABLE_KEY"
+        const val HOP_KEY = "HOP_KEY"
         private const val NUM_PAGES = 2
     }
 }

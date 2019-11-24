@@ -13,6 +13,8 @@ import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import com.example.matt.concoctioncrafter.MainActivity.Companion.FERMENTABLE_KEY
+import com.example.matt.concoctioncrafter.MainActivity.Companion.HOP_KEY
 import com.example.matt.concoctioncrafter.data.Fermentable
 import com.example.matt.concoctioncrafter.data.Hop
 import com.example.matt.concoctioncrafter.data.Recipe
@@ -20,8 +22,6 @@ import io.reactivex.disposables.Disposable
 
 
 class RecipeFragment : Fragment() {
-    private val FERMENTABLE_KEY = "FERMENTABLE_KEY"
-    private val HOP_KEY = "HOP_KEY"
     private var _recipeLayout: ConstraintLayout? = null
     private var _beerName: EditText? = null
     private var _fermentableList: LinearLayout? = null
@@ -85,16 +85,16 @@ class RecipeFragment : Fragment() {
         _addFermentableButton = rootView.findViewById(R.id.add_fermentable_button)
         _addHopButton = rootView.findViewById(R.id.add_hop_button)
 
-        _addFermentableButton!!.setOnClickListener {
+        _addFermentableButton?.setOnClickListener {
             layoutInflater.inflate(R.layout.fermentable_row, _fermentableList, true)
         }
 
-        _addHopButton!!.setOnClickListener {
+        _addHopButton?.setOnClickListener {
             layoutInflater.inflate(R.layout.hop_row, _hopList, true)
         }
 
-        _fermentableList!!.removeAllViews()
-        _hopList!!.removeAllViews()
+        _fermentableList?.removeAllViews()
+        _hopList?.removeAllViews()
         restoreSavedState(savedInstanceState)
 
         return rootView
