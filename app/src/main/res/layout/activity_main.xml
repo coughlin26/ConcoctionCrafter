@@ -29,11 +29,13 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
+                android:id="@+id/recipe_tab"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/recipe" />
 
             <com.google.android.material.tabs.TabItem
+                android:id="@+id/brew_tab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/brew_day" />

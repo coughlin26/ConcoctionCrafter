@@ -13,8 +13,7 @@ import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import com.example.matt.concoctioncrafter.MainActivity.Companion.FERMENTABLE_KEY
-import com.example.matt.concoctioncrafter.MainActivity.Companion.HOP_KEY
+import com.example.matt.concoctioncrafter.MainActivity.Companion.RECIPE_KEY
 import com.example.matt.concoctioncrafter.data.Fermentable
 import com.example.matt.concoctioncrafter.data.Hop
 import com.example.matt.concoctioncrafter.data.Recipe
@@ -112,31 +111,28 @@ class RecipeFragment : Fragment() {
      * @see android.view.View.onSaveInstanceState
      */
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(FERMENTABLE_KEY, getFermentablesFromList() as ArrayList<Fermentable>)
-        outState.putParcelableArrayList(HOP_KEY, getHopsFromList() as ArrayList<Hop>)
+        _recipe?._fermentables = getFermentablesFromList()
+        _recipe?._hops = getHopsFromList()
+        outState.putParcelable(RECIPE_KEY, _recipe)
         super.onSaveInstanceState(outState)
     }
 
     private fun restoreSavedState(savedInstanceState: Bundle?) {
-        var fermentables: ArrayList<Fermentable>? = null
-        var hops: ArrayList<Hop>? = null
-
         if (_recipe != null) {
             beerName = _recipe!!._recipeName
             yeast = _recipe!!._yeast
             style = _recipe!!._style
-            fermentables = _recipe?._fermentables as ArrayList<Fermentable>
-            hops = _recipe?._hops as ArrayList<Hop>
         } else if (savedInstanceState != null) {
-            fermentables = savedInstanceState.getParcelableArrayList<Fermentable>(FERMENTABLE_KEY)
-            hops = savedInstanceState.getParcelableArrayList<Hop>(HOP_KEY)
+            _recipe = savedInstanceState.getParcelable(RECIPE_KEY)
         }
 
-        Log.d("TESTING", "Fermentables: $fermentables")
-        Log.d("TESTING", "Hops: $hops")
+        Log.d("TESTING", "Fermentables: ${_recipe?._fermentables}")
+        Log.d("TESTING", "Hops: ${_recipe?._hops}")
 
-        setFermentableViews(fermentables)
-        setHopViews(hops)
+        if (_recipe != null) {
+            setFermentableViews(_recipe?._fermentables)
+            setHopViews(_recipe?._hops)
+        }
     }
 
     private fun getFermentablesFromList(): List<Fermentable> {
@@ -174,6 +170,7 @@ class RecipeFragment : Fragment() {
 
         if (fermentables != null) {
             for (fermentable in fermentables) {
+                Log.d("TESTING", "Adding row for ${fermentable.name}")
                 val newRow = layoutInflater.inflate(R.layout.fermentable_row, activity!!.findViewById(R.id.fermentable_list), false)
                 setSpinner(newRow, fermentable.name)
                 newRow.findViewById<EditText>(R.id.amount).setText("%.2f".format(fermentable.amount_lbs))
@@ -204,6 +201,7 @@ class RecipeFragment : Fragment() {
         val spinner = parent.findViewById<Spinner>(R.id.spinner)
         for (i in 0 until spinner.count) {
             if (spinner.getItemAtPosition(i) == text) {
+                Log.d("TESTING", "Setting the spinner value to $text from position $i")
                 spinner.setSelection(i)
                 break
             }

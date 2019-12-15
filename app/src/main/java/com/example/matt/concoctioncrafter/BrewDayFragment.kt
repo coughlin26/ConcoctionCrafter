@@ -7,10 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.matt.concoctioncrafter.MainActivity.Companion.RECIPE_KEY
 import com.example.matt.concoctioncrafter.data.Hop
@@ -59,13 +56,7 @@ class BrewDayFragment : Fragment() {
         _hopList = rootView.findViewById(R.id.hop_info_list)
         _alcoholContent = rootView.findViewById(R.id.actual_ac)
 
-        if (arguments != null) {
-            _recipe = arguments!!.getParcelable(RECIPE_KEY)
-
-            if (_recipe != null) {
-                importRecipe(_recipe as Recipe)
-            }
-        }
+        restoreSavedState(savedInstanceState)
 
         return rootView
     }
@@ -76,24 +67,43 @@ class BrewDayFragment : Fragment() {
     }
 
     /**
-     * Save the fermentables and hops.
+     * Save the recipe.
      *
      * @param outState The saved instance state bundle.
      * @see android.view.View.onSaveInstanceState
      */
     override fun onSaveInstanceState(outState: Bundle) {
+        val hops = ArrayList<Hop>()
+        val list = activity!!.findViewById<LinearLayout>(R.id.hop_list)
+
+        for (i in 0 until list.childCount) {
+            val row = list.getChildAt(i)
+            val amount = row.findViewById<EditText>(R.id.amount).text.toString()
+            val time = row.findViewById<EditText>(R.id.time).text.toString()
+            hops.add(Hop(row.findViewById<Spinner>(R.id.spinner).selectedItem.toString(),
+                    if (amount.isEmpty()) 0f else amount.toFloat(),
+                    if (time.isEmpty()) -1 else time.toInt()))
+        }
+
+        _recipe?._hops = hops
         outState.putParcelable(RECIPE_KEY, _recipe)
         super.onSaveInstanceState(outState)
     }
 
+    /**
+     * Restore the recipe information.
+     */
     private fun restoreSavedState(savedInstanceState: Bundle?) {
         if (_recipe != null) {
             recipeName = _recipe!!._recipeName
             setHopViews(_recipe?._hops as ArrayList<Hop>)
         } else if (savedInstanceState != null) {
-            val recipe = savedInstanceState.getParcelable<Recipe>(RECIPE_KEY)
-            recipeName = recipe!!._recipeName
-            setHopViews(recipe._hops)
+            _recipe = savedInstanceState.getParcelable(RECIPE_KEY)
+
+            if (_recipe != null) {
+                recipeName = _recipe!!._recipeName
+                setHopViews(_recipe?._hops)
+            }
         }
     }
 

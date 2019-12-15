@@ -149,33 +149,18 @@ class MainActivity : AppCompatActivity() {
         return "Nothing"
     }
 
-    private fun getFloatFromEditText(@IdRes viewId: Int): Float {
-        val text = getTextFromEditText(viewId)
-        return if (text.isEmpty() or (text == "Nothing")) {
-            0f
-        } else {
-            java.lang.Float.valueOf(text)
-        }
-    }
-
-    private fun getIntFromEditText(@IdRes viewId: Int): Int {
-        val text = getTextFromEditText(viewId)
-        return if (text.isEmpty() or text.equals("Nothing")) {
-            0
-        } else {
-            Integer.valueOf(text)
-        }
-    }
-
     private fun getFermentablesFromList(): List<Fermentable> {
         val fermentables = ArrayList<Fermentable>()
         val list = findViewById<LinearLayout>(R.id.fermentable_list)
 
         for (i in 0 until list.childCount) {
             val row = list.getChildAt(i)
-            val amount = row.findViewById<EditText>(R.id.amount).text.toString()
-            fermentables.add(Fermentable(row.findViewById<Spinner>(R.id.spinner).selectedItem.toString(),
-                    if (amount.isEmpty()) 0f else amount.toFloat()))
+
+            if ("Not Used" != row.findViewById<Spinner>(R.id.spinner).selectedItem.toString()) {
+                val amount = row.findViewById<EditText>(R.id.amount).text.toString()
+                fermentables.add(Fermentable(row.findViewById<Spinner>(R.id.spinner).selectedItem.toString(),
+                        if (amount.isEmpty()) 0f else amount.toFloat()))
+            }
         }
 
         return fermentables
@@ -187,11 +172,14 @@ class MainActivity : AppCompatActivity() {
 
         for (i in 0 until list.childCount) {
             val row = list.getChildAt(i)
-            val amount = row.findViewById<EditText>(R.id.amount).text.toString()
-            val time = row.findViewById<EditText>(R.id.time).text.toString()
-            hops.add(Hop(row.findViewById<Spinner>(R.id.spinner).selectedItem.toString(),
-                    if (amount.isEmpty()) 0f else amount.toFloat(),
-                    if (time.isEmpty()) -1 else time.toInt()))
+
+            if ("Not Used" != row.findViewById<Spinner>(R.id.spinner).selectedItem.toString()) {
+                val amount = row.findViewById<EditText>(R.id.amount).text.toString()
+                val time = row.findViewById<EditText>(R.id.time).text.toString()
+                hops.add(Hop(row.findViewById<Spinner>(R.id.spinner).selectedItem.toString(),
+                        if (amount.isEmpty()) 0f else amount.toFloat(),
+                        if (time.isEmpty()) -1 else time.toInt()))
+            }
         }
 
         return hops
@@ -200,7 +188,5 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val REQUEST_CODE = 7
         const val RECIPE_KEY = "RECIPE_KEY"
-        const val FERMENTABLE_KEY = "FERMENTABLE_KEY"
-        const val HOP_KEY = "HOP_KEY"
     }
 }
