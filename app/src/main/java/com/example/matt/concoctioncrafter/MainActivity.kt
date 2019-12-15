@@ -17,9 +17,6 @@ import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.example.matt.concoctioncrafter.data.Fermentable
@@ -32,13 +29,11 @@ import io.reactivex.subjects.Subject
 
 class MainActivity : AppCompatActivity() {
     private var _pager: ViewPager? = null
-    private var _pageAdapter: FragmentPagerAdapter? = null
+    private var _pageAdapter: MainPageAdapter? = null
     private var _tabLayout: TabLayout? = null
     private var _toolBar: Toolbar? = null
     private var _recipeViewModel: RecipeViewModel? = null
     private val _recipe = PublishSubject.create<Recipe>()
-    private val _recipeFragment = RecipeFragment()
-    private val _brewDayFragment = BrewDayFragment()
 
     /**
      * Provides a recipe observable to populate the recipe and brew day fragments.
@@ -55,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         _pager = findViewById(R.id.pager)
         _tabLayout = findViewById(R.id.pager_header)
         _toolBar = findViewById(R.id.toolbar)
-        _pageAdapter = CustomPageAdapter(supportFragmentManager)
+        _pageAdapter = MainPageAdapter(supportFragmentManager)
         _pager!!.adapter = _pageAdapter
         _recipeViewModel = ViewModelProviders.of(this).get(RecipeViewModel::class.java)
 
@@ -103,8 +98,6 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.action_clear -> {
-                _recipeFragment.clear()
-                _brewDayFragment.clear()
                 return true
             }
             R.id.action_delete -> {
@@ -125,24 +118,6 @@ class MainActivity : AppCompatActivity() {
             super.onBackPressed()
         } else {
             _pager!!.currentItem = _pager!!.currentItem - 1
-        }
-    }
-
-    /**
-     * A custom page adapter.
-     */
-    private inner class CustomPageAdapter constructor(manager: FragmentManager) : FragmentPagerAdapter(manager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-
-        override fun getItem(position: Int): Fragment {
-            return if (position == 0) _recipeFragment else _brewDayFragment
-        }
-
-        override fun getCount(): Int {
-            return NUM_PAGES
-        }
-
-        override fun getPageTitle(position: Int): CharSequence? {
-            return if (position == 0) getString(R.string.recipe) else getString(R.string.brew_day)
         }
     }
 
@@ -227,6 +202,5 @@ class MainActivity : AppCompatActivity() {
         const val RECIPE_KEY = "RECIPE_KEY"
         const val FERMENTABLE_KEY = "FERMENTABLE_KEY"
         const val HOP_KEY = "HOP_KEY"
-        private const val NUM_PAGES = 2
     }
 }
