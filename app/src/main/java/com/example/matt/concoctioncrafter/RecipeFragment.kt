@@ -118,36 +118,6 @@ class RecipeFragment : Fragment() {
         Log.d("TESTING", "Hops: ${recipe?.hops}")
     }
 
-    private fun getFermentablesFromList(): List<Fermentable> {
-        val fermentables = ArrayList<Fermentable>()
-        val list = activity!!.findViewById<LinearLayout>(R.id.fermentable_list)
-
-        for (i in 0 until list.childCount) {
-            val row = list.getChildAt(i)
-            val amount = row.findViewById<EditText>(R.id.amount).text.toString()
-            fermentables.add(Fermentable(row.findViewById<Spinner>(R.id.spinner).selectedItem.toString(),
-                    if (amount.isEmpty()) 0f else amount.toFloat()))
-        }
-
-        return fermentables
-    }
-
-    private fun getHopsFromList(): List<Hop> {
-        val hops = ArrayList<Hop>()
-        val list = activity!!.findViewById<LinearLayout>(R.id.hop_list)
-
-        for (i in 0 until list.childCount) {
-            val row = list.getChildAt(i)
-            val amount = row.findViewById<EditText>(R.id.amount).text.toString()
-            val time = row.findViewById<EditText>(R.id.time).text.toString()
-            hops.add(Hop(row.findViewById<Spinner>(R.id.spinner).selectedItem.toString(),
-                    if (amount.isEmpty()) 0f else amount.toFloat(),
-                    if (time.isEmpty()) -1 else time.toInt()))
-        }
-
-        return hops
-    }
-
     private fun setFermentableViews(fermentables: List<Fermentable>?) {
         _fermentableList!!.removeAllViews()
 
@@ -189,14 +159,5 @@ class RecipeFragment : Fragment() {
                 break
             }
         }
-    }
-
-    fun clear() {
-        Log.d("TESTING", "Clearing the recipe")
-        _beerName?.text?.clear()
-        _fermentableList?.removeAllViews()
-        _hopList?.removeAllViews()
-        _yeast?.setSelection(0)
-        _style?.setSelection(0)
     }
 }

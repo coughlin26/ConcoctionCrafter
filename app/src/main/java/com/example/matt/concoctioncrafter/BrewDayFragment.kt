@@ -40,7 +40,6 @@ class BrewDayFragment : Fragment() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("TESTING", "Creating BrewDayFragment")
         super.onCreate(savedInstanceState)
 
         if (activity != null) {
@@ -95,16 +94,5 @@ class BrewDayFragment : Fragment() {
 
     private fun setStartBoilButton(text: CharSequence) {
         startBoilButton?.text = text
-    }
-
-    private fun importRecipe(recipe: Recipe) {
-        recipeName = recipe.recipeName
-        setHopViews(recipe.hops)
-    }
-
-    fun clear() {
-        recipeName = getString(R.string.recipe_name)
-        _hopList?.removeAllViews()
-        _alcoholContent?.text = ""
     }
 }
