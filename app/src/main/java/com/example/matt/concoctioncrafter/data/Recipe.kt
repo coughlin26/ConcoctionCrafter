@@ -9,8 +9,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Entity(tableName = "recipes.db")
 @Parcelize
-data class Recipe(@PrimaryKey var _recipeName: String,
-                  var _style: String,
-                  var _fermentables: List<Fermentable>,
-                  var _hops: List<Hop>,
-                  var _yeast: String) : Parcelable
+data class Recipe(@PrimaryKey var recipeName: String,
+                  var style: String,
+                  var fermentables: List<Fermentable>,
+                  var hops: List<Hop>,
+                  var yeast: String) : Parcelable {
+    constructor() : this("", "", ArrayList(), ArrayList(), "")
+}

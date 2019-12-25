@@ -7,9 +7,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.matt.concoctioncrafter.MainActivity.Companion.RECIPE_KEY
 import com.example.matt.concoctioncrafter.data.Hop
 import com.example.matt.concoctioncrafter.data.Recipe
 import io.reactivex.disposables.Disposable
@@ -21,12 +23,14 @@ class BrewDayFragment : Fragment() {
     private var _hopList: LinearLayout? = null
     private var _alcoholContent: TextView? = null
     private var _recipeSubscription: Disposable? = null
-    private var _recipe: Recipe? = null
 
     private var recipeName: String
         get() = _recipeName!!.text.toString()
         set(name) {
-            _recipeName!!.text = name
+            if (_recipeName != null)
+                _recipeName!!.text = name
+            else
+                Log.w("Brew_Day_Fragment", "Recipe Name view is null")
         }
 
     private var alcoholContent: Float
@@ -40,9 +44,8 @@ class BrewDayFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         if (activity != null) {
-            _recipeSubscription = (activity as MainActivity).recipe.subscribe({ (_recipeName, _style, _fermentables, _hops, _yeast) ->
-                _recipe = Recipe(_recipeName, _style, _fermentables, _hops, _yeast)
-                restoreSavedState(savedInstanceState)
+            _recipeSubscription = (activity as MainActivity).recipeSubject.subscribe({ recipe ->
+                restoreRecipeViews(recipe)
             }, { throwable -> Log.e("Brew_Day_Fragment", "Failed to get the recipe", throwable) })
         }
     }
@@ -56,54 +59,21 @@ class BrewDayFragment : Fragment() {
         _hopList = rootView.findViewById(R.id.hop_info_list)
         _alcoholContent = rootView.findViewById(R.id.actual_ac)
 
-        restoreSavedState(savedInstanceState)
-
         return rootView
     }
 
     override fun onDestroy() {
-        _recipeSubscription!!.dispose()
+        _recipeSubscription?.dispose()
         super.onDestroy()
-    }
-
-    /**
-     * Save the recipe.
-     *
-     * @param outState The saved instance state bundle.
-     * @see android.view.View.onSaveInstanceState
-     */
-    override fun onSaveInstanceState(outState: Bundle) {
-        val hops = ArrayList<Hop>()
-        val list = activity!!.findViewById<LinearLayout>(R.id.hop_list)
-
-        for (i in 0 until list.childCount) {
-            val row = list.getChildAt(i)
-            val amount = row.findViewById<EditText>(R.id.amount).text.toString()
-            val time = row.findViewById<EditText>(R.id.time).text.toString()
-            hops.add(Hop(row.findViewById<Spinner>(R.id.spinner).selectedItem.toString(),
-                    if (amount.isEmpty()) 0f else amount.toFloat(),
-                    if (time.isEmpty()) -1 else time.toInt()))
-        }
-
-        _recipe?._hops = hops
-        outState.putParcelable(RECIPE_KEY, _recipe)
-        super.onSaveInstanceState(outState)
     }
 
     /**
      * Restore the recipe information.
      */
-    private fun restoreSavedState(savedInstanceState: Bundle?) {
-        if (_recipe != null) {
-            recipeName = _recipe!!._recipeName
-            setHopViews(_recipe?._hops as ArrayList<Hop>)
-        } else if (savedInstanceState != null) {
-            _recipe = savedInstanceState.getParcelable(RECIPE_KEY)
-
-            if (_recipe != null) {
-                recipeName = _recipe!!._recipeName
-                setHopViews(_recipe?._hops)
-            }
+    private fun restoreRecipeViews(recipe: Recipe?) {
+        if (recipe != null) {
+            recipeName = recipe.recipeName
+            setHopViews(recipe.hops as ArrayList<Hop>)
         }
     }
 
@@ -128,8 +98,8 @@ class BrewDayFragment : Fragment() {
     }
 
     private fun importRecipe(recipe: Recipe) {
-        recipeName = recipe._recipeName
-        setHopViews(recipe._hops)
+        recipeName = recipe.recipeName
+        setHopViews(recipe.hops)
     }
 
     fun clear() {

@@ -25,23 +25,14 @@ import com.example.matt.concoctioncrafter.data.Recipe
 import com.example.matt.concoctioncrafter.data.RecipeViewModel
 import com.google.android.material.tabs.TabLayout
 import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
 
 class MainActivity : AppCompatActivity() {
+    val recipeSubject = PublishSubject.create<Recipe>()
     private var _pager: ViewPager? = null
     private var _pageAdapter: MainPageAdapter? = null
     private var _tabLayout: TabLayout? = null
     private var _toolBar: Toolbar? = null
     private var _recipeViewModel: RecipeViewModel? = null
-    private val _recipe = PublishSubject.create<Recipe>()
-
-    /**
-     * Provides a recipe observable to populate the recipe and brew day fragments.
-     *
-     * @return The current recipe being viewed
-     */
-    val recipe: Subject<Recipe>
-        get() = _recipe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,13 +49,37 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(_toolBar)
     }
 
+    override fun onResume() {
+        if (_recipeViewModel?.recipe != null) {
+            Log.d("TESTING", "Sending ${_recipeViewModel?.recipe}")
+            recipeSubject.onNext(_recipeViewModel?.recipe as Recipe)
+        } else {
+            Log.d("TESTING", "Sending a blank recipe")
+            recipeSubject.onNext(Recipe())
+        }
+        super.onResume()
+    }
+
+    override fun onPause() {
+        _recipeViewModel?.recipe = makeRecipe()
+        super.onPause()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK &&
                 requestCode == REQUEST_CODE &&
-                data!!.getParcelableExtra<Parcelable>(RECIPE_KEY) != null)
-            _recipe.onNext(data.getParcelableExtra<Parcelable>(RECIPE_KEY) as Recipe)
+                data!!.getParcelableExtra<Parcelable>(RECIPE_KEY) != null) {
+            Log.d("TESTING", "Result had: ${data.getParcelableExtra<Recipe?>(RECIPE_KEY)}")
+            _recipeViewModel?.recipe = data.getParcelableExtra(RECIPE_KEY)
+            recipeSubject.onNext(data.getParcelableExtra(RECIPE_KEY) as Recipe)
+        }
         super.onActivityResult(requestCode, resultCode, data)
     }
+
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        _recipeViewModel?.recipe = makeRecipe()
+//        super.onSaveInstanceState(outState)
+//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
@@ -78,12 +93,12 @@ class MainActivity : AppCompatActivity() {
                 if (_pager!!.currentItem == 0) {
                     val recipe = makeRecipe()
 
-                    if (_recipeViewModel!!.findByName(recipe._recipeName) != null) {
+                    if (_recipeViewModel?.findByName(recipe.recipeName) != null) {
                         Log.d("Testing", "Updating the recipe")
-                        _recipeViewModel!!.update(recipe)
+                        _recipeViewModel?.update(recipe)
                     } else {
                         Log.d("Testing", "Inserting a new recipe")
-                        _recipeViewModel!!.insert(recipe)
+                        _recipeViewModel?.insert(recipe)
                     }
                 } else if (_pager!!.currentItem == 1) {
                     Toast.makeText(this, "Cannot save a recipe on Brew Day", Toast.LENGTH_SHORT).show()
@@ -98,6 +113,7 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.action_clear -> {
+                recipeSubject.onNext(Recipe())
                 return true
             }
             R.id.action_delete -> {
@@ -125,6 +141,7 @@ class MainActivity : AppCompatActivity() {
      * Creates a new Recipe from the views in the Recipe fragment.
      */
     private fun makeRecipe(): Recipe {
+        Log.d("TESTING", "Making a recipe")
         val beerName = getTextFromEditText(R.id.name_input)
         val style = getTextFromSpinner(R.id.style_spinner)
         val fermentables = getFermentablesFromList()

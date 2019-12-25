@@ -25,7 +25,7 @@ class RecipeListAdapter internal constructor(private val _recipeViewModel: Recip
     }
 
     override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {
-        holder.title.text = _recipes[position]._recipeName
+        holder.title.text = _recipes[position].recipeName
         holder.viewGroup.setOnClickListener { recipeClicks.onNext(_recipes[position]) }
         holder.deleteButton.setOnClickListener { _recipeViewModel.delete(_recipes[position]) }
     }

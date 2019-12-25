@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
     private val _recipeRepository: RecipeRepository = RecipeRepository(application)
     val recipeList: LiveData<List<Recipe>>
+    var recipe: Recipe? = null
 
     val all: List<Recipe>?
         get() {
@@ -47,7 +48,9 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
     fun findByName(name: String): Recipe? {
         Log.d(TAG, "Searching for $name")
-        return _recipeRepository.findByName(name)
+        recipe = _recipeRepository.findByName(name)
+        Log.d("TESTING", "Retrieved: $recipe")
+        return recipe
     }
 
     fun delete(recipe: Recipe) {

@@ -13,7 +13,6 @@ import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import com.example.matt.concoctioncrafter.MainActivity.Companion.RECIPE_KEY
 import com.example.matt.concoctioncrafter.data.Fermentable
 import com.example.matt.concoctioncrafter.data.Hop
 import com.example.matt.concoctioncrafter.data.Recipe
@@ -30,11 +29,15 @@ class RecipeFragment : Fragment() {
     private var _yeast: Spinner? = null
     private var _style: Spinner? = null
     private var _recipeSubscription: Disposable? = null
-    private var _recipe: Recipe? = null
 
     private var beerName: String
         get() = _beerName!!.text.toString()
-        set(beerName) = _beerName!!.setText(beerName)
+        set(beerName) {
+            if (_beerName != null)
+                _beerName!!.setText(beerName)
+            else
+                Log.w("Recipe_Fragment", "Beer Name view is null")
+        }
 
     private var yeast: String
         get() = _yeast!!.selectedItem.toString()
@@ -63,9 +66,8 @@ class RecipeFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         if (activity != null) {
-            _recipeSubscription = (activity as MainActivity).recipe.subscribe({ (_recipeName, _style, _fermentables, _hops, _yeast) ->
-                _recipe = Recipe(_recipeName, _style, _fermentables, _hops, _yeast)
-                restoreSavedState(savedInstanceState)
+            _recipeSubscription = (activity as MainActivity).recipeSubject.subscribe({ recipe ->
+                restoreRecipeViews(recipe)
             }, { throwable -> Log.e("Recipe_Fragment", "Failed to get the recipe", throwable) })
         }
     }
@@ -94,45 +96,26 @@ class RecipeFragment : Fragment() {
 
         _fermentableList?.removeAllViews()
         _hopList?.removeAllViews()
-        restoreSavedState(savedInstanceState)
 
         return rootView
     }
 
     override fun onDestroy() {
-        _recipeSubscription!!.dispose()
+        _recipeSubscription?.dispose()
         super.onDestroy()
     }
 
-    /**
-     * Save the fermentables and hops.
-     *
-     * @param outState The saved instance state bundle.
-     * @see android.view.View.onSaveInstanceState
-     */
-    override fun onSaveInstanceState(outState: Bundle) {
-        _recipe?._fermentables = getFermentablesFromList()
-        _recipe?._hops = getHopsFromList()
-        outState.putParcelable(RECIPE_KEY, _recipe)
-        super.onSaveInstanceState(outState)
-    }
-
-    private fun restoreSavedState(savedInstanceState: Bundle?) {
-        if (_recipe != null) {
-            beerName = _recipe!!._recipeName
-            yeast = _recipe!!._yeast
-            style = _recipe!!._style
-        } else if (savedInstanceState != null) {
-            _recipe = savedInstanceState.getParcelable(RECIPE_KEY)
+    private fun restoreRecipeViews(recipe: Recipe?) {
+        if (recipe != null) {
+            beerName = recipe.recipeName
+            yeast = recipe.yeast
+            style = recipe.style
+            setFermentableViews(recipe.fermentables)
+            setHopViews(recipe.hops)
         }
 
-        Log.d("TESTING", "Fermentables: ${_recipe?._fermentables}")
-        Log.d("TESTING", "Hops: ${_recipe?._hops}")
-
-        if (_recipe != null) {
-            setFermentableViews(_recipe?._fermentables)
-            setHopViews(_recipe?._hops)
-        }
+        Log.d("TESTING", "Fermentables: ${recipe?.fermentables}")
+        Log.d("TESTING", "Hops: ${recipe?.hops}")
     }
 
     private fun getFermentablesFromList(): List<Fermentable> {
@@ -215,6 +198,5 @@ class RecipeFragment : Fragment() {
         _hopList?.removeAllViews()
         _yeast?.setSelection(0)
         _style?.setSelection(0)
-        _recipe = null
     }
 }
