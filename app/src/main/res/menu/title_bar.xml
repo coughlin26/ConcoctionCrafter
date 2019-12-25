@@ -7,13 +7,11 @@
 
     <item
         android:id="@+id/action_save"
-        android:icon="@drawable/ic_save_black_24dp"
         android:title="@string/save"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_import"
-        android:icon="@drawable/ic_import_black_24dp"
         android:title="@string/import_action"
         app:showAsAction="ifRoom" />
 
