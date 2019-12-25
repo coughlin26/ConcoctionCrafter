@@ -51,10 +51,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         if (_recipeViewModel?.recipe != null) {
-            Log.d("TESTING", "Sending ${_recipeViewModel?.recipe}")
             recipeSubject.onNext(_recipeViewModel?.recipe as Recipe)
         } else {
-            Log.d("TESTING", "Sending a blank recipe")
             recipeSubject.onNext(Recipe())
         }
         super.onResume()
@@ -69,9 +67,7 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK &&
                 requestCode == REQUEST_CODE &&
                 data!!.getParcelableExtra<Parcelable>(RECIPE_KEY) != null) {
-            Log.d("TESTING", "Result had: ${data.getParcelableExtra<Recipe?>(RECIPE_KEY)}")
             _recipeViewModel?.recipe = data.getParcelableExtra(RECIPE_KEY)
-            recipeSubject.onNext(data.getParcelableExtra(RECIPE_KEY) as Recipe)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -89,12 +85,13 @@ class MainActivity : AppCompatActivity() {
                     val recipe = makeRecipe()
 
                     if (_recipeViewModel?.findByName(recipe.recipeName) != null) {
-                        Log.d("Testing", "Updating the recipe")
                         _recipeViewModel?.update(recipe)
                     } else {
-                        Log.d("Testing", "Inserting a new recipe")
                         _recipeViewModel?.insert(recipe)
                     }
+
+                    _recipeViewModel?.recipe = recipe
+                    recipeSubject.onNext(recipe)
                 } else if (_pager!!.currentItem == 1) {
                     Toast.makeText(this, "Cannot save a recipe on Brew Day", Toast.LENGTH_SHORT).show()
                 } else {
