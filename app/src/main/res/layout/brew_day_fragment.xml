@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/brew_day_constraint"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/name"
@@ -20,7 +20,6 @@
             android:layout_marginTop="0dp"
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="0dp"
-            android:text="@string/recipe_name"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@id/date_input"
             app:layout_constraintStart_toStartOf="parent"
@@ -53,20 +52,6 @@
             app:layout_constraintStart_toEndOf="@id/date_title"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/start_boil_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="0dp"
-            android:background="@color/colorAccent"
-            android:text="@string/start_boil"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/date_input" />
-
         <TextView
             android:id="@+id/hop_type_title"
             android:layout_width="0dp"
@@ -80,7 +65,7 @@
             app:layout_constraintEnd_toStartOf="@id/amount_title"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/start_boil_button" />
+            app:layout_constraintTop_toBottomOf="@id/date_input" />
 
         <TextView
             android:id="@+id/amount_title"
@@ -201,13 +186,29 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="0dp"
-            android:text="0%"
             android:textAlignment="center"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/actual_ac_title"
             app:layout_constraintTop_toBottomOf="@id/actual_fg_input" />
+
+        <Button
+            android:id="@+id/start_boil_button"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/colorAccent"
+            android:text="@string/start_boil"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/actual_ac" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

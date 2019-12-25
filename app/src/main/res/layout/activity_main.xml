@@ -26,7 +26,9 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/pager_header"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:tabGravity="fill"
+            app:tabMaxWidth="0dp">
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/recipe_tab"
@@ -36,7 +38,7 @@
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/brew_tab"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/brew_day" />
 

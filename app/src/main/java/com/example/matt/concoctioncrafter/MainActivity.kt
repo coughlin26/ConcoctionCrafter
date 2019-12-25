@@ -160,10 +160,10 @@ class MainActivity : AppCompatActivity() {
 
         if (view != null) {
             val text = (view as EditText).text.toString()
-            return if (text.isEmpty()) "Nothing" else text
+            return if (text.isEmpty()) "" else text
         }
 
-        return "Nothing"
+        return ""
     }
 
     private fun getFermentablesFromList(): List<Fermentable> {
