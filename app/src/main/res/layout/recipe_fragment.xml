@@ -17,17 +17,27 @@
 
         <Button
             android:id="@+id/add_fermentable_button"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/colorAccent"
             android:text="@string/add_fermentable"
+            android:textAllCaps="false"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fermentable_list" />
 
         <Button
             android:id="@+id/add_hop_button"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/colorAccent"
             android:text="@string/add_hop"
+            android:textAllCaps="false"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/hop_list" />
 
@@ -40,7 +50,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="0dp"
             android:hint="@string/name_autofill"
-            android:inputType="text"
+            android:inputType="textNoSuggestions"
             app:layout_constraintTop_toBottomOf="@id/name_title" />
 
         <LinearLayout
@@ -93,6 +103,7 @@
             android:layout_marginBottom="0dp"
             android:labelFor="@id/name_input"
             android:text="@string/beer_name"
+            android:textSize="18sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -105,6 +116,7 @@
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="0dp"
             android:text="@string/fermentables"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/name_input" />
 
@@ -117,6 +129,7 @@
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="0dp"
             android:text="@string/amount"
+            android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@id/fermentable_units"
             app:layout_constraintTop_toBottomOf="@id/name_input" />
 
@@ -127,12 +140,13 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="@string/lbs_abbreviation"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/name_input" />
 
         <TextView
             android:id="@+id/hop_title"
-            android:layout_width="152dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -140,12 +154,15 @@
             android:layout_marginBottom="0dp"
             android:text="@string/hops"
             android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@id/hop_amount_title"
+            app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/hop_divider" />
 
         <TextView
             android:id="@+id/hop_amount_title"
-            android:layout_width="80dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="0dp"
             android:layout_marginTop="8dp"
@@ -153,13 +170,14 @@
             android:layout_marginBottom="0dp"
             android:text="@string/amount"
             android:textAlignment="center"
+            android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@id/addition_time_title"
             app:layout_constraintStart_toEndOf="@id/hop_title"
             app:layout_constraintTop_toBottomOf="@id/hop_divider" />
 
         <TextView
             android:id="@+id/addition_time_title"
-            android:layout_width="100dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="0dp"
             android:layout_marginTop="8dp"
@@ -167,7 +185,9 @@
             android:layout_marginBottom="0dp"
             android:text="@string/hop_addition_time"
             android:textAlignment="center"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/hop_amount_title"
             app:layout_constraintTop_toBottomOf="@id/hop_divider" />
 
         <TextView
@@ -179,6 +199,7 @@
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="0dp"
             android:text="@string/yeast"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/yeast_divider" />
 
@@ -191,6 +212,7 @@
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="0dp"
             android:text="@string/beer_style"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/yeast_spinner" />
 
