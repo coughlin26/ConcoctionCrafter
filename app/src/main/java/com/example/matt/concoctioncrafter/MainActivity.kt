@@ -76,11 +76,6 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        _recipeViewModel?.recipe = makeRecipe()
-//        super.onSaveInstanceState(outState)
-//    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.title_bar, menu)
