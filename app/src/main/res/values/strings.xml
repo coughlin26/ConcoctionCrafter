@@ -40,6 +40,10 @@
     <string name="mash_temp">Mash Temperature</string>
     <string name="none">None</string>
     <string name="start_boil">Start Boil</string>
+    <string name="stop_boil">Stop Boil</string>
+    <string name="boil_finished">Boil Finished!</string>
+    <string name="click_to_dismiss">Click OK to dismiss</string>
+    <string name="ok">OK</string>
     <string name="save">Save</string>
     <string name="import_action">Recipes</string>
     <string name="clear_action">Clear</string>
@@ -49,6 +53,7 @@
     <string name="delete_recipe">Delete Recipe</string>
     <string name="add_fermentable">Add Fermentable</string>
     <string name="add_hop">Add Hop</string>
+    <string name="remaining_time">Boil Time Remaining: %1$d min %2$d sec</string>
 
     <string name="recipe_tag">RECIPE_TAG</string>
     <string name="brew_day_tag">BREW_DAY_TAG</string>

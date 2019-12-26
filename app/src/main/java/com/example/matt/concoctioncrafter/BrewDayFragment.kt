@@ -2,7 +2,9 @@
 
 package com.example.matt.concoctioncrafter
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,19 +12,22 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.matt.concoctioncrafter.data.Hop
 import com.example.matt.concoctioncrafter.data.Recipe
 import io.reactivex.disposables.Disposable
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class BrewDayFragment : Fragment() {
-    private var startBoilButton: Button? = null
+    private var _startBoilButton: Button? = null
     private var _recipeName: TextView? = null
     private var _hopList: LinearLayout? = null
     private var _alcoholContent: TextView? = null
+    private var _timeRemaining: TextView? = null
     private var _recipeSubscription: Disposable? = null
+    private var _boilTimer: CountDownTimer? = null
+    private var _remainingSeconds: Long = 0
 
     private var recipeName: String
         get() = _recipeName!!.text.toString()
@@ -47,16 +52,28 @@ class BrewDayFragment : Fragment() {
                 restoreRecipeViews(recipe)
             }, { throwable -> Log.e("Brew_Day_Fragment", "Failed to get the recipe", throwable) })
         }
+
+        if (savedInstanceState != null) {
+            _remainingSeconds = savedInstanceState.getLong("REMAINING_TIME")
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.brew_day_fragment, container, false) as ViewGroup
 
-        startBoilButton = rootView.findViewById(R.id.start_boil_button)
-        startBoilButton?.setOnClickListener { Toast.makeText(context, "This feature is coming soon!", Toast.LENGTH_SHORT).show() }
+        _startBoilButton = rootView.findViewById(R.id.start_boil_button)
+        _startBoilButton?.setOnClickListener {
+            //Toast.makeText(context, "This feature is coming soon!", Toast.LENGTH_SHORT).show()
+            when (_startBoilButton?.text) {
+                getString(R.string.start_boil) -> startBoil(TimeUnit.MINUTES.toSeconds(60))
+                "Stop Boil" -> stopBoil()
+                else -> stopBoil()
+            }
+        }
         _recipeName = rootView.findViewById(R.id.name)
         _hopList = rootView.findViewById(R.id.hop_info_list)
         _alcoholContent = rootView.findViewById(R.id.actual_ac)
+        _timeRemaining = rootView.findViewById(R.id.time_remaining)
 
         return rootView
     }
@@ -64,6 +81,25 @@ class BrewDayFragment : Fragment() {
     override fun onDestroy() {
         _recipeSubscription?.dispose()
         super.onDestroy()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putLong("REMAINING_TIME", _remainingSeconds)
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onResume() {
+        if (_remainingSeconds > 0) {
+            startBoil(_remainingSeconds)
+        }
+        super.onResume()
+    }
+
+    override fun onPause() {
+        if (_boilTimer != null) {
+            _boilTimer?.cancel()
+        }
+        super.onPause()
     }
 
     /**
@@ -92,7 +128,35 @@ class BrewDayFragment : Fragment() {
         }
     }
 
-    private fun setStartBoilButton(text: CharSequence) {
-        startBoilButton?.text = text
+    private fun startBoil(boilTimeSeconds: Long) {
+        _startBoilButton?.text = getString(R.string.stop_boil)
+        _timeRemaining?.visibility = View.VISIBLE
+
+        _boilTimer = object : CountDownTimer(TimeUnit.SECONDS.toMillis(boilTimeSeconds), 1000) {
+            override fun onFinish() {
+                val builder: AlertDialog.Builder? = activity.let { AlertDialog.Builder(it) }
+                builder?.setTitle(R.string.boil_finished)
+                        ?.setMessage(R.string.click_to_dismiss)
+                        ?.setPositiveButton(R.string.ok) { dialog, _ ->
+                            stopBoil()
+                            dialog.dismiss()
+                        }
+                        ?.show()
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+                _remainingSeconds = millisUntilFinished / 1000
+                _timeRemaining?.text = getString(R.string.remaining_time,
+                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
+                        (millisUntilFinished / 1000) - (millisUntilFinished / 1000 / 60 * 60))
+            }
+        }.start()
+    }
+
+    private fun stopBoil() {
+        _startBoilButton?.text = getString(R.string.start_boil)
+        _timeRemaining?.visibility = View.GONE
+        _boilTimer?.cancel()
+        _remainingSeconds = 0
     }
 }
