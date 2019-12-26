@@ -28,6 +28,7 @@ class BrewDayFragment : Fragment() {
     private var _recipeSubscription: Disposable? = null
     private var _boilTimer: CountDownTimer? = null
     private var _remainingSeconds: Long = 0
+    private var _hops: List<Hop>? = null
 
     private var recipeName: String
         get() = _recipeName!!.text.toString()
@@ -108,7 +109,8 @@ class BrewDayFragment : Fragment() {
     private fun restoreRecipeViews(recipe: Recipe?) {
         if (recipe != null) {
             recipeName = recipe.recipeName
-            setHopViews(recipe.hops as ArrayList<Hop>)
+            _hops = recipe.hops
+            setHopViews(_hops as ArrayList<Hop>)
         }
     }
 
@@ -146,9 +148,22 @@ class BrewDayFragment : Fragment() {
 
             override fun onTick(millisUntilFinished: Long) {
                 _remainingSeconds = millisUntilFinished / 1000
+
+                if (_hops != null) {
+                    for (hop in _hops!!) {
+                        if (_remainingSeconds == hop.additionTime_min * 60L) {
+                            activity.let { AlertDialog.Builder(it) }
+                                    .setTitle(getString(R.string.add_title, hop.name))
+                                    ?.setMessage(getString(R.string.add_message, hop.amount_oz))
+                                    ?.setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                                    ?.show()
+                        }
+                    }
+                }
+
                 _timeRemaining?.text = getString(R.string.remaining_time,
                         TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
-                        (millisUntilFinished / 1000) - (millisUntilFinished / 1000 / 60 * 60))
+                        _remainingSeconds - (_remainingSeconds / 60 * 60))
             }
         }.start()
     }
