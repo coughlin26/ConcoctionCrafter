@@ -3,10 +3,12 @@
 package com.example.matt.concoctioncrafter
 
 import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -47,6 +49,7 @@ class MainActivity : AppCompatActivity() {
 
         _tabLayout!!.setupWithViewPager(_pager)
         setSupportActionBar(_toolBar)
+        createNotificationChannel()
     }
 
     override fun onResume() {
@@ -133,7 +136,6 @@ class MainActivity : AppCompatActivity() {
      * Creates a new Recipe from the views in the Recipe fragment.
      */
     private fun makeRecipe(): Recipe {
-        Log.d("TESTING", "Making a recipe")
         val beerName = getTextFromEditText(R.id.name_input)
         val style = getTextFromSpinner(R.id.style_spinner)
         val fermentables = getFermentablesFromList()
@@ -193,6 +195,26 @@ class MainActivity : AppCompatActivity() {
 
         return hops
     }
+
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.channel_name)
+            val descriptionText = getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel("ConcoctionNotification",
+                    name,
+                    importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                    getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
 
     companion object {
         const val REQUEST_CODE = 7

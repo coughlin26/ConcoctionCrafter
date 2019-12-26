@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import com.example.matt.concoctioncrafter.data.Hop
 import com.example.matt.concoctioncrafter.data.Recipe
@@ -89,18 +91,18 @@ class BrewDayFragment : Fragment() {
         super.onSaveInstanceState(outState)
     }
 
-    override fun onResume() {
+    override fun onStart() {
         if (_remainingSeconds > 0) {
             startBoil(_remainingSeconds)
         }
-        super.onResume()
+        super.onStart()
     }
 
-    override fun onPause() {
+    override fun onStop() {
         if (_boilTimer != null) {
             _boilTimer?.cancel()
         }
-        super.onPause()
+        super.onStop()
     }
 
     /**
@@ -152,10 +154,27 @@ class BrewDayFragment : Fragment() {
                 if (_hops != null) {
                     for (hop in _hops!!) {
                         if (_remainingSeconds == hop.additionTime_min * 60L) {
+                            val id: Int = (Math.random() * 1000).toInt()
+
+                            val builder = NotificationCompat.Builder(activity!!.applicationContext)
+                                    .setSmallIcon(R.mipmap.ic_text_launcher_square)
+                                    .setContentTitle(getString(R.string.add_title, hop.name))
+                                    .setContentText(getString(R.string.add_message, hop.amount_oz))
+                                    .setPriority(NotificationCompat.DEFAULT_ALL)
+
+                            with(NotificationManagerCompat.from(activity!!.applicationContext)) {
+                                notify(id, builder.build())
+                            }
+
                             activity.let { AlertDialog.Builder(it) }
                                     .setTitle(getString(R.string.add_title, hop.name))
                                     ?.setMessage(getString(R.string.add_message, hop.amount_oz))
-                                    ?.setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                                    ?.setPositiveButton(R.string.ok) { dialog, _ ->
+                                        dialog.dismiss()
+                                        with(NotificationManagerCompat.from(activity!!.applicationContext)) {
+                                            cancel(id)
+                                        }
+                                    }
                                     ?.show()
                         }
                     }

@@ -56,6 +56,8 @@
     <string name="remaining_time">Boil Time Remaining: %1$d min %2$d sec</string>
     <string name="add_title">Add %1$s</string>
     <string name="add_message">Add %1$.2f oz</string>
+    <string name="channel_name">Concoction Channel</string>
+    <string name="channel_description">Concoction Crafter\'s Notification Channel</string>
 
     <string name="recipe_tag">RECIPE_TAG</string>
     <string name="brew_day_tag">BREW_DAY_TAG</string>
