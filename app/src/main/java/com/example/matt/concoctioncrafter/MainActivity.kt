@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity() {
             val name = getString(R.string.channel_name)
             val descriptionText = getString(R.string.channel_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel("ConcoctionNotification",
+            val channel = NotificationChannel(NOTIFICATION_CHANNEL,
                     name,
                     importance).apply {
                 description = descriptionText
@@ -219,5 +219,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val REQUEST_CODE = 7
         const val RECIPE_KEY = "RECIPE_KEY"
+        const val NOTIFICATION_CHANNEL = "ConcoctionNotification"
     }
 }
