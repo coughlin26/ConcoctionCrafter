@@ -115,11 +115,11 @@ class MainActivity : AppCompatActivity() {
                 _recipeViewModel!!.deleteAll()
                 return true
             }
-            R.id.settings_action -> {
-                val settingsIntent = Intent(this, SettingsActivity::class.java)
-                startActivity(settingsIntent)
-                return true
-            }
+//            R.id.settings_action -> {
+//                val settingsIntent = Intent(this, SettingsActivity::class.java)
+//                startActivity(settingsIntent)
+//                return true
+//            }
             else -> return super.onOptionsItemSelected(item)
         }
     }

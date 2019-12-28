@@ -27,9 +27,9 @@
         android:title="@string/delete_all"
         app:showAsAction="never" />
 
-    <item
+    <!--<item
         android:id="@+id/settings_action"
         android:title="@string/settings"
-        app:showAsAction="never" />
+        app:showAsAction="never" />-->
 
 </menu>
