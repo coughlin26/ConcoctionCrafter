@@ -1,4 +1,4 @@
-/* Copyright Matthew Coughlin 2018, 2019 */
+/* Copyright Matthew Coughlin 2018, 2019, 2020 */
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
@@ -8,7 +8,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId 'com.example.matt.concoctioncrafter'
+        applicationId 'dev.mattcoughlin.concoctioncrafter'
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 1

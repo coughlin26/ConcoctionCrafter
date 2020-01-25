@@ -3,7 +3,7 @@
 <!-- Copyright Matthew Coughlin 2018 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.matt.concoctioncrafter">
+    package="dev.mattcoughlin.concoctioncrafter">
 
     <application
         android:allowBackup="false"
