@@ -2,7 +2,9 @@
 
 package com.example.matt.concoctioncrafter
 
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.PendingIntent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
@@ -32,6 +34,8 @@ class BrewDayFragment : Fragment() {
     private var _boilTimer: CountDownTimer? = null
     private var _remainingSeconds: Long = 0
     private var _hops: List<Hop>? = null
+    private var _alarmManager: AlarmManager? = null
+    private lateinit var _alarmIntent: PendingIntent
 
     private var recipeName: String
         get() = _recipeName!!.text.toString()
@@ -40,12 +44,6 @@ class BrewDayFragment : Fragment() {
                 _recipeName!!.text = name
             else
                 Log.w("Brew_Day_Fragment", "Recipe Name view is null")
-        }
-
-    private var alcoholContent: Float
-        get() = java.lang.Float.valueOf(_alcoholContent!!.text.toString())
-        set(alcoholContent) {
-            _alcoholContent!!.text = String.format(Locale.getDefault(), "%.2f", alcoholContent)
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,6 +76,8 @@ class BrewDayFragment : Fragment() {
         _hopList = rootView.findViewById(R.id.hop_info_list)
         _alcoholContent = rootView.findViewById(R.id.actual_ac)
         _timeRemaining = rootView.findViewById(R.id.time_remaining)
+
+        // TODO Calculate the alcohol content. Might need to save it with the recipe.
 
         return rootView
     }
@@ -137,6 +137,16 @@ class BrewDayFragment : Fragment() {
         _startBoilButton?.text = getString(R.string.stop_boil)
         _timeRemaining?.visibility = View.VISIBLE
 
+        // TODO Replace the notification with an Alarm
+//        _alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        _alarmIntent = Intent(context, BoilTimerReceiver::class.java).let { intent ->
+//            PendingIntent.getBroadcast(context, 0, intent, 0)
+//        }
+//
+//        _alarmManager?.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+//                SystemClock.elapsedRealtime() + 2 * 1000,
+//                _alarmIntent)
+
         _boilTimer = object : CountDownTimer(TimeUnit.SECONDS.toMillis(boilTimeSeconds), 1000) {
             override fun onFinish() {
                 val builder: AlertDialog.Builder? = activity.let { AlertDialog.Builder(it) }
@@ -193,5 +203,6 @@ class BrewDayFragment : Fragment() {
         _timeRemaining?.visibility = View.GONE
         _boilTimer?.cancel()
         _remainingSeconds = 0
+        _alarmManager?.cancel(_alarmIntent)
     }
 }
