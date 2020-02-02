@@ -19,6 +19,7 @@ import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
@@ -205,12 +206,15 @@ class MainActivity : AppCompatActivity() {
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(NOTIFICATION_CHANNEL,
                     name,
-                    importance).apply {
-                description = descriptionText
-            }
+                    importance)
+
+            channel.enableLights(true)
+            channel.lightColor = ContextCompat.getColor(this, R.color.colorAccent)
+            channel.enableVibration(true)
+            channel.description = descriptionText
+
             // Register the channel with the system
-            val notificationManager: NotificationManager =
-                    getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager = getSystemService(NotificationManager::class.java) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
@@ -220,5 +224,7 @@ class MainActivity : AppCompatActivity() {
         const val REQUEST_CODE = 7
         const val RECIPE_KEY = "RECIPE_KEY"
         const val NOTIFICATION_CHANNEL = "ConcoctionNotification"
+        const val NOTIFICATION_TITLE = "NOTIFICATION_TITLE"
+        const val NOTIFICATION_MESSAGE = "NOTIFICATION_MESSAGE"
     }
 }

@@ -12,14 +12,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import dev.mattcoughlin.concoctioncrafter.MainActivity.Companion.NOTIFICATION_CHANNEL
 import dev.mattcoughlin.concoctioncrafter.data.Hop
 import dev.mattcoughlin.concoctioncrafter.data.Recipe
+import dev.mattcoughlin.concoctioncrafter.data.RecipeViewModel
 import io.reactivex.disposables.Disposable
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -30,11 +33,14 @@ class BrewDayFragment : Fragment() {
     private var _hopList: LinearLayout? = null
     private var _alcoholContent: TextView? = null
     private var _timeRemaining: TextView? = null
+    private var _startingGravity: EditText? = null
+    private var _finalGravity: EditText? = null
     private var _recipeSubscription: Disposable? = null
     private var _boilTimer: CountDownTimer? = null
     private var _remainingSeconds: Long = 0
     private var _hops: List<Hop>? = null
     private var _alarmManager: AlarmManager? = null
+    private var _recipeViewModel: RecipeViewModel? = null
     private lateinit var _alarmIntent: PendingIntent
 
     private var recipeName: String
@@ -58,6 +64,8 @@ class BrewDayFragment : Fragment() {
         if (savedInstanceState != null) {
             _remainingSeconds = savedInstanceState.getLong("REMAINING_TIME")
         }
+
+        _recipeViewModel = ViewModelProvider(this).get(RecipeViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -76,8 +84,12 @@ class BrewDayFragment : Fragment() {
         _hopList = rootView.findViewById(R.id.hop_info_list)
         _alcoholContent = rootView.findViewById(R.id.actual_ac)
         _timeRemaining = rootView.findViewById(R.id.time_remaining)
+        _startingGravity = rootView.findViewById(R.id.actual_og_input)
+        _finalGravity = rootView.findViewById(R.id.actual_fg_input)
 
-        // TODO Calculate the alcohol content. Might need to save it with the recipe.
+        val startingGravity = _startingGravity?.text.toString().toDouble()
+        val finalGravity = _finalGravity?.text.toString().toDouble()
+        _alcoholContent?.text = (((1.05 * (startingGravity - finalGravity)) / finalGravity) / 0.79).toString()
 
         return rootView
     }
@@ -137,15 +149,7 @@ class BrewDayFragment : Fragment() {
         _startBoilButton?.text = getString(R.string.stop_boil)
         _timeRemaining?.visibility = View.VISIBLE
 
-        // TODO Replace the notification with an Alarm
-//        _alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        _alarmIntent = Intent(context, BoilTimerReceiver::class.java).let { intent ->
-//            PendingIntent.getBroadcast(context, 0, intent, 0)
-//        }
-//
-//        _alarmManager?.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-//                SystemClock.elapsedRealtime() + 2 * 1000,
-//                _alarmIntent)
+        _recipeViewModel?.setAlarm(true)
 
         _boilTimer = object : CountDownTimer(TimeUnit.SECONDS.toMillis(boilTimeSeconds), 1000) {
             override fun onFinish() {
@@ -204,5 +208,6 @@ class BrewDayFragment : Fragment() {
         _boilTimer?.cancel()
         _remainingSeconds = 0
         _alarmManager?.cancel(_alarmIntent)
+        _recipeViewModel?.setAlarm(false)
     }
 }

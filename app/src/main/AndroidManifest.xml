@@ -38,8 +38,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <!--<receiver android:name=".BoilTimerReceiver">
-        </receiver>-->
+
+        <receiver
+            android:name=".BoilTimerReceiver"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>
