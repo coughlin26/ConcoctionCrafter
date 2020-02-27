@@ -3,7 +3,6 @@
 package dev.mattcoughlin.concoctioncrafter
 
 import android.app.AlarmManager
-import android.app.AlertDialog
 import android.app.PendingIntent
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -15,16 +14,15 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
+import androidx.databinding.BindingAdapter
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import dev.mattcoughlin.concoctioncrafter.MainActivity.Companion.NOTIFICATION_CHANNEL
 import dev.mattcoughlin.concoctioncrafter.data.Hop
 import dev.mattcoughlin.concoctioncrafter.data.Recipe
 import dev.mattcoughlin.concoctioncrafter.data.RecipeViewModel
+import dev.mattcoughlin.concoctioncrafter.databinding.BrewDayFragmentBinding
 import io.reactivex.disposables.Disposable
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 class BrewDayFragment : Fragment() {
@@ -69,7 +67,8 @@ class BrewDayFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.brew_day_fragment, container, false) as ViewGroup
+        val binding: BrewDayFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.brew_day_fragment, container, false)
+        val rootView = binding.root
 
         _startBoilButton = rootView.findViewById(R.id.start_boil_button)
         _startBoilButton?.setOnClickListener {
@@ -87,9 +86,22 @@ class BrewDayFragment : Fragment() {
         _startingGravity = rootView.findViewById(R.id.actual_og_input)
         _finalGravity = rootView.findViewById(R.id.actual_fg_input)
 
-        val startingGravity = _startingGravity?.text.toString().toDouble()
-        val finalGravity = _finalGravity?.text.toString().toDouble()
-        _alcoholContent?.text = (((1.05 * (startingGravity - finalGravity)) / finalGravity) / 0.79).toString()
+        var startingGravity = 0.0
+        var finalGravity = 0.0
+
+        if (_startingGravity?.text.toString() != "") {
+            startingGravity = _startingGravity?.text.toString().toDouble()
+        }
+        if (_finalGravity?.text.toString() != "") {
+            finalGravity = _finalGravity?.text.toString().toDouble()
+        }
+
+        if (finalGravity != 0.0) {
+            _alcoholContent?.text = (((1.05 * (startingGravity - finalGravity)) / finalGravity) / 0.79).toString()
+        }
+
+        binding.recipeViewModel = _recipeViewModel
+        binding.lifecycleOwner = this.viewLifecycleOwner
 
         return rootView
     }
@@ -102,20 +114,6 @@ class BrewDayFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putLong("REMAINING_TIME", _remainingSeconds)
         super.onSaveInstanceState(outState)
-    }
-
-    override fun onStart() {
-        if (_remainingSeconds > 0) {
-            startBoil(_remainingSeconds)
-        }
-        super.onStart()
-    }
-
-    override fun onStop() {
-        if (_boilTimer != null) {
-            _boilTimer?.cancel()
-        }
-        super.onStop()
     }
 
     /**
@@ -151,55 +149,55 @@ class BrewDayFragment : Fragment() {
 
         _recipeViewModel?.setAlarm(true)
 
-        _boilTimer = object : CountDownTimer(TimeUnit.SECONDS.toMillis(boilTimeSeconds), 1000) {
-            override fun onFinish() {
-                val builder: AlertDialog.Builder? = activity.let { AlertDialog.Builder(it) }
-                builder?.setTitle(R.string.boil_finished)
-                        ?.setMessage(R.string.click_to_dismiss)
-                        ?.setPositiveButton(R.string.ok) { dialog, _ ->
-                            stopBoil()
-                            dialog.dismiss()
-                        }
-                        ?.show()
-            }
-
-            override fun onTick(millisUntilFinished: Long) {
-                _remainingSeconds = millisUntilFinished / 1000
-
-                if (_hops != null) {
-                    for (hop in _hops!!) {
-                        if (_remainingSeconds == hop.additionTime_min * 60L) {
-                            val id: Int = (Math.random() * 1000).toInt()
-
-                            val builder = NotificationCompat.Builder(activity!!.applicationContext, NOTIFICATION_CHANNEL)
-                                    .setSmallIcon(R.mipmap.ic_text_launcher_square)
-                                    .setContentTitle(getString(R.string.add_title, hop.name))
-                                    .setContentText(getString(R.string.add_message, hop.amount_oz))
-                                    .setPriority(NotificationCompat.DEFAULT_ALL)
-
-                            with(NotificationManagerCompat.from(activity!!.applicationContext)) {
-                                notify(id, builder.build())
-                            }
-
-                            activity.let { AlertDialog.Builder(it) }
-                                    .setTitle(getString(R.string.add_title, hop.name))
-                                    ?.setMessage(getString(R.string.add_message, hop.amount_oz))
-                                    ?.setPositiveButton(R.string.ok) { dialog, _ ->
-                                        dialog.dismiss()
-                                        with(NotificationManagerCompat.from(activity!!.applicationContext)) {
-                                            cancel(id)
-                                        }
-                                    }
-                                    ?.show()
-                        }
-                    }
-                }
-
-                _timeRemaining?.text = getString(R.string.remaining_time,
-                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
-                        _remainingSeconds - (_remainingSeconds / 60 * 60))
-            }
-        }.start()
+//        _boilTimer = object : CountDownTimer(TimeUnit.SECONDS.toMillis(boilTimeSeconds), 1000) {
+//            override fun onFinish() {
+//                val builder: AlertDialog.Builder? = activity.let { AlertDialog.Builder(it) }
+//                builder?.setTitle(R.string.boil_finished)
+//                        ?.setMessage(R.string.click_to_dismiss)
+//                        ?.setPositiveButton(R.string.ok) { dialog, _ ->
+//                            stopBoil()
+//                            dialog.dismiss()
+//                        }
+//                        ?.show()
+//            }
+//
+//            override fun onTick(millisUntilFinished: Long) {
+//                _remainingSeconds = millisUntilFinished / 1000
+//
+//                if (_hops != null) {
+//                    for (hop in _hops!!) {
+//                        if (_remainingSeconds == hop.additionTime_min * 60L) {
+//                            val id: Int = (Math.random() * 1000).toInt()
+//
+//                            val builder = NotificationCompat.Builder(activity!!.applicationContext, NOTIFICATION_CHANNEL)
+//                                    .setSmallIcon(R.mipmap.ic_text_launcher_square)
+//                                    .setContentTitle(getString(R.string.add_title, hop.name))
+//                                    .setContentText(getString(R.string.add_message, hop.amount_oz))
+//                                    .setPriority(NotificationCompat.DEFAULT_ALL)
+//
+//                            with(NotificationManagerCompat.from(activity!!.applicationContext)) {
+//                                notify(id, builder.build())
+//                            }
+//
+//                            activity.let { AlertDialog.Builder(it) }
+//                                    .setTitle(getString(R.string.add_title, hop.name))
+//                                    ?.setMessage(getString(R.string.add_message, hop.amount_oz))
+//                                    ?.setPositiveButton(R.string.ok) { dialog, _ ->
+//                                        dialog.dismiss()
+//                                        with(NotificationManagerCompat.from(activity!!.applicationContext)) {
+//                                            cancel(id)
+//                                        }
+//                                    }
+//                                    ?.show()
+//                        }
+//                    }
+//                }
+//
+//                _timeRemaining?.text = getString(R.string.remaining_time,
+//                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
+//                        _remainingSeconds - (_remainingSeconds / 60 * 60))
+//            }
+//        }.start()
     }
 
     private fun stopBoil() {
@@ -209,5 +207,12 @@ class BrewDayFragment : Fragment() {
         _remainingSeconds = 0
         _alarmManager?.cancel(_alarmIntent)
         _recipeViewModel?.setAlarm(false)
+    }
+
+    @BindingAdapter("elapsedTime")
+    fun TextView.setElapsedTime(value: Long) {
+        text = getString(R.string.remaining_time,
+                TimeUnit.MILLISECONDS.toMinutes(value),
+                _remainingSeconds - (_remainingSeconds / 60 * 60))
     }
 }
