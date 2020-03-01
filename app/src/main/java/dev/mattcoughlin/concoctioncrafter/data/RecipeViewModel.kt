@@ -151,7 +151,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             val triggerTime = loadTime()
             _boilTimer = object : CountDownTimer(triggerTime, _second) {
                 override fun onTick(millisUntilFinished: Long) {
-                    Log.d("TESTING", "onTick: $millisUntilFinished")
                     _elapsedTime.value = triggerTime - SystemClock.elapsedRealtime()
                     if (_elapsedTime.value!! <= 0) {
                         resetTimer()

@@ -3,8 +3,6 @@
 package dev.mattcoughlin.concoctioncrafter
 
 import android.annotation.SuppressLint
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
@@ -29,7 +27,6 @@ import java.util.concurrent.TimeUnit
 @SuppressLint("SetTextI18n")
 @BindingAdapter("elapsedTime")
 fun TextView.setElapsedTime(value: Long) {
-    Log.d("TESTING", "Setting time: $value")
     text = "${TimeUnit.MILLISECONDS.toMinutes(value)}:${TimeUnit.MILLISECONDS.toSeconds(value) - TimeUnit.MILLISECONDS.toMinutes(value) * 60}"
 }
 
@@ -45,10 +42,8 @@ class BrewDayFragment : Fragment() {
     private var _boilTimer: CountDownTimer? = null
     private var _remainingSeconds: Long = 0
     private var _hops: List<Hop>? = null
-    private var _alarmManager: AlarmManager? = null
     lateinit var _viewModelFatory: ViewModelProvider.AndroidViewModelFactory
     private var _recipeViewModel: RecipeViewModel? = null
-    private lateinit var _alarmIntent: PendingIntent
 
     private var recipeName: String
         get() = _recipeName!!.text.toString()
@@ -77,7 +72,6 @@ class BrewDayFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
         val binding: BrewDayFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.brew_day_fragment, container, false)
         val rootView = binding.root
 
@@ -216,7 +210,6 @@ class BrewDayFragment : Fragment() {
         _timeRemaining?.visibility = View.GONE
         _boilTimer?.cancel()
         _remainingSeconds = 0
-        _alarmManager?.cancel(_alarmIntent)
-        _recipeViewModel?.setAlarm(false)
+        _recipeViewModel!!.setAlarm(false)
     }
 }
