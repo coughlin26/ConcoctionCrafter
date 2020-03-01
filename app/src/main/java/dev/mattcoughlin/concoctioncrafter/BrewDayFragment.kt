@@ -2,6 +2,7 @@
 
 package dev.mattcoughlin.concoctioncrafter
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.os.Bundle
@@ -25,12 +26,11 @@ import dev.mattcoughlin.concoctioncrafter.databinding.BrewDayFragmentBinding
 import io.reactivex.disposables.Disposable
 import java.util.concurrent.TimeUnit
 
+@SuppressLint("SetTextI18n")
 @BindingAdapter("elapsedTime")
 fun TextView.setElapsedTime(value: Long) {
-    text = "${value / 60}:${value / 60 * 60}"
-    // act.getString(R.string.remaining_time,
-//            TimeUnit.MILLISECONDS.toMinutes(value),
-//            _remainingSeconds - (_remainingSeconds / 60 * 60))
+    Log.d("TESTING", "Setting time: $value")
+    text = "${TimeUnit.MILLISECONDS.toMinutes(value)}:${TimeUnit.MILLISECONDS.toSeconds(value) - TimeUnit.MILLISECONDS.toMinutes(value) * 60}"
 }
 
 class BrewDayFragment : Fragment() {
