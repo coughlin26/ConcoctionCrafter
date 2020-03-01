@@ -25,6 +25,14 @@ import dev.mattcoughlin.concoctioncrafter.databinding.BrewDayFragmentBinding
 import io.reactivex.disposables.Disposable
 import java.util.concurrent.TimeUnit
 
+@BindingAdapter("elapsedTime")
+fun TextView.setElapsedTime(value: Long) {
+    text = "${value / 60}:${value / 60 * 60}"
+    // act.getString(R.string.remaining_time,
+//            TimeUnit.MILLISECONDS.toMinutes(value),
+//            _remainingSeconds - (_remainingSeconds / 60 * 60))
+}
+
 class BrewDayFragment : Fragment() {
     private var _startBoilButton: Button? = null
     private var _recipeName: TextView? = null
@@ -38,6 +46,7 @@ class BrewDayFragment : Fragment() {
     private var _remainingSeconds: Long = 0
     private var _hops: List<Hop>? = null
     private var _alarmManager: AlarmManager? = null
+    lateinit var _viewModelFatory: ViewModelProvider.AndroidViewModelFactory
     private var _recipeViewModel: RecipeViewModel? = null
     private lateinit var _alarmIntent: PendingIntent
 
@@ -63,10 +72,12 @@ class BrewDayFragment : Fragment() {
             _remainingSeconds = savedInstanceState.getLong("REMAINING_TIME")
         }
 
-        _recipeViewModel = ViewModelProvider(this).get(RecipeViewModel::class.java)
+        _viewModelFatory = ViewModelProvider.AndroidViewModelFactory(this.activity!!.application)
+        _recipeViewModel = ViewModelProvider(this, _viewModelFatory).get(RecipeViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         val binding: BrewDayFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.brew_day_fragment, container, false)
         val rootView = binding.root
 
@@ -207,12 +218,5 @@ class BrewDayFragment : Fragment() {
         _remainingSeconds = 0
         _alarmManager?.cancel(_alarmIntent)
         _recipeViewModel?.setAlarm(false)
-    }
-
-    @BindingAdapter("elapsedTime")
-    fun TextView.setElapsedTime(value: Long) {
-        text = getString(R.string.remaining_time,
-                TimeUnit.MILLISECONDS.toMinutes(value),
-                _remainingSeconds - (_remainingSeconds / 60 * 60))
     }
 }

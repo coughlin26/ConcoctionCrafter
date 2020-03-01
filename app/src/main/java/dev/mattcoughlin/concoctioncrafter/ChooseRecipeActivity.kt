@@ -26,7 +26,8 @@ class ChooseRecipeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.recipe_chooser)
 
-        val recipeViewModel = ViewModelProvider(this).get(RecipeViewModel::class.java)
+        val viewModelFactory = ViewModelProvider.AndroidViewModelFactory(application)
+        val recipeViewModel = ViewModelProvider(this, viewModelFactory).get(RecipeViewModel::class.java)
 
         _recipeList = findViewById(R.id.recipe_list)
         _recipeList!!.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)

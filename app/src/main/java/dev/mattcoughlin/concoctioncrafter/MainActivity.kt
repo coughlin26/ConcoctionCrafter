@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     private var _pageAdapter: MainPageAdapter? = null
     private var _tabLayout: TabLayout? = null
     private var _toolBar: Toolbar? = null
+    lateinit var _viewModelFactory: ViewModelProvider.AndroidViewModelFactory
     private var _recipeViewModel: RecipeViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +47,10 @@ class MainActivity : AppCompatActivity() {
         _toolBar = findViewById(R.id.toolbar)
         _pageAdapter = MainPageAdapter(supportFragmentManager)
         _pager!!.adapter = _pageAdapter
-        _recipeViewModel = ViewModelProvider(this).get(RecipeViewModel::class.java)
+
+        _viewModelFactory = ViewModelProvider.AndroidViewModelFactory(application)
+
+        _recipeViewModel = ViewModelProvider(this, _viewModelFactory).get(RecipeViewModel::class.java)
 
         _tabLayout!!.setupWithViewPager(_pager)
         setSupportActionBar(_toolBar)
