@@ -125,6 +125,8 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun startTimer(timerLength: Long) {
+        resetTimer()
+
         _alarmOn.value?.let {
             _alarmOn.value = true
             val triggerTime = SystemClock.elapsedRealtime() + timerLength

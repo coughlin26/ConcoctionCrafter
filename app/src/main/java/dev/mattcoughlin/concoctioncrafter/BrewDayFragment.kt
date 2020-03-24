@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit
 @SuppressLint("SetTextI18n")
 @BindingAdapter("elapsedTime")
 fun TextView.setElapsedTime(value: Long) {
-    text = "${TimeUnit.MILLISECONDS.toMinutes(value)}:${TimeUnit.MILLISECONDS.toSeconds(value) - TimeUnit.MILLISECONDS.toMinutes(value) * 60}"
+    text = String.format("Time Remaining: ${TimeUnit.MILLISECONDS.toMinutes(value)}:%02d", TimeUnit.MILLISECONDS.toSeconds(value) - TimeUnit.MILLISECONDS.toMinutes(value) * 60)
 }
 
 class BrewDayFragment : Fragment() {
