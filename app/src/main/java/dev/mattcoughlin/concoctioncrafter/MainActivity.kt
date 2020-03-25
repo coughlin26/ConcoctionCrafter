@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     private var _pageAdapter: MainPageAdapter? = null
     private var _tabLayout: TabLayout? = null
     private var _toolBar: Toolbar? = null
-    lateinit var _viewModelFactory: ViewModelProvider.AndroidViewModelFactory
+    private lateinit var _viewModelFactory: ViewModelProvider.AndroidViewModelFactory
     private var _recipeViewModel: RecipeViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
