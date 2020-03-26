@@ -1,3 +1,5 @@
+/* Copyright 2020 Matthew Coughlin */
+
 package dev.mattcoughlin.concoctioncrafter
 
 import android.app.NotificationManager
@@ -11,7 +13,10 @@ import dev.mattcoughlin.concoctioncrafter.MainActivity.Companion.NOTIFICATION_TI
 
 class BoilTimerReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
-        val notificationManager = ContextCompat.getSystemService(context, NotificationManager::class.java) as NotificationManager
+        val notificationManager = ContextCompat.getSystemService(
+                context,
+                NotificationManager::class.java) as NotificationManager
+
         if (intent != null) {
             val title: String = intent.getStringExtra(NOTIFICATION_TITLE) as String
             val message: String = intent.getStringExtra(NOTIFICATION_MESSAGE) as String

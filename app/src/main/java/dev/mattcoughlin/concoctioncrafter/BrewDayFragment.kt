@@ -26,7 +26,9 @@ import java.util.concurrent.TimeUnit
 @SuppressLint("SetTextI18n")
 @BindingAdapter("elapsedTime")
 fun TextView.setElapsedTime(value: Long) {
-    text = String.format("Time Remaining: ${TimeUnit.MILLISECONDS.toMinutes(value)}:%02d", TimeUnit.MILLISECONDS.toSeconds(value) - TimeUnit.MILLISECONDS.toMinutes(value) * 60)
+    text = String.format(
+            "Time Remaining: ${TimeUnit.MILLISECONDS.toMinutes(value)}:%02d",
+            TimeUnit.MILLISECONDS.toSeconds(value) - TimeUnit.MILLISECONDS.toMinutes(value) * 60)
 }
 
 class BrewDayFragment : Fragment() {
@@ -39,7 +41,7 @@ class BrewDayFragment : Fragment() {
     private var _finalGravity: EditText? = null
     private var _recipeSubscription: Disposable? = null
     private var _hops: List<Hop>? = null
-    lateinit var _viewModelFatory: ViewModelProvider.AndroidViewModelFactory
+    private lateinit var _viewModelFatory: ViewModelProvider.AndroidViewModelFactory
     private var _recipeViewModel: RecipeViewModel? = null
 
     private var recipeName: String
@@ -65,7 +67,11 @@ class BrewDayFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding: BrewDayFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.brew_day_fragment, container, false)
+        val binding: BrewDayFragmentBinding = DataBindingUtil.inflate(
+                inflater,
+                R.layout.brew_day_fragment,
+                container,
+                false)
         val rootView = binding.root
 
         _startBoilButton = rootView.findViewById(R.id.start_boil_button)
@@ -119,6 +125,7 @@ class BrewDayFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setHopViews(hops: List<Hop>?) {
         _hopList!!.removeAllViews()
 
@@ -139,12 +146,12 @@ class BrewDayFragment : Fragment() {
         _startBoilButton?.text = getString(R.string.stop_boil)
         _timeRemaining?.visibility = View.VISIBLE
 
-        _recipeViewModel?.setAlarm(true)
+        _recipeViewModel?.setAlarm(true, _hops!!)
     }
 
     private fun stopBoil() {
         _startBoilButton?.text = getString(R.string.start_boil)
         _timeRemaining?.visibility = View.GONE
-        _recipeViewModel!!.setAlarm(false)
+        _recipeViewModel!!.setAlarm(false, _hops!!)
     }
 }

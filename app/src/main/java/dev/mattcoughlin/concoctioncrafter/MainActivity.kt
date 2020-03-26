@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK &&
                 requestCode == REQUEST_CODE &&
                 data!!.getParcelableExtra<Parcelable>(RECIPE_KEY) != null) {
-            _recipeViewModel?.recipe = data.getParcelableExtra(RECIPE_KEY)
+            _recipeViewModel!!.recipe = data.getParcelableExtra(RECIPE_KEY)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -102,8 +102,14 @@ class MainActivity : AppCompatActivity() {
                         _recipeViewModel?.recipe = recipe
                         recipeSubject.onNext(recipe)
                     }
-                    1 -> Toast.makeText(this, "Cannot save a recipe on Brew Day", Toast.LENGTH_SHORT).show()
-                    else -> Toast.makeText(this, "Invalid page: " + _pager!!.currentItem, Toast.LENGTH_SHORT).show()
+                    1 -> Toast.makeText(
+                            this,
+                            "Cannot save a recipe on Brew Day",
+                            Toast.LENGTH_SHORT).show()
+                    else -> Toast.makeText(
+                            this,
+                            "Invalid page: " + _pager!!.currentItem,
+                            Toast.LENGTH_SHORT).show()
                 }
                 return true
             }
@@ -174,8 +180,9 @@ class MainActivity : AppCompatActivity() {
 
             if ("Not Used" != row.findViewById<Spinner>(R.id.spinner).selectedItem.toString()) {
                 val amount = row.findViewById<EditText>(R.id.amount).text.toString()
-                fermentables.add(Fermentable(row.findViewById<Spinner>(R.id.spinner).selectedItem.toString(),
-                        if (amount.isEmpty()) 0f else amount.toFloat()))
+                fermentables.add(
+                        Fermentable(row.findViewById<Spinner>(R.id.spinner).selectedItem.toString(),
+                                if (amount.isEmpty()) 0f else amount.toFloat()))
             }
         }
 
@@ -218,7 +225,8 @@ class MainActivity : AppCompatActivity() {
             channel.description = descriptionText
 
             // Register the channel with the system
-            val notificationManager = getSystemService(NotificationManager::class.java) as NotificationManager
+            val notificationManager = getSystemService(
+                    NotificationManager::class.java) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
