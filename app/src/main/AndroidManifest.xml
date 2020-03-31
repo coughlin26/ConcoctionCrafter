@@ -43,6 +43,10 @@
             android:name=".BoilTimerReceiver"
             android:enabled="true"
             android:exported="false" />
+        <receiver
+            android:name=".HopTimerReceiver"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

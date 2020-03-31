@@ -3,6 +3,9 @@
 package dev.mattcoughlin.concoctioncrafter
 
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -59,14 +63,18 @@ class BrewDayFragment : Fragment() {
         if (activity != null) {
             _recipeSubscription = (activity as MainActivity).recipeSubject.subscribe({ recipe ->
                 restoreRecipeViews(recipe)
-            }, { throwable -> Log.e("Brew_Day_Fragment", "Failed to get the recipe", throwable) })
+            }, { throwable ->
+                Log.e("Brew_Day_Fragment", "Failed to get the recipe", throwable)
+            })
         }
 
         _viewModelFatory = ViewModelProvider.AndroidViewModelFactory(this.activity!!.application)
         _recipeViewModel = ViewModelProvider(this, _viewModelFatory).get(RecipeViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         val binding: BrewDayFragmentBinding = DataBindingUtil.inflate(
                 inflater,
                 R.layout.brew_day_fragment,
@@ -100,11 +108,14 @@ class BrewDayFragment : Fragment() {
         }
 
         if (finalGravity != 0.0) {
-            _alcoholContent?.text = (((1.05 * (startingGravity - finalGravity)) / finalGravity) / 0.79).toString()
+            _alcoholContent?.text =
+                    (((1.05 * (startingGravity - finalGravity)) / finalGravity) / 0.79).toString()
         }
 
         binding.recipeViewModel = _recipeViewModel
         binding.lifecycleOwner = this.viewLifecycleOwner
+
+        createNotificationChannels()
 
         return rootView
     }
@@ -130,11 +141,15 @@ class BrewDayFragment : Fragment() {
         _hopList!!.removeAllViews()
 
         if (hops != null) {
-            for (hop in hops) {
-                val newRow = layoutInflater.inflate(R.layout.hop_info_row, activity!!.findViewById(R.id.hop_info_list), false)
+            for (hop in hops.sortedByDescending { hop -> hop.additionTime_min }) {
+                val newRow = layoutInflater.inflate(
+                        R.layout.hop_info_row,
+                        activity!!.findViewById(R.id.hop_info_list),
+                        false)
                 newRow.findViewById<TextView>(R.id.hop_name).text = hop.name
                 newRow.findViewById<TextView>(R.id.hop_amount).text = "%.2f".format(hop.amount_oz)
-                newRow.findViewById<TextView>(R.id.hop_time).text = if (hop.additionTime_min != -1) hop.additionTime_min.toString() else ""
+                newRow.findViewById<TextView>(R.id.hop_time).text =
+                        if (hop.additionTime_min != -1) hop.additionTime_min.toString() else ""
 
                 if (_hopList!!.parent != null) (_hopList!!.parent as ViewGroup).removeView(newRow)
                 _hopList!!.addView(newRow)
@@ -146,12 +161,53 @@ class BrewDayFragment : Fragment() {
         _startBoilButton?.text = getString(R.string.stop_boil)
         _timeRemaining?.visibility = View.VISIBLE
 
-        _recipeViewModel?.setAlarm(true, _hops!!)
+        _recipeViewModel?.setAlarm(true, _hops)
     }
 
     private fun stopBoil() {
         _startBoilButton?.text = getString(R.string.start_boil)
         _timeRemaining?.visibility = View.GONE
-        _recipeViewModel!!.setAlarm(false, _hops!!)
+        _recipeViewModel!!.setAlarm(false)
+    }
+
+    private fun createNotificationChannels() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.boil_channel_name)
+            val descriptionText = getString(R.string.boil_channel_description)
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(
+                    activity!!.getString(R.string.boil_channel_name),
+                    name,
+                    importance)
+                    .apply { setShowBadge(true) }
+
+            channel.enableLights(true)
+            channel.lightColor = ContextCompat.getColor(activity!!, R.color.colorAccent)
+            channel.enableVibration(true)
+            channel.description = descriptionText
+
+            // Register the channel with the system
+            val notificationManager = activity!!.getSystemService(
+                    NotificationManager::class.java) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+
+            val hopName = getString(R.string.hop_channel_name)
+            val hopDesc = getString(R.string.hop_channel_description)
+            val hopImportance = NotificationManager.IMPORTANCE_HIGH
+            val hopChannel = NotificationChannel(
+                    activity!!.getString(R.string.hop_channel_name),
+                    hopName,
+                    hopImportance)
+                    .apply { setShowBadge(true) }
+
+            hopChannel.enableLights(true)
+            hopChannel.lightColor = ContextCompat.getColor(activity!!, R.color.colorAccent)
+            hopChannel.enableVibration(true)
+            hopChannel.description = hopDesc
+
+            notificationManager.createNotificationChannel(hopChannel)
+        }
     }
 }
