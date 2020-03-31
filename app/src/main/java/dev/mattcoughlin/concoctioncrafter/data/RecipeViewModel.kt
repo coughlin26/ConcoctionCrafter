@@ -173,8 +173,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                             "Time to add ${hop.amount_oz}oz of ${hop.name}")
                     _hopIntents.add(hopIntent)
 
-                    Log.d(TAG, "Current intent: ${_hopIntents.last()}")
-
                     _hopPendingIntents.add(PendingIntent.getBroadcast(
                             getApplication(),
                             MainActivity.HOP_REQUEST_CODE,
@@ -185,7 +183,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                     // For example, an addition time of 45 minutes happens 15 minutes into a 1 hour boil.
                     Log.d(TAG, "Setting timer for ${(timerLength -
                             TimeUnit.MINUTES.toMillis(hop.additionTime_min.toLong()))}ms from now")
-                    Log.d(TAG, "Current hop pending intent: ${_hopPendingIntents.last()}")
                     AlarmManagerCompat.setExactAndAllowWhileIdle(
                             _alarmManager,
                             AlarmManager.ELAPSED_REALTIME_WAKEUP,
