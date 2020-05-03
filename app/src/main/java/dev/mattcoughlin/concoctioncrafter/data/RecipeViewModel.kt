@@ -11,6 +11,7 @@ import android.content.Intent
 import android.os.CountDownTimer
 import android.os.SystemClock
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.AlarmManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
@@ -18,11 +19,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dev.mattcoughlin.concoctioncrafter.BoilTimerReceiver
+import dev.mattcoughlin.concoctioncrafter.HopTimerReceiver
 import dev.mattcoughlin.concoctioncrafter.MainActivity
 import dev.mattcoughlin.concoctioncrafter.cancelNotifications
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
     val recipeList: LiveData<List<Recipe>>
@@ -34,10 +37,14 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     private val _minute = 60L * _second
 
     private val _recipeRepository: RecipeRepository = RecipeRepository(application)
-    private val _notifyPendingIntent: PendingIntent
+    private val _boilPendingIntent: PendingIntent
+    private val _hopPendingIntents = ArrayList<PendingIntent>()
     private val _alarmManager = application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    private val prefs = application.getSharedPreferences("dev.mattcoughlin.concoctioncrafter", Context.MODE_PRIVATE)
-    private val _notifyIntent = Intent(application, BoilTimerReceiver::class.java)
+    private val prefs = application.getSharedPreferences(
+            "dev.mattcoughlin.concoctioncrafter",
+            Context.MODE_PRIVATE)
+    private val _boilIntent = Intent(application, BoilTimerReceiver::class.java)
+    private val _hopIntents = ArrayList<Intent>()
 
     private val _elapsedTime = MutableLiveData<Long>()
     val elapsedTime: LiveData<Long>
@@ -59,17 +66,19 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         recipeList = _recipeRepository.allRecipes
         _alarmOn.value = PendingIntent.getBroadcast(
                 getApplication(),
-                MainActivity.REQUEST_CODE,
-                _notifyIntent,
+                MainActivity.BOIL_REQUEST_CODE,
+                _boilIntent,
                 PendingIntent.FLAG_NO_CREATE
         ) != null
 
-        _notifyPendingIntent = PendingIntent.getBroadcast(
+        _boilIntent.putExtra(MainActivity.NOTIFICATION_TITLE, "Boil Complete")
+        _boilIntent.putExtra(MainActivity.NOTIFICATION_MESSAGE, "Your concoction is done boiling")
+
+        _boilPendingIntent = PendingIntent.getBroadcast(
                 getApplication(),
-                MainActivity.REQUEST_CODE,
-                _notifyIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-        )
+                MainActivity.BOIL_REQUEST_CODE,
+                _boilIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT)
 
         if (_alarmOn.value!!) {
             createTimer()
@@ -103,7 +112,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     fun findByName(name: String): Recipe? {
         Log.d(TAG, "Searching for $name")
         recipe = _recipeRepository.findByName(name)
-        Log.d("TESTING", "Retrieved: $recipe")
         return recipe
     }
 
@@ -117,14 +125,16 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         _recipeRepository.deleteAll()
     }
 
-    fun setAlarm(isChecked: Boolean) {
+    fun setAlarm(isChecked: Boolean, hops: List<Hop>? = null) {
         when (isChecked) {
-            true -> startTimer(_minute * 60)
+            true -> startTimer(_minute * 60, hops)
             false -> cancelNotification()
         }
     }
 
-    private fun startTimer(timerLength: Long) {
+    private fun startTimer(timerLength: Long, hops: List<Hop>?) {
+        resetTimer()
+
         _alarmOn.value?.let {
             _alarmOn.value = true
             val triggerTime = SystemClock.elapsedRealtime() + timerLength
@@ -137,7 +147,50 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                     _alarmManager,
                     AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     triggerTime,
-                    _notifyPendingIntent)
+                    _boilPendingIntent)
+
+            // TODO: Recipe is null here, it shouldn't be.
+            Log.d(TAG, "Recipe: $recipe")
+            Log.d(TAG, "Hops: $hops")
+
+            if (hops != null) {
+                for (hop in hops) {
+                    // Check for an invalid hop time.
+                    if (TimeUnit.MINUTES.toMillis(hop.additionTime_min.toLong()) > timerLength) {
+                        Toast.makeText(getApplication(),
+                                "${hop.name} hops have an invalid time!",
+                                Toast.LENGTH_SHORT)
+                                .show()
+
+                        // Skip to the next hop.
+                        continue
+                    }
+
+                    val hopIntent = Intent(getApplication(), HopTimerReceiver::class.java)
+                    hopIntent.putExtra(MainActivity.NOTIFICATION_TITLE, "Add Hop")
+                    hopIntent.putExtra(
+                            MainActivity.NOTIFICATION_MESSAGE,
+                            "Time to add ${hop.amount_oz}oz of ${hop.name}")
+                    _hopIntents.add(hopIntent)
+
+                    _hopPendingIntents.add(PendingIntent.getBroadcast(
+                            getApplication(),
+                            MainActivity.HOP_REQUEST_CODE,
+                            _hopIntents.last(),
+                            PendingIntent.FLAG_UPDATE_CURRENT))
+
+                    // The hop time is inverted, so subtract the input hop time from the boil time.
+                    // For example, an addition time of 45 minutes happens 15 minutes into a 1 hour boil.
+                    Log.d(TAG, "Setting timer for ${(timerLength -
+                            TimeUnit.MINUTES.toMillis(hop.additionTime_min.toLong()))}ms from now")
+                    AlarmManagerCompat.setExactAndAllowWhileIdle(
+                            _alarmManager,
+                            AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                            SystemClock.elapsedRealtime() +
+                                    (timerLength - TimeUnit.MINUTES.toMillis(hop.additionTime_min.toLong())),
+                            _hopPendingIntents.last())
+                }
+            }
 
             viewModelScope.launch {
                 saveTime(triggerTime)
@@ -167,7 +220,11 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun cancelNotification() {
         resetTimer()
-        _alarmManager.cancel(_notifyPendingIntent)
+        _alarmManager.cancel(_boilPendingIntent)
+
+        for (hopIntent in _hopPendingIntents) {
+            _alarmManager.cancel(hopIntent)
+        }
     }
 
     private fun resetTimer() {

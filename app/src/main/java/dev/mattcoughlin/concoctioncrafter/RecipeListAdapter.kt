@@ -11,8 +11,9 @@ import dev.mattcoughlin.concoctioncrafter.data.Recipe
 import dev.mattcoughlin.concoctioncrafter.data.RecipeViewModel
 import io.reactivex.subjects.PublishSubject
 
-class RecipeListAdapter internal constructor(private val _recipeViewModel: RecipeViewModel) : RecyclerView.Adapter<RecipeListAdapter.RecipeViewHolder>() {
-    val recipeClicks: PublishSubject<Recipe> = PublishSubject.create<Recipe>()
+class RecipeListAdapter internal constructor(private val _recipeViewModel: RecipeViewModel) :
+        RecyclerView.Adapter<RecipeListAdapter.RecipeViewHolder>() {
+    val recipeClicks: PublishSubject<Recipe> = PublishSubject.create()
     private var _recipes = emptyList<Recipe>()
 
     fun loadItems(recipes: List<Recipe>) {
@@ -21,7 +22,10 @@ class RecipeListAdapter internal constructor(private val _recipeViewModel: Recip
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
-        return RecipeViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.recipe_item, parent, false) as ViewGroup)
+        return RecipeViewHolder(LayoutInflater.from(parent.context).inflate(
+                R.layout.recipe_item,
+                parent,
+                false) as ViewGroup)
     }
 
     override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {

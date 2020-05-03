@@ -138,11 +138,15 @@ class RecipeFragment : Fragment() {
         _hopList!!.removeAllViews()
 
         if (hops != null) {
-            for (hop in hops) {
-                val newRow = layoutInflater.inflate(R.layout.hop_row, activity!!.findViewById(R.id.hop_list), false)
+            for (hop in hops.sortedByDescending { hop -> hop.additionTime_min }) {
+                val newRow = layoutInflater.inflate(
+                        R.layout.hop_row,
+                        activity!!.findViewById(R.id.hop_list),
+                        false)
                 setSpinner(newRow, hop.name)
                 newRow.findViewById<EditText>(R.id.amount).setText("%.2f".format(hop.amount_oz))
-                newRow.findViewById<EditText>(R.id.time).setText(if (hop.additionTime_min != -1) hop.additionTime_min.toString() else "")
+                newRow.findViewById<EditText>(R.id.time).setText(
+                        if (hop.additionTime_min != -1) hop.additionTime_min.toString() else "")
 
                 if (_hopList!!.parent != null) (_hopList!!.parent as ViewGroup).removeView(newRow)
                 _hopList!!.addView(newRow)

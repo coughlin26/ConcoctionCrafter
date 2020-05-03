@@ -3,8 +3,10 @@
 package dev.mattcoughlin.concoctioncrafter
 
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -27,7 +30,9 @@ import java.util.concurrent.TimeUnit
 @SuppressLint("SetTextI18n")
 @BindingAdapter("elapsedTime")
 fun TextView.setElapsedTime(value: Long) {
-    text = "${TimeUnit.MILLISECONDS.toMinutes(value)}:${TimeUnit.MILLISECONDS.toSeconds(value) - TimeUnit.MILLISECONDS.toMinutes(value) * 60}"
+    text = String.format(
+            "Time Remaining: ${TimeUnit.MILLISECONDS.toMinutes(value)}:%02d",
+            TimeUnit.MILLISECONDS.toSeconds(value) - TimeUnit.MILLISECONDS.toMinutes(value) * 60)
 }
 
 class BrewDayFragment : Fragment() {
@@ -39,10 +44,8 @@ class BrewDayFragment : Fragment() {
     private var _startingGravity: EditText? = null
     private var _finalGravity: EditText? = null
     private var _recipeSubscription: Disposable? = null
-    private var _boilTimer: CountDownTimer? = null
-    private var _remainingSeconds: Long = 0
     private var _hops: List<Hop>? = null
-    lateinit var _viewModelFatory: ViewModelProvider.AndroidViewModelFactory
+    private lateinit var _viewModelFatory: ViewModelProvider.AndroidViewModelFactory
     private var _recipeViewModel: RecipeViewModel? = null
 
     private var recipeName: String
@@ -60,27 +63,30 @@ class BrewDayFragment : Fragment() {
         if (activity != null) {
             _recipeSubscription = (activity as MainActivity).recipeSubject.subscribe({ recipe ->
                 restoreRecipeViews(recipe)
-            }, { throwable -> Log.e("Brew_Day_Fragment", "Failed to get the recipe", throwable) })
-        }
-
-        if (savedInstanceState != null) {
-            _remainingSeconds = savedInstanceState.getLong("REMAINING_TIME")
+            }, { throwable ->
+                Log.e("Brew_Day_Fragment", "Failed to get the recipe", throwable)
+            })
         }
 
         _viewModelFatory = ViewModelProvider.AndroidViewModelFactory(this.activity!!.application)
         _recipeViewModel = ViewModelProvider(this, _viewModelFatory).get(RecipeViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding: BrewDayFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.brew_day_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        val binding: BrewDayFragmentBinding = DataBindingUtil.inflate(
+                inflater,
+                R.layout.brew_day_fragment,
+                container,
+                false)
         val rootView = binding.root
 
         _startBoilButton = rootView.findViewById(R.id.start_boil_button)
         _startBoilButton?.setOnClickListener {
-            //Toast.makeText(context, "This feature is coming soon!", Toast.LENGTH_SHORT).show()
             when (_startBoilButton?.text) {
                 getString(R.string.start_boil) -> startBoil(TimeUnit.MINUTES.toSeconds(60))
-                "Stop Boil" -> stopBoil()
+                getString(R.string.stop_boil) -> stopBoil()
                 else -> stopBoil()
             }
         }
@@ -102,11 +108,14 @@ class BrewDayFragment : Fragment() {
         }
 
         if (finalGravity != 0.0) {
-            _alcoholContent?.text = (((1.05 * (startingGravity - finalGravity)) / finalGravity) / 0.79).toString()
+            _alcoholContent?.text =
+                    (((1.05 * (startingGravity - finalGravity)) / finalGravity) / 0.79).toString()
         }
 
         binding.recipeViewModel = _recipeViewModel
         binding.lifecycleOwner = this.viewLifecycleOwner
+
+        createNotificationChannels()
 
         return rootView
     }
@@ -114,11 +123,6 @@ class BrewDayFragment : Fragment() {
     override fun onDestroy() {
         _recipeSubscription?.dispose()
         super.onDestroy()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putLong("REMAINING_TIME", _remainingSeconds)
-        super.onSaveInstanceState(outState)
     }
 
     /**
@@ -132,15 +136,20 @@ class BrewDayFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setHopViews(hops: List<Hop>?) {
         _hopList!!.removeAllViews()
 
         if (hops != null) {
-            for (hop in hops) {
-                val newRow = layoutInflater.inflate(R.layout.hop_info_row, activity!!.findViewById(R.id.hop_info_list), false)
+            for (hop in hops.sortedByDescending { hop -> hop.additionTime_min }) {
+                val newRow = layoutInflater.inflate(
+                        R.layout.hop_info_row,
+                        activity!!.findViewById(R.id.hop_info_list),
+                        false)
                 newRow.findViewById<TextView>(R.id.hop_name).text = hop.name
                 newRow.findViewById<TextView>(R.id.hop_amount).text = "%.2f".format(hop.amount_oz)
-                newRow.findViewById<TextView>(R.id.hop_time).text = if (hop.additionTime_min != -1) hop.additionTime_min.toString() else ""
+                newRow.findViewById<TextView>(R.id.hop_time).text =
+                        if (hop.additionTime_min != -1) hop.additionTime_min.toString() else ""
 
                 if (_hopList!!.parent != null) (_hopList!!.parent as ViewGroup).removeView(newRow)
                 _hopList!!.addView(newRow)
@@ -152,64 +161,53 @@ class BrewDayFragment : Fragment() {
         _startBoilButton?.text = getString(R.string.stop_boil)
         _timeRemaining?.visibility = View.VISIBLE
 
-        _recipeViewModel?.setAlarm(true)
-
-//        _boilTimer = object : CountDownTimer(TimeUnit.SECONDS.toMillis(boilTimeSeconds), 1000) {
-//            override fun onFinish() {
-//                val builder: AlertDialog.Builder? = activity.let { AlertDialog.Builder(it) }
-//                builder?.setTitle(R.string.boil_finished)
-//                        ?.setMessage(R.string.click_to_dismiss)
-//                        ?.setPositiveButton(R.string.ok) { dialog, _ ->
-//                            stopBoil()
-//                            dialog.dismiss()
-//                        }
-//                        ?.show()
-//            }
-//
-//            override fun onTick(millisUntilFinished: Long) {
-//                _remainingSeconds = millisUntilFinished / 1000
-//
-//                if (_hops != null) {
-//                    for (hop in _hops!!) {
-//                        if (_remainingSeconds == hop.additionTime_min * 60L) {
-//                            val id: Int = (Math.random() * 1000).toInt()
-//
-//                            val builder = NotificationCompat.Builder(activity!!.applicationContext, NOTIFICATION_CHANNEL)
-//                                    .setSmallIcon(R.mipmap.ic_text_launcher_square)
-//                                    .setContentTitle(getString(R.string.add_title, hop.name))
-//                                    .setContentText(getString(R.string.add_message, hop.amount_oz))
-//                                    .setPriority(NotificationCompat.DEFAULT_ALL)
-//
-//                            with(NotificationManagerCompat.from(activity!!.applicationContext)) {
-//                                notify(id, builder.build())
-//                            }
-//
-//                            activity.let { AlertDialog.Builder(it) }
-//                                    .setTitle(getString(R.string.add_title, hop.name))
-//                                    ?.setMessage(getString(R.string.add_message, hop.amount_oz))
-//                                    ?.setPositiveButton(R.string.ok) { dialog, _ ->
-//                                        dialog.dismiss()
-//                                        with(NotificationManagerCompat.from(activity!!.applicationContext)) {
-//                                            cancel(id)
-//                                        }
-//                                    }
-//                                    ?.show()
-//                        }
-//                    }
-//                }
-//
-//                _timeRemaining?.text = getString(R.string.remaining_time,
-//                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
-//                        _remainingSeconds - (_remainingSeconds / 60 * 60))
-//            }
-//        }.start()
+        _recipeViewModel?.setAlarm(true, _hops)
     }
 
     private fun stopBoil() {
         _startBoilButton?.text = getString(R.string.start_boil)
         _timeRemaining?.visibility = View.GONE
-        _boilTimer?.cancel()
-        _remainingSeconds = 0
         _recipeViewModel!!.setAlarm(false)
+    }
+
+    private fun createNotificationChannels() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.boil_channel_name)
+            val descriptionText = getString(R.string.boil_channel_description)
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(
+                    activity!!.getString(R.string.boil_channel_name),
+                    name,
+                    importance)
+                    .apply { setShowBadge(true) }
+
+            channel.enableLights(true)
+            channel.lightColor = ContextCompat.getColor(activity!!, R.color.colorAccent)
+            channel.enableVibration(true)
+            channel.description = descriptionText
+
+            // Register the channel with the system
+            val notificationManager = activity!!.getSystemService(
+                    NotificationManager::class.java) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+
+            val hopName = getString(R.string.hop_channel_name)
+            val hopDesc = getString(R.string.hop_channel_description)
+            val hopImportance = NotificationManager.IMPORTANCE_HIGH
+            val hopChannel = NotificationChannel(
+                    activity!!.getString(R.string.hop_channel_name),
+                    hopName,
+                    hopImportance)
+                    .apply { setShowBadge(true) }
+
+            hopChannel.enableLights(true)
+            hopChannel.lightColor = ContextCompat.getColor(activity!!, R.color.colorAccent)
+            hopChannel.enableVibration(true)
+            hopChannel.description = hopDesc
+
+            notificationManager.createNotificationChannel(hopChannel)
+        }
     }
 }

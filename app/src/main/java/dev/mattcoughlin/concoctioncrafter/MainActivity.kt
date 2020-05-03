@@ -3,10 +3,7 @@
 package dev.mattcoughlin.concoctioncrafter
 
 import android.app.Activity
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
@@ -19,7 +16,6 @@ import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
@@ -35,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     private var _pageAdapter: MainPageAdapter? = null
     private var _tabLayout: TabLayout? = null
     private var _toolBar: Toolbar? = null
-    lateinit var _viewModelFactory: ViewModelProvider.AndroidViewModelFactory
+    private lateinit var _viewModelFactory: ViewModelProvider.AndroidViewModelFactory
     private var _recipeViewModel: RecipeViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +50,6 @@ class MainActivity : AppCompatActivity() {
 
         _tabLayout!!.setupWithViewPager(_pager)
         setSupportActionBar(_toolBar)
-        createNotificationChannel()
     }
 
     override fun onResume() {
@@ -73,9 +68,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK &&
-                requestCode == REQUEST_CODE &&
+                requestCode == RECIPE_REQUEST_CODE &&
                 data!!.getParcelableExtra<Parcelable>(RECIPE_KEY) != null) {
-            _recipeViewModel?.recipe = data.getParcelableExtra(RECIPE_KEY)
+            _recipeViewModel!!.recipe = data.getParcelableExtra(RECIPE_KEY)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -102,14 +97,20 @@ class MainActivity : AppCompatActivity() {
                         _recipeViewModel?.recipe = recipe
                         recipeSubject.onNext(recipe)
                     }
-                    1 -> Toast.makeText(this, "Cannot save a recipe on Brew Day", Toast.LENGTH_SHORT).show()
-                    else -> Toast.makeText(this, "Invalid page: " + _pager!!.currentItem, Toast.LENGTH_SHORT).show()
+                    1 -> Toast.makeText(
+                            this,
+                            "Cannot save a recipe on Brew Day",
+                            Toast.LENGTH_SHORT).show()
+                    else -> Toast.makeText(
+                            this,
+                            "Invalid page: " + _pager!!.currentItem,
+                            Toast.LENGTH_SHORT).show()
                 }
                 return true
             }
             R.id.action_import -> {
                 val chooserIntent = Intent(this, ChooseRecipeActivity::class.java)
-                startActivityForResult(chooserIntent, REQUEST_CODE)
+                startActivityForResult(chooserIntent, RECIPE_REQUEST_CODE)
                 return true
             }
             R.id.action_clear -> {
@@ -174,8 +175,9 @@ class MainActivity : AppCompatActivity() {
 
             if ("Not Used" != row.findViewById<Spinner>(R.id.spinner).selectedItem.toString()) {
                 val amount = row.findViewById<EditText>(R.id.amount).text.toString()
-                fermentables.add(Fermentable(row.findViewById<Spinner>(R.id.spinner).selectedItem.toString(),
-                        if (amount.isEmpty()) 0f else amount.toFloat()))
+                fermentables.add(
+                        Fermentable(row.findViewById<Spinner>(R.id.spinner).selectedItem.toString(),
+                                if (amount.isEmpty()) 0f else amount.toFloat()))
             }
         }
 
@@ -201,33 +203,11 @@ class MainActivity : AppCompatActivity() {
         return hops
     }
 
-    private fun createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = getString(R.string.channel_name)
-            val descriptionText = getString(R.string.channel_description)
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(NOTIFICATION_CHANNEL,
-                    name,
-                    importance)
-
-            channel.enableLights(true)
-            channel.lightColor = ContextCompat.getColor(this, R.color.colorAccent)
-            channel.enableVibration(true)
-            channel.description = descriptionText
-
-            // Register the channel with the system
-            val notificationManager = getSystemService(NotificationManager::class.java) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-    }
-
-
     companion object {
-        const val REQUEST_CODE = 7
+        const val RECIPE_REQUEST_CODE = 7
+        const val HOP_REQUEST_CODE = 8
+        const val BOIL_REQUEST_CODE = 9
         const val RECIPE_KEY = "RECIPE_KEY"
-        const val NOTIFICATION_CHANNEL = "ConcoctionNotification"
         const val NOTIFICATION_TITLE = "NOTIFICATION_TITLE"
         const val NOTIFICATION_MESSAGE = "NOTIFICATION_MESSAGE"
     }

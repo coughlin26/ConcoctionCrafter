@@ -5,6 +5,7 @@ package dev.mattcoughlin.concoctioncrafter
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +14,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import dev.mattcoughlin.concoctioncrafter.data.Recipe
 import dev.mattcoughlin.concoctioncrafter.data.RecipeViewModel
 import io.reactivex.disposables.Disposable
 
@@ -27,13 +27,15 @@ class ChooseRecipeActivity : AppCompatActivity() {
         setContentView(R.layout.recipe_chooser)
 
         val viewModelFactory = ViewModelProvider.AndroidViewModelFactory(application)
-        val recipeViewModel = ViewModelProvider(this, viewModelFactory).get(RecipeViewModel::class.java)
+        val recipeViewModel = ViewModelProvider(
+                this,
+                viewModelFactory).get(RecipeViewModel::class.java)
 
         _recipeList = findViewById(R.id.recipe_list)
         _recipeList!!.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         _recipeAdapter = RecipeListAdapter(recipeViewModel)
 
-        recipeViewModel.recipeList.observe(this, Observer<List<Recipe>> { recipeList ->
+        recipeViewModel.recipeList.observe(this, Observer { recipeList ->
             _recipeAdapter!!.loadItems(recipeList)
             _recipeAdapter!!.notifyDataSetChanged()
         })
@@ -43,6 +45,7 @@ class ChooseRecipeActivity : AppCompatActivity() {
         _recipeClickSubscription = _recipeAdapter!!.recipeClicks.subscribe { recipe ->
             val intent = Intent()
             intent.putExtra(MainActivity.RECIPE_KEY, recipe)
+            Log.d("Test", "Returning result: $recipe")
             setResult(Activity.RESULT_OK, intent)
             finish()
         }

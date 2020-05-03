@@ -12,9 +12,9 @@ import dev.mattcoughlin.concoctioncrafter.MainActivity.Companion.NOTIFICATION_ME
 import dev.mattcoughlin.concoctioncrafter.MainActivity.Companion.NOTIFICATION_TITLE
 
 
-class BoilTimerReceiver : BroadcastReceiver() {
+class HopTimerReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
-        Log.d("Test", "Boil timer onReceive called")
+        Log.d("Test", "Hop timer onReceive called")
         val notificationManager = ContextCompat.getSystemService(
                 context,
                 NotificationManager::class.java) as NotificationManager
@@ -26,7 +26,7 @@ class BoilTimerReceiver : BroadcastReceiver() {
             notificationManager.sendNotification(
                     title,
                     message,
-                    context.getString(R.string.boil_channel_name),
+                    context.getString(R.string.hop_channel_name),
                     context)
         }
     }
