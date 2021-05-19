@@ -72,7 +72,7 @@ class RecipeFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         Log.d("TESTING", "Creating views in RecipeFragment")
 
         val rootView = inflater.inflate(R.layout.recipe_fragment, container, false) as ViewGroup
@@ -124,7 +124,7 @@ class RecipeFragment : Fragment() {
         if (fermentables != null) {
             for (fermentable in fermentables) {
                 Log.d("TESTING", "Adding row for ${fermentable.name}")
-                val newRow = layoutInflater.inflate(R.layout.fermentable_row, activity!!.findViewById(R.id.fermentable_list), false)
+                val newRow = layoutInflater.inflate(R.layout.fermentable_row, requireActivity().findViewById(R.id.fermentable_list), false)
                 setSpinner(newRow, fermentable.name)
                 newRow.findViewById<EditText>(R.id.amount).setText("%.2f".format(fermentable.amount_lbs))
 
@@ -141,7 +141,7 @@ class RecipeFragment : Fragment() {
             for (hop in hops.sortedByDescending { hop -> hop.additionTime_min }) {
                 val newRow = layoutInflater.inflate(
                         R.layout.hop_row,
-                        activity!!.findViewById(R.id.hop_list),
+                        requireActivity().findViewById(R.id.hop_list),
                         false)
                 setSpinner(newRow, hop.name)
                 newRow.findViewById<EditText>(R.id.amount).setText("%.2f".format(hop.amount_oz))

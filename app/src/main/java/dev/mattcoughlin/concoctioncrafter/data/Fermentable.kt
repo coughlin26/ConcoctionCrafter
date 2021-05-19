@@ -3,7 +3,7 @@
 package dev.mattcoughlin.concoctioncrafter.data
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Fermentable(var name: String, var amount_lbs: Float) : Parcelable

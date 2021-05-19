@@ -45,7 +45,7 @@ class BrewDayFragment : Fragment() {
     private var _finalGravity: EditText? = null
     private var _recipeSubscription: Disposable? = null
     private var _hops: List<Hop>? = null
-    private lateinit var _viewModelFatory: ViewModelProvider.AndroidViewModelFactory
+    private lateinit var _viewModelFactory: ViewModelProvider.AndroidViewModelFactory
     private var _recipeViewModel: RecipeViewModel? = null
 
     private var recipeName: String
@@ -68,13 +68,13 @@ class BrewDayFragment : Fragment() {
             })
         }
 
-        _viewModelFatory = ViewModelProvider.AndroidViewModelFactory(this.activity!!.application)
-        _recipeViewModel = ViewModelProvider(this, _viewModelFatory).get(RecipeViewModel::class.java)
+        _viewModelFactory = ViewModelProvider.AndroidViewModelFactory(this.requireActivity().application)
+        _recipeViewModel = ViewModelProvider(this, _viewModelFactory).get(RecipeViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         val binding: BrewDayFragmentBinding = DataBindingUtil.inflate(
                 inflater,
                 R.layout.brew_day_fragment,
@@ -144,7 +144,7 @@ class BrewDayFragment : Fragment() {
             for (hop in hops.sortedByDescending { hop -> hop.additionTime_min }) {
                 val newRow = layoutInflater.inflate(
                         R.layout.hop_info_row,
-                        activity!!.findViewById(R.id.hop_info_list),
+                        requireActivity().findViewById(R.id.hop_info_list),
                         false)
                 newRow.findViewById<TextView>(R.id.hop_name).text = hop.name
                 newRow.findViewById<TextView>(R.id.hop_amount).text = "%.2f".format(hop.amount_oz)
@@ -178,18 +178,18 @@ class BrewDayFragment : Fragment() {
             val descriptionText = getString(R.string.boil_channel_description)
             val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(
-                    activity!!.getString(R.string.boil_channel_name),
+                    requireActivity().getString(R.string.boil_channel_name),
                     name,
                     importance)
                     .apply { setShowBadge(true) }
 
             channel.enableLights(true)
-            channel.lightColor = ContextCompat.getColor(activity!!, R.color.colorAccent)
+            channel.lightColor = ContextCompat.getColor(requireActivity(), R.color.colorAccent)
             channel.enableVibration(true)
             channel.description = descriptionText
 
             // Register the channel with the system
-            val notificationManager = activity!!.getSystemService(
+            val notificationManager = requireActivity().getSystemService(
                     NotificationManager::class.java) as NotificationManager
             notificationManager.createNotificationChannel(channel)
 
@@ -197,13 +197,13 @@ class BrewDayFragment : Fragment() {
             val hopDesc = getString(R.string.hop_channel_description)
             val hopImportance = NotificationManager.IMPORTANCE_HIGH
             val hopChannel = NotificationChannel(
-                    activity!!.getString(R.string.hop_channel_name),
+                    requireActivity().getString(R.string.hop_channel_name),
                     hopName,
                     hopImportance)
                     .apply { setShowBadge(true) }
 
             hopChannel.enableLights(true)
-            hopChannel.lightColor = ContextCompat.getColor(activity!!, R.color.colorAccent)
+            hopChannel.lightColor = ContextCompat.getColor(requireActivity(), R.color.colorAccent)
             hopChannel.enableVibration(true)
             hopChannel.description = hopDesc
 

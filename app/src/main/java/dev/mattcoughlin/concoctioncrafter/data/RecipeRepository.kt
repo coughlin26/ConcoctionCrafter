@@ -84,7 +84,7 @@ class RecipeRepository(application: Application) {
         updateList()
     }
 
-    private class InsertAsyncTask internal constructor(private val _asyncRecipeDao: RecipeDAO) : AsyncTask<Recipe, Void, Void>() {
+    private class InsertAsyncTask(private val _asyncRecipeDao: RecipeDAO) : AsyncTask<Recipe, Void, Void>() {
 
         override fun doInBackground(vararg params: Recipe): Void? {
             Log.d("Testing", "Inserting in AsyncTask...")
@@ -93,7 +93,7 @@ class RecipeRepository(application: Application) {
         }
     }
 
-    private class DeleteAsyncTask internal constructor(private val _asyncRecipeDao: RecipeDAO) : AsyncTask<Recipe, Void, Void>() {
+    private class DeleteAsyncTask(private val _asyncRecipeDao: RecipeDAO) : AsyncTask<Recipe, Void, Void>() {
 
         override fun doInBackground(vararg params: Recipe): Void? {
             Log.d("Testing", "Deleting in AsyncTask...")
@@ -106,7 +106,7 @@ class RecipeRepository(application: Application) {
         }
     }
 
-    private class UpdateAsyncTask internal constructor(private val _asyncRecipeDao: RecipeDAO) : AsyncTask<Recipe, Void, Void>() {
+    private class UpdateAsyncTask(private val _asyncRecipeDao: RecipeDAO) : AsyncTask<Recipe, Void, Void>() {
 
         override fun doInBackground(vararg params: Recipe): Void? {
             Log.d("Testing", "Updating in AsyncTask...")
@@ -117,7 +117,7 @@ class RecipeRepository(application: Application) {
         }
     }
 
-    private class FindByNameAsyncTask internal constructor(private val _asyncRecipeDao: RecipeDAO) : AsyncTask<String, Void, Recipe>() {
+    private class FindByNameAsyncTask(private val _asyncRecipeDao: RecipeDAO) : AsyncTask<String, Void, Recipe>() {
 
         override fun doInBackground(vararg params: String): Recipe {
             Log.d("Testing", "Querying for recipe: " + params[0])
@@ -125,7 +125,7 @@ class RecipeRepository(application: Application) {
         }
     }
 
-    private class GetAllAsyncTask internal constructor(private val _asyncRecipeDao: RecipeDAO) : AsyncTask<Void, Void, List<Recipe>>() {
+    private class GetAllAsyncTask(private val _asyncRecipeDao: RecipeDAO) : AsyncTask<Void, Void, List<Recipe>>() {
 
         override fun doInBackground(vararg params: Void): List<Recipe> {
             return _asyncRecipeDao.all

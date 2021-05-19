@@ -22,7 +22,7 @@ interface RecipeDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg recipes: Recipe)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(recipe: Recipe)
 
     @Query("DELETE FROM `recipes.db`")

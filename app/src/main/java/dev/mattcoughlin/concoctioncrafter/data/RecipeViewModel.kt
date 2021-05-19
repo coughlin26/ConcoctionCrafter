@@ -31,7 +31,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     val recipeList: LiveData<List<Recipe>>
     var recipe: Recipe? = null
 
-    private val TRIGGER_TIME = "TRIGGER_AT"
+    private val _triggerTime = "TRIGGER_AT"
 
     private val _second = 1000L
     private val _minute = 60L * _second
@@ -235,12 +235,12 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
     private suspend fun saveTime(triggerTime: Long) =
             withContext(Dispatchers.IO) {
-                prefs.edit().putLong(TRIGGER_TIME, triggerTime).apply()
+                prefs.edit().putLong(_triggerTime, triggerTime).apply()
             }
 
     private suspend fun loadTime(): Long =
             withContext(Dispatchers.IO) {
-                prefs.getLong(TRIGGER_TIME, 0)
+                prefs.getLong(_triggerTime, 0)
             }
 
     companion object {

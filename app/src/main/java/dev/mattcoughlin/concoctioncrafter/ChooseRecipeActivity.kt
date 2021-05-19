@@ -10,7 +10,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,7 +34,7 @@ class ChooseRecipeActivity : AppCompatActivity() {
         _recipeList!!.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         _recipeAdapter = RecipeListAdapter(recipeViewModel)
 
-        recipeViewModel.recipeList.observe(this, Observer { recipeList ->
+        recipeViewModel.recipeList.observe(this, { recipeList ->
             _recipeAdapter!!.loadItems(recipeList)
             _recipeAdapter!!.notifyDataSetChanged()
         })

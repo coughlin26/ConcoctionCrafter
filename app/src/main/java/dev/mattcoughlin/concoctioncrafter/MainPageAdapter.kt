@@ -15,7 +15,7 @@ class MainPageAdapter constructor(manager: FragmentManager) : FragmentPagerAdapt
         return 2
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun getPageTitle(position: Int): CharSequence {
         return if (position == 0) "Recipe" else "Brew Day"
     }
 }
